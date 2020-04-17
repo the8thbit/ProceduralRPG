@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <Kingdom name="kingdom1">
+    <Settlement name="capital">
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+    </Settlement>
+  </Kingdom>
+  <Kingdom name="kingdom2">
+    <Settlement name="capital">
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+    </Settlement>
+  </Kingdom>
+  <Kingdom name="kingdom3">
+    <Settlement name="capital">
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+    </Settlement>
+  </Kingdom>
+  <Kingdom name="kingdom4">
+    <Settlement name="capital">
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+      <Entity name="un-named_entity" />
+    </Settlement>
+  </Kingdom>
+</root>
