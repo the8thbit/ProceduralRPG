@@ -1,0 +1,186 @@
+﻿using UnityEngine;
+using UnityEditor;
+using System.Collections.Generic;
+using System.Linq;
+
+/// <summary>
+/// Holds onto all the resources that are needed in the game
+/// </summary>
+public class ResourceManager
+{
+
+    public static GameObject ChunkPrefab { get; private set; }
+    private static Dictionary<string, Shader> Shaders;
+    private static Dictionary<string, Material> Materials;
+    private static Dictionary<string, GameObject> EntityGameObjects;
+    private static Dictionary<int, GameObject> AllWorldObjects;
+    private static Dictionary<int, Texture2D> ItemImages;
+    private static Dictionary<int, GameObject> EquiptableItemObjects;
+    private static Dictionary<string, Sprite[]> SpriteSheets;
+    private static Dictionary<string, GameObject> ProjectileObjects;
+    private static Dictionary<string, GameObject> BeamObjects;
+    private static Dictionary<string, GameObject> MiscPrefabs;
+    public static void LoadAllResources()
+    {
+        ChunkPrefab = Resources.Load<GameObject>("Misc/ChunkPrefab");
+        LoadShaders();
+        CreateMaterials();
+        LoadEntityGameObjects();
+        LoadWorldObjects();
+        LoadItemImages();
+        LoadEquiptableItemObjects();
+        LoadSpriteSheets();
+        LoadProjectileObjects();
+        LoadBeamObjects();
+        LoadMiscPrefabs();
+    }
+
+
+    private static void LoadShaders()
+    {
+        Shaders = new Dictionary<string, Shader>();
+        string root = "Shaders/";
+        Shaders.Add("ChunkShader", Resources.Load<Shader>(root + "ChunkShader"));
+    }
+
+    private static void CreateMaterials()
+    {
+        Materials = new Dictionary<string, Material>();
+        //Materials.Add("Chunk", new Material(Shaders["ChunkShader"]));
+        Materials.Add("Chunk", Resources.Load<Material>("Shaders/Chunk/ChunkMaterial"));
+        Materials.Add("brick", Resources.Load<Material>("Shaders/WorldObject/Simple/Brick/BrickMaterial"));
+
+    }
+
+    private static void LoadEntityGameObjects()
+    {
+        EntityGameObjects = new Dictionary<string, GameObject>();
+        string root = "Entity/";
+        EntityGameObjects.Add("healthbar", Resources.Load<GameObject>(root + "EntityHealthBar"));
+        EntityGameObjects.Add("default", Resources.Load<GameObject>(root + "default"));
+
+        EntityGameObjects.Add("bear", Resources.Load<GameObject>(root + "bear"));
+        EntityGameObjects.Add("spider", Resources.Load<GameObject>(root + "Creature/Spider/Spider_pref"));
+        EntityGameObjects.Add("human", Resources.Load<GameObject>(root + "Human/Human_pref"));
+
+
+
+    }
+
+    private static void LoadWorldObjects()
+    {
+        AllWorldObjects = new Dictionary<int, GameObject>();
+        string root = "WorldObjects/";
+        AllWorldObjects.Add((int)WorldObjects.EMPTY_OBJECT_BASE, Resources.Load<GameObject>(root + "Null"));
+
+        AllWorldObjects.Add((int)WorldObjects.WALL, Resources.Load<GameObject>(root + "BrickWall"));
+        AllWorldObjects.Add((int)WorldObjects.LOOT_SACK, Resources.Load<GameObject>(root + "InventoryObjects/LootSack"));
+        AllWorldObjects.Add((int)WorldObjects.TREE, Resources.Load<GameObject>(root + "Natural/Tree/TreeBase"));
+        AllWorldObjects.Add((int)WorldObjects.TREE_CANOPY, Resources.Load<GameObject>(root + "Natural/Tree/TreeCanopy"));
+        AllWorldObjects.Add((int)WorldObjects.TREE_BRANCH, Resources.Load<GameObject>(root + "Natural/Tree/TreeBranch"));
+        AllWorldObjects.Add((int)WorldObjects.WATER, Resources.Load<GameObject>(root + "Natural/Terrain/Water"));
+        AllWorldObjects.Add((int)WorldObjects.BRIDGE, Resources.Load<GameObject>(root + "Structure/Bridge/Bridge"));
+        AllWorldObjects.Add((int)WorldObjects.BRIDGE_BASE, Resources.Load<GameObject>(root + "Structure/Bridge/Bridge"));
+        AllWorldObjects.Add((int)WorldObjects.BRIDGE_RAMP, Resources.Load<GameObject>(root + "Structure/Bridge/BridgeRamp"));
+        AllWorldObjects.Add((int)WorldObjects.GRASS, Resources.Load<GameObject>(root + "Natural/Terrain/Grass/Grass"));
+        AllWorldObjects.Add((int)WorldObjects.ROCK, Resources.Load<GameObject>(root + "Natural/Rock/Rock"));
+        AllWorldObjects.Add((int)WorldObjects.WOOD_SPIKE, Resources.Load<GameObject>(root + "Structure/Wood/WoodSpike"));
+        AllWorldObjects.Add((int)WorldObjects.ANVIL, Resources.Load<GameObject>(root + "BrickWall"));
+        AllWorldObjects.Add((int)WorldObjects.GLASS_WINDOW, Resources.Load<GameObject>(root + "Structure/Glass/Window"));
+        AllWorldObjects.Add((int)WorldObjects.ROOF, Resources.Load<GameObject>(root + "Building/Roof"));
+        AllWorldObjects.Add((int)WorldObjects.DOOR, Resources.Load<GameObject>(root + "Structure/Door/Door"));
+        AllWorldObjects.Add((int)WorldObjects.DUNGEON_ENTRANCE, Resources.Load<GameObject>(root + "Null"));
+
+        /*
+        WorldObjects.Add(WorldObject.FORGE.ID, Resources.Load<GameObject>(root + "Work/Blacksmith/Forge"));
+        WorldObjects.Add(WorldObject.BED.ID, Resources.Load<GameObject>(root + "Building/House/Bed"));
+        WorldObjects.Add(WorldObject.MARKETSTALL.ID, Resources.Load<GameObject>(root + "Work/Market/MarketStall"));
+        WorldObjects.Add(WorldObject.CHEST.ID, Resources.Load<GameObject>(root + "InventoryObjects/Chest"));*/
+    }
+
+    private static void LoadItemImages()
+    {
+        ItemImages = new Dictionary<int, Texture2D>();
+        string root = "ItemImages/";
+        ItemImages.Add(0, Resources.Load<Texture2D>(root + "item1"));
+        ItemImages.Add(1, Resources.Load<Texture2D>(root + "item2"));
+
+    }
+
+    private static void LoadEquiptableItemObjects()
+    {
+        EquiptableItemObjects = new Dictionary<int, GameObject>();
+        string root = "Items/Combat/Weapon/Sword/";
+        EquiptableItemObjects.Add(0, Resources.Load<GameObject>(root + "Sword"));
+    }
+
+    private static void LoadSpriteSheets()
+    {
+        SpriteSheets = new Dictionary<string, Sprite[]>
+        {
+            { "weapons", Resources.LoadAll<Sprite>("ItemImages/WeaponSpriteSheet") }
+        };
+    }
+    private static void LoadProjectileObjects()
+    {
+        ProjectileObjects = new Dictionary<string, GameObject>();
+        string root = "Projectiles/";
+        ProjectileObjects.Add("fire_ball", Resources.Load<GameObject>(root + "fire_ball"));
+        ProjectileObjects.Add("Arrow", Resources.Load<GameObject>(root + "Arrow"));
+
+    }
+    private static void LoadBeamObjects()
+    {
+        BeamObjects = new Dictionary<string, GameObject>();
+        string root = "Beams/";
+        BeamObjects.Add("fire_breath", Resources.Load<GameObject>(root + "fire_breath"));
+
+    }
+
+    private static void LoadMiscPrefabs()
+    {
+        MiscPrefabs = new Dictionary<string, GameObject>();
+        MiscPrefabs.Add("march_sone_wall", Resources.Load<GameObject>("Misc/MarchStoneWall"));
+    }
+    public static Material GetMaterial(string name)
+    {
+        return Materials[name];
+    }
+    public static GameObject GetEntityGameObject(string name)
+    {
+
+        return EntityGameObjects[name];
+    }
+
+    public static GameObject GetWorldObject(int id)
+    {
+        return AllWorldObjects[id];
+    }
+    public static Texture2D GetItemImage(int id)
+    {
+        return ItemImages[id];
+    }
+    public static Sprite GetItemSprite(string sheetTag, string itemTag)
+    {
+        Sprite[] sheet = SpriteSheets[sheetTag];
+        Sprite sprite = sheet.Single(s => s.name == itemTag);
+        return sprite;
+    }
+
+    public static GameObject GetEquiptableItemObject(int id)
+    {
+        return EquiptableItemObjects[id];
+    }
+    public static GameObject GetProjectileObject(string key)
+    {
+        return ProjectileObjects[key];
+    }
+    public static GameObject GetBeamObject(string key)
+    {
+        return BeamObjects[key];
+    }
+    public static GameObject GetMiscPrefab(string key)
+    {
+        return MiscPrefabs[key];
+    }
+}
