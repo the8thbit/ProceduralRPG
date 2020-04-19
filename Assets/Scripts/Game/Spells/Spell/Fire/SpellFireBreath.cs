@@ -7,6 +7,9 @@ public class SpellFireBreath : HoldSpell
 
     public override string Description => "Breath Fire";
 
+    public override float XPGain => 1;
+
+    public override SpellCombatType SpellCombatType => SpellCombatType.OFFENSIVE;
 
     private LoadedBeam LoadedSpell;
 

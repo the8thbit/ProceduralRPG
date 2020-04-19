@@ -91,6 +91,12 @@ public class ResourceManager
         AllWorldObjects.Add((int)WorldObjects.DOOR, Resources.Load<GameObject>(root + "Structure/Door/Door"));
         AllWorldObjects.Add((int)WorldObjects.DUNGEON_ENTRANCE, Resources.Load<GameObject>(root + "Null"));
 
+
+        foreach(KeyValuePair<int, GameObject> kvp in AllWorldObjects)
+        {
+            kvp.Value.gameObject.layer = 8;
+        }
+
         /*
         WorldObjects.Add(WorldObject.FORGE.ID, Resources.Load<GameObject>(root + "Work/Blacksmith/Forge"));
         WorldObjects.Add(WorldObject.BED.ID, Resources.Load<GameObject>(root + "Building/House/Bed"));

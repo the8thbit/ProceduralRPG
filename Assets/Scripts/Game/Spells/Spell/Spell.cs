@@ -6,10 +6,15 @@ public abstract class Spell
 {
     public abstract float ManaCost { get; }
  
-
+    public abstract float XPGain { get; }
     public abstract string Description { get; }
 
+    public abstract SpellCombatType SpellCombatType { get; }
+}
 
+public enum SpellCombatType
+{
+    OFFENSIVE, DEFENSIVE, PASSIVE
 }
 [System.Serializable]
 public abstract class SingleSpell : Spell

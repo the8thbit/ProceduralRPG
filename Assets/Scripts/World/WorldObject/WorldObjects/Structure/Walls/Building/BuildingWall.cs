@@ -127,6 +127,12 @@ public class BuildingWall : WorldObjectData
             WorldObject roofObj = Roof.CreateWorldObject(empty_base.transform);
             roofObj.transform.localPosition = new Vector3(0, WallHeight, 0);
         }
+
+        foreach(Transform tran in empty_base.transform)
+        {
+            tran.gameObject.layer = 8;
+        }
+
         return empty_base;
     }
 

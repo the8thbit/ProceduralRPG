@@ -20,6 +20,11 @@ public class BrickWall : WorldObjectData
         {
 
         }
+
+        foreach(Transform t in transform)
+        {
+            t.gameObject.layer = 8;
+        }
         return obj;
     }
 

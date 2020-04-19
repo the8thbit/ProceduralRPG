@@ -3,6 +3,11 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+/// <summary>
+/// EntitySpellManager is used to deal with 
+/// the casting of spells.
+/// Used to cast a spell by the Entity/Player
+/// </summary>
 [System.Serializable]
 public class EntitySpellManager
 {
@@ -21,6 +26,7 @@ public class EntitySpellManager
     private Stopwatch stopwatch;
     public EntitySpellManager(Entity entity)
     {
+        Entity = entity;
         AllSpells = new List<Spell>();
         EquiptSpells = new Spell[2];
         SpellKeyDown = new bool[2];
@@ -29,15 +35,27 @@ public class EntitySpellManager
         stopwatch = new Stopwatch();
     }
 
+    /// <summary>
+    /// Increases mana by the mana regeneration rate.
+    /// </summary>
+    /// <param name="time"></param>
     public void Tick(float time)
     {
         CurrentMana = Mathf.Clamp(CurrentMana + ManaRegenerationRate * time, 0, MaxMana);
     }
-
+    /// <summary>
+    /// Called for a loaded entity that can cast spells
+    /// Checks if the Entity is currently casting a Continous Cast spell
+    /// If they are, we update the spell casting, and change mana and XP values
+    /// accordingly
+    /// </summary>
+    /// <param name="data"></param>
     public void Update(SpellCastData data)
     {
+        //Check lots 1 and 2
         for(int i=0; i<2; i++)
         {
+            //get the spell, continue if spell is null
             Spell s = EquiptSpells[i];
             if (s == null)
                 continue;
@@ -63,6 +81,7 @@ public class EntitySpellManager
                         {
                             Debug.Log("Updating");
                             holdSpell.SpellUpdate(data);
+                            AddXp(holdSpell);
                             CurrentMana -= holdSpell.ManaCost * Time.deltaTime;
                         }
                         else
@@ -81,8 +100,13 @@ public class EntitySpellManager
         }
 
     }
-
-    public void SpellButtonDown(int spell, SpellCastData data)
+    /// <summary>
+    /// Casts the specified spell from the local spell inventory
+    /// based on the relevent SpellCastData
+    /// </summary>
+    /// <param name="spell"></param>
+    /// <param name="data"></param>
+    public void CastSpell(int spell, SpellCastData data)
     {
         //Check if spell number is valid
         if(spell <= 0 && spell < 2)
@@ -99,6 +123,7 @@ public class EntitySpellManager
                 if(CurrentMana > s.ManaCost && stopwatch.ElapsedMilliseconds > singSpe.CoolDown * 1000)
                 {
                     singSpe.CastSpell(data);
+                    AddXp(s);
                     CurrentMana -= s.ManaCost;
                     stopwatch.Restart();
                 }
@@ -111,12 +136,45 @@ public class EntitySpellManager
                 {
                     Debug.Log("Casting");
                     holdSpel.SpellStart(data);
+                    AddXp(s);
                     CurrentMana -= s.ManaCost * Time.deltaTime;
                 }
+                //If we are casting, it is dealth with in the u[
                     
             }
 
 
+        }
+    }
+
+
+    /// <summary>
+    /// Checks the type of magic used for the spell (offensive, defencive, passive),
+    /// and increases the XP by the relevent amount
+    /// </summary>
+    /// <param name="spell"></param>
+    private void AddXp(Spell spell)
+    {
+        //Shouldn't happen but just incase
+        if (spell == null)
+            return;
+        //Calculate the xp based on whether it is a single shot spell, or constant cast spell
+        float xpGain = (spell is SingleSpell)?spell.XPGain:spell.XPGain* Time.deltaTime;
+
+
+        //Check the combat type, and add XP to relevent skill
+        switch (spell.SpellCombatType)
+        {         
+
+            case SpellCombatType.OFFENSIVE:
+                Entity.SkillTree.OffensiveMagic.AddXP(xpGain);
+                return;
+            case SpellCombatType.DEFENSIVE:
+                Entity.SkillTree.DefensiveMagic.AddXP(xpGain);
+                return;
+            case SpellCombatType.PASSIVE:
+                Entity.SkillTree.PassiveMagic.AddXP(xpGain);
+                return;
         }
     }
 

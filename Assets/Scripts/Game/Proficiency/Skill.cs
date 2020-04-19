@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-
+[System.Serializable]
 public abstract class Skill
 {
     private Skills SkillName;
@@ -10,6 +10,9 @@ public abstract class Skill
     {
         SkillName = skill;
     }
+
+
+    public abstract string Name { get; }
 
 
     public void AddXP(float xp)

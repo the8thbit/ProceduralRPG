@@ -76,10 +76,20 @@ public class PlayerManager : MonoBehaviour
         if (GameManager.GUIManager.DialogGUI.InConversation)
             return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKey(KeyCode.E))
+        {
+            PlayerCameraScript.ClockwiseMove(20 * Time.deltaTime);
+        }else if (Input.GetKey(KeyCode.Q))
+        {
+            PlayerCameraScript.ClockwiseMove(-20 * Time.deltaTime);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             GUIManager2.Instance.SetVisible(!GUIManager2.Instance.OpenGUIVisible);
+
         }
+
         if (GameManager.Paused)
             return;
 
@@ -88,7 +98,14 @@ public class PlayerManager : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         //GameManager.DebugGUI.SetData("player_xy_input", new Vector2(x, z).ToString());
-        LoadedPlayer.MoveInDirection(new Vector2(x, z));
+
+        float ud = x * Mathf.Cos(-PlayerCameraScript.Theta * Mathf.Deg2Rad) + z * Mathf.Sin(-PlayerCameraScript.Theta * Mathf.Deg2Rad);
+        float lr = x * Mathf.Sin(-PlayerCameraScript.Theta * Mathf.Deg2Rad) - z * Mathf.Cos(-PlayerCameraScript.Theta * Mathf.Deg2Rad);
+
+        x *= Mathf.Cos(PlayerCameraScript.Theta * Mathf.Deg2Rad) + Mathf.Sin(PlayerCameraScript.Theta * Mathf.Deg2Rad);
+        z *= Mathf.Sin(PlayerCameraScript.Theta * Mathf.Deg2Rad);
+
+        LoadedPlayer.MoveInDirection(new Vector2(lr, ud));
 
 
         Vector3 worldMousePos = GetWorldMousePosition();
@@ -96,12 +113,12 @@ public class PlayerManager : MonoBehaviour
         //GameManager.DebugGUI.SetData("world_mouse_pos", worldMousePos.ToString());
         LoadedPlayer.LookTowardsPoint(worldMousePos);
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Alpha1))
         {
             SpellCastData data = new SpellCastData();
             data.Source = Player;
             data.Target = GetWorldMousePosition();
-            Player.CombatManager.SpellManager.SpellButtonDown(0, data);
+            Player.CombatManager.SpellManager.CastSpell(0, data);
             
         }
 

@@ -31,6 +31,11 @@ public class Debug : ScriptableObject
     {
         UnityEngine.Debug.LogError(obj);
     }
+
+    public static void LogError(object obj)
+    {
+        UnityEngine.Debug.LogError(obj);
+    }
     public static void Log(string str, int TAG=-1)
     {
         if(TAG==-1 || TAG==CURRENT_TAG)

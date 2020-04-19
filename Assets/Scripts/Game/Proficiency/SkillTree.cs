@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// It contains all of their experience for each skill,
 ///  and each elemental mastery
 /// </summary>
+[System.Serializable]
 public class SkillTree
 {
 
