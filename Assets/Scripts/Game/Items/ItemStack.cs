@@ -14,4 +14,8 @@ public class ItemStack
     {
         Count += add;
     }
+    public void RemoveFromStack(int rem = 1)
+    {
+        Count -= rem;
+    }
 }

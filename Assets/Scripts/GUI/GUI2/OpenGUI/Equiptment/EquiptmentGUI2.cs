@@ -17,18 +17,18 @@ public class EquiptmentGUI2 : MonoBehaviour
         for(int i=0; i<7; i++)
         {
 
-            ItemStack itSt = Player.EquiptmentManager.GetEquiptItem((EquiptmentSlot)i);
-            EquiptmentSlots[i].SetButton(this, (EquiptmentSlot)i, itSt);
+            Item item = Player.EquiptmentManager.GetEquiptItem((LoadedEquiptmentPlacement)i);
+            EquiptmentSlots[i].SetButton(this, (LoadedEquiptmentPlacement)i, item);
         }
 
     }
 
 
 
-    public void UnEquipt(EquiptmentSlot slot)
+    public void UnEquipt(LoadedEquiptmentPlacement slot)
     {
-        ItemStack itst = Player.EquiptmentManager.UnequiptItem(slot);
-        Player.Inventory.AddItemStack(itst);
+        Item itst = Player.EquiptmentManager.UnequiptItem(slot);
+        Player.Inventory.AddItem(itst);
     }
 
 

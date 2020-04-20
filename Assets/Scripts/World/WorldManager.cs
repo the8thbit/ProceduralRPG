@@ -182,10 +182,15 @@ public class WorldManager : MonoBehaviour
         c.SetObject(worldPos.x, worldPos.z, null);
         //c.Objects[worldPos.x % World.ChunkSize, worldPos.z % World.ChunkSize] = null;
         LoadedChunk loaded = CRManager.GetLoadedChunk(chunkPos);
+        Debug.Log("Destroy: " + worldPos);
         if (loaded != null)
         {
-            Destroy(loaded.LoadedWorldObjects[worldPos.x % World.ChunkSize, worldPos.z % World.ChunkSize].gameObject);
-            loaded.LoadedWorldObjects[worldPos.x % World.ChunkSize, worldPos.z % World.ChunkSize] = null;
+            if(loaded.LoadedWorldObjects[worldPos.x % World.ChunkSize, worldPos.z % World.ChunkSize] != null)
+            {
+                Destroy(loaded.LoadedWorldObjects[worldPos.x % World.ChunkSize, worldPos.z % World.ChunkSize].gameObject);
+                loaded.LoadedWorldObjects[worldPos.x % World.ChunkSize, worldPos.z % World.ChunkSize] = null;
+            }
+            
         }
     }
 

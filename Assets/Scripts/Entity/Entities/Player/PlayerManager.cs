@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    public static PlayerManager Instance;
+
 
     public LoadedEntity LoadedPlayer { get; private set; }
     public Player Player { get; private set; }
@@ -13,6 +15,7 @@ public class PlayerManager : MonoBehaviour
     private NPC CurrentlySelected;
     private void Awake()
     {
+        Instance = this;
         if (TestMain.TEST_MODE)
         {
             PlayerCamera = GameObject.Find("PlayerCamera").GetComponent<Camera>();
@@ -35,7 +38,7 @@ public class PlayerManager : MonoBehaviour
         entityObject.name = "Player";
         entityObject.transform.parent = transform;
 
-        LoadedEntity loadedEntity = entityObject.AddComponent<LoadedEntity>();
+        LoadedEntity loadedEntity = entityObject.GetComponent<LoadedEntity>();
         player.OnEntityLoad(loadedEntity, true);
         loadedEntity.SetEntity(player);
         entityObject.transform.position = player.Position;
@@ -69,11 +72,11 @@ public class PlayerManager : MonoBehaviour
     void Update()
     {
 
-        if (Console.Instance.Active)
+        if (Console.Instance != null && Console.Instance.Active)
             return;
 
 
-        if (GameManager.GUIManager.DialogGUI.InConversation)
+        if (GameManager.GUIManager!=null && GameManager.GUIManager.DialogGUI.InConversation)
             return;
 
         if (Input.GetKey(KeyCode.E))
@@ -110,7 +113,7 @@ public class PlayerManager : MonoBehaviour
 
         Vector3 worldMousePos = GetWorldMousePosition();
 
-        //GameManager.DebugGUI.SetData("world_mouse_pos", worldMousePos.ToString());
+        GameManager.DebugGUI.SetData("world_mouse_pos", worldMousePos.ToString());
         LoadedPlayer.LookTowardsPoint(worldMousePos);
 
         if (Input.GetKey(KeyCode.Alpha1))
@@ -145,12 +148,11 @@ public class PlayerManager : MonoBehaviour
         //So, the ray is a Point + float * direction
         Vector3 start = PlayerCamera.transform.position;
         float mult = start.y / ray.direction.y;
-        float x = start.x - 2*PlayerCameraScript.Dif.x - ray.direction.x * mult;
+        float x = start.x  - ray.direction.x * mult;
         float z = start.z  - ray.direction.z * mult;
         //float x = start.x  + ray.direction.x * mult;
         //float z = start.z  + ray.direction.z * mult;
         return new Vector3(x, 0, z);
-
     }
 
  
@@ -160,6 +162,15 @@ public class PlayerManager : MonoBehaviour
     /// </summary>
     public void LeftMouseButton()
     {
+        
+        //Weapon in sheath but not in hand, so we put in hand
+        if(Player.EquiptmentManager.HasWeapon && !Player.EquiptmentManager.WeaponReady)
+        {
+            Player.EquiptmentManager.UnsheathWeapon(LoadedEquiptmentPlacement.weaponSheath);
+            return;
+        }
+
+
         if (Player.CombatManager.CanAttack())
         {
             //LoadedPlayer.WeaponController.PlayWeaponAnimation();

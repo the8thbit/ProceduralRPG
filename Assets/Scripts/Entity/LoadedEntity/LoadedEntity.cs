@@ -9,16 +9,17 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
    
 
     public static readonly float LOOK_ROTATION_SPEED = 5;
-    public LoadedEquiptmentManager EquiptmentManager { get; private set; }
     public Entity Entity { get; private set; }
+    public LoadedEntityAnimationManager AnimationManager { get; private set; }
+    public Rigidbody RigidBody { get; private set; }
+
+    private float VerticalVelocity;
+
     private EntityHealthBar EntityHealthBar;
-    private Rigidbody rBody;
     private Collider Collider;
-    private Vector3 targetPosition;
     //private float targetRotation;
     private float DistToGround;
-    private float VerticalVelocity;
-    private bool DirectionBasedLook;
+
     private Vector3 LookTowards;
 
     private Vector2 MoveDirection;
@@ -26,9 +27,7 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
 
     //public WeaponController WeaponController { get; private set; }
 
-    private GameObject EquiptWeapon;
 
-    public Animator Anim;
     public bool IsIdle { get; private set; }
 
     //private Vector3 moveDirection = Vector3.zero;
@@ -39,6 +38,7 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
 
     void OnDrawGizmos()
     {
+
         if(Entity.EntityAI != null)
         {
             if(Entity.EntityAI.EntityPath != null)
@@ -70,64 +70,37 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
 
             }
         }
-
-
-
-
     }
+
     public void SetEntity(Entity entity)
     {
     
-        GameManager.EventManager.AddListener(this);
-        //controller = gameObject.AddComponent<CharacterController>();
+        EventManager.Instance.AddListener(this);
         
         Entity = entity;
-
-        EquiptmentManager = gameObject.GetComponent<LoadedEquiptmentManager>();
-        if(EquiptmentManager != null)
-            EquiptmentManager.SetLoadedEntity(this);
+        AnimationManager = GetComponent<LoadedEntityAnimationManager>();
 
         DistToGround = 0;
         transform.position = new Vector3(entity.Position.x, transform.position.y, entity.Position.z);
-        DirectionBasedLook = true;
-        rBody = GetComponent<Rigidbody>();
+        RigidBody = GetComponent<Rigidbody>();
         Collider = GetComponent<Collider>();
-        targetPosition = transform.position;
-        if(entity is NPC)
-        {
-            NPC npc = entity as NPC;
-            if (npc.NPCData.HasJob)
-            {
-                //gameObject.GetComponentInChildren<MeshRenderer>().material.SetColor("_Color", Color.red);
-                //gameObject.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.red);
 
-            }
-        }
-        //WeaponController = gameObject.AddComponent<WeaponController>();
-        //WeaponController.SetEntity(entity);
+
         GameObject entityhealthBar = Instantiate(ResourceManager.GetEntityGameObject("healthbar"));
         entityhealthBar.transform.parent = transform;
         entityhealthBar.transform.localPosition = new Vector3(0, 2, 0);
 
-        EntityHealthBar = entityhealthBar.GetComponent<EntityHealthBar>();
+        EntityHealthBar = entityhealthBar.GetComponentInChildren<EntityHealthBar>();
 
        // AnimControll = GetComponentInChildren<AnimatorController>();
-        Anim = GetComponentInChildren<Animator>();
 
     }
-    public Animator GetAnimator()
-    {
-        return Anim;
-    }
 
-    public Rigidbody GetRigidBody()
-    {
-        return rBody;
-    }
+
+
     public void ResetPhysics()
     {
         VerticalVelocity = 0;
-        targetPosition = transform.position;
 
     }
 
@@ -169,7 +142,6 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
     public void SetLookBasedOnMovement(bool onMovement)
     {
         IsIdle = false;
-        DirectionBasedLook = onMovement;
     }
 
     public void MoveTowards(Vector3 position, bool chosenPoint=false)
@@ -203,8 +175,8 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
 
         EntityHealthBar.SetHealthPct(Entity.CombatManager.CurrentHealth / Entity.CombatManager.MaxHealth);
 
-        //if (transform.position.y < 0)
-        //    transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        if (transform.position.y < 0)
+            transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 
         Vec2i cPos = World.GetChunkPosition(transform.position);
         if (GameManager.WorldManager.InSubworld)
@@ -220,56 +192,44 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             return;
         }
 
-        rBody.velocity = new Vector3(0, rBody.velocity.y - 9.81f*Time.fixedDeltaTime, 0);
-        rBody.angularVelocity = Vector3.zero;
+        RigidBody.angularVelocity = Vector3.zero;
         if (GameManager.Paused)
             return;
         if (IsIdle)
         {
-            if (Anim != null)
-            {
-                Anim.SetFloat("speed", 0);
-                Anim.SetBool("moving", false);
-            }
+
             return;
         }
 
-        if (MoveDirection != Vector2.zero && !Entity.CombatManager.IsAttacking())
+        if (MoveDirection != Vector2.zero)
         {
 
-            if(Anim != null)
-            {
-                Anim.SetFloat("speed", 1);
-                Anim.SetBool("moving", true);
-            }
+
             float tileSpeed = 1; //TODO - get tile speed
             float entitySpeed = 20; //TODO - get entity speed
 
             Vector2 v2Pos = new Vector2(transform.position.x, transform.position.z);
             Vector2 targetDisp = TargetPosition - v2Pos;
             float targetMag = targetDisp.magnitude;
- 
 
-            rBody.velocity = new Vector3(MoveDirection.x, 0, MoveDirection.y) * tileSpeed * entitySpeed;
+
+            RigidBody.velocity = new Vector3(MoveDirection.x, 0, MoveDirection.y) * tileSpeed * entitySpeed;
             //If the distance the body will move in a frame (|velocity|*dt) is more than the desired amount (target mag)
             //Then we must scale the velocity down
-            if(rBody.velocity.magnitude*Time.fixedDeltaTime > targetMag)
+            if(RigidBody.velocity.magnitude*Time.fixedDeltaTime > targetMag)
             {
 
-                rBody.velocity = rBody.velocity * targetMag/(Time.fixedDeltaTime* rBody.velocity.magnitude);
+                RigidBody.velocity = RigidBody.velocity * targetMag/(Time.fixedDeltaTime* RigidBody.velocity.magnitude);
             }
 
         }
         else
         {
-            if (Anim != null)
-            {
-                
-            }
+
         }
         if (LookTowards != Vector3.zero)
         {
-            float angle = Vector3.SignedAngle(Vector3.right, LookTowards - transform.position, Vector3.up);
+            float angle = Vector3.SignedAngle(Vector3.forward, LookTowards - transform.position, Vector3.up);
             Quaternion quat = Quaternion.Euler(new Vector3(0, angle, 0));
             transform.rotation = Quaternion.Slerp(transform.rotation, quat, Time.fixedDeltaTime * LOOK_ROTATION_SPEED);
             Entity.SetLookAngle(transform.rotation.eulerAngles.y);
@@ -300,9 +260,6 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
 
     public void GamePauseEvent(bool pause)
     {
-        if (Anim != null)
-        {
-            Anim.enabled = !pause;
-        }
+      
     }
 }

@@ -9,26 +9,26 @@ public class EquiptmentButton : MonoBehaviour, IPointerClickHandler
     public Image ItemImage;
 
     private EquiptmentGUI2 EquiptmentGUI;
-    private EquiptmentSlot Slot;
+    private LoadedEquiptmentPlacement Slot;
 
-    private ItemStack ItemStack;
+    private Item Item;
 
-    public void SetButton(EquiptmentGUI2 parent, EquiptmentSlot slot, ItemStack item)
+    public void SetButton(EquiptmentGUI2 parent, LoadedEquiptmentPlacement slot, Item item)
     {
         EquiptmentGUI = parent;
         Slot = slot;
-        ItemStack = item;
+        Item = item;
         if(item != null)
-            ItemImage.sprite = item.Item.GetItemImage();
+            ItemImage.sprite = Item.GetItemImage();
     }
 
     public void OnLeftClick()
     {
-        if(ItemStack != null)
+        if(Item != null)
         {
             EquiptmentGUI.UnEquipt(Slot);
             ItemImage.sprite = null;
-            ItemStack = null;
+            Item = null;
         }
     }
     public void OnRightClick()

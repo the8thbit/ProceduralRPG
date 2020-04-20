@@ -16,6 +16,12 @@ public class EntityCombatManager : IGamePauseEvent
 
     public Entity Entity { get; private set; }
 
+    private LoadedEntityAnimationManager GetAnimationManager()
+    {
+        return  Entity.GetLoadedEntity().AnimationManager;
+    }
+
+
     /// <summary>
     /// All values of Max, Current, and regen rate of health, mana, and stamina
     /// </summary>
@@ -64,9 +70,10 @@ public class EntityCombatManager : IGamePauseEvent
         stopwatch = new Stopwatch();
         stopwatch.Start();
 
-        GameManager.EventManager.AddListener(this);
+        EventManager.Instance.AddListener(this);
 
         SpellManager = new EntitySpellManager(entity);
+        
 
     }
 
@@ -196,11 +203,7 @@ public class EntityCombatManager : IGamePauseEvent
     /// </summary>
     public void UseEquiptWeapon()
     {
-        Animator anim = Entity.GetLoadedEntity().GetAnimator();
-        if(anim != null)
-        {
-            anim.SetTrigger("attack");
-        }
+      
 
         
         stopwatch.Restart();
@@ -237,6 +240,7 @@ public class EntityCombatManager : IGamePauseEvent
             Vector3 bot = Entity.GetLoadedEntity().transform.position + EntityLookAngleToEulerLook(Entity.LookAngle) * 2;
             Vector3 top = Entity.GetLoadedEntity().transform.position + EntityLookAngleToEulerLook(Entity.LookAngle) * 2 + new Vector3(0, 2, 0);
             WeaponDamageRegion region = new WeaponDamageRegion(bot, top, 5f);
+            Entity.GetLoadedEntity().AnimationManager.HumanoidCast().AttackLeft();
 
             GameManager.EventManager.InvokeNewEvent(new NewDamageRegion(Entity, damage, damageType, region));
         }
@@ -326,7 +330,7 @@ public class EntityCombatManager : IGamePauseEvent
     {
         Vector2 normDir = knock.Direction.normalized;
         Vector3 forceDir = new Vector3(normDir.x, 0.5f, normDir.y).normalized;
-        Entity.GetLoadedEntity().GetRigidBody().AddForce(forceDir * knock.Force);
+        Entity.GetLoadedEntity().RigidBody.AddForce(forceDir * knock.Force);
     }
 
 

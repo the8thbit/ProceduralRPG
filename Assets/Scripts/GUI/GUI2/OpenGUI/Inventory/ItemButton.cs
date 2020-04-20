@@ -15,22 +15,22 @@ public class ItemButton : MonoBehaviour, IPointerClickHandler
 
     private DisplayInventoryGUI DisplayInvent;
 
-    public ItemStack ItemStack;
+    public Item Item;
 
     public void SetDisplayInventory(DisplayInventoryGUI dispInv)
     {
         DisplayInvent = dispInv;
     }
 
-    public void SetItemStack(ItemStack itSt)
+    public void SetItem(Item itSt)
     {
-        Sprite sprite = itSt.Item.GetItemImage();
+        Sprite sprite = itSt.GetItemImage();
         if (sprite != null)
         {
             Image.sprite = sprite;
         }
-        Text.text = itSt.Item.Name;
-        ItemStack = itSt;
+        Text.text = itSt.Name;
+        Item = itSt;
     }
     
 

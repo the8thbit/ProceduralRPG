@@ -294,7 +294,7 @@ public class EntityManager : MonoBehaviour
         entityObject.name = entity.Name;
         entityObject.transform.parent = transform;
 
-        LoadedEntity loadedEntity = entityObject.AddComponent<LoadedEntity>();
+        LoadedEntity loadedEntity = entityObject.GetComponent<LoadedEntity>();
         loadedEntity.SetEntity(entity);
         entity.OnEntityLoad(loadedEntity);
         LoadedEntities.Add(loadedEntity);

@@ -73,8 +73,7 @@ public class BasicHumanoidCombatAI : EntityCombatAI
         Vector2 combatDisp = CurrentTarget.Position2 - Entity.Position2;
         float distance = combatDisp.magnitude;
         EquiptmentManager eqMan = (Entity as HumanoidEntity).EquiptmentManager;
-        ItemStack itSt = eqMan.GetEquiptItem(EquiptmentSlot.weapon);
-        Item currentlyEquipt = itSt == null ? null : itSt.Item;
+        Item currentlyEquipt = eqMan.GetEquiptItem(LoadedEquiptmentPlacement.handR);
         //If we are unarmed
         if (currentlyEquipt == null)
         {

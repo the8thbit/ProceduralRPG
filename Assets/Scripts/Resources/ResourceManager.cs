@@ -61,8 +61,7 @@ public class ResourceManager
 
         EntityGameObjects.Add("bear", Resources.Load<GameObject>(root + "bear"));
         EntityGameObjects.Add("spider", Resources.Load<GameObject>(root + "Creature/Spider/Spider_pref"));
-        EntityGameObjects.Add("human", Resources.Load<GameObject>(root + "Human/Human_pref"));
-
+        EntityGameObjects.Add("human", Resources.Load<GameObject>(root + "Human/VoxelHuman"));
 
 
     }

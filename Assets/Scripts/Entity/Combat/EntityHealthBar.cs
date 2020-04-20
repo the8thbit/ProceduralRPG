@@ -11,7 +11,7 @@ public class EntityHealthBar : MonoBehaviour
     void Start()
     {
         SetHealthPct(1);
-        canvas.worldCamera = GameManager.PlayerManager.PlayerCamera;
+        canvas.worldCamera = PlayerManager.Instance.PlayerCamera;
     }
 
     public void SetHealthPct(float pct)
@@ -26,7 +26,7 @@ public class EntityHealthBar : MonoBehaviour
         {
             canvas.enabled = true;
         }
-        transform.LookAt(GameManager.PlayerManager.PlayerCamera.transform);
+        transform.LookAt(PlayerManager.Instance.PlayerCamera.transform);
         transform.Rotate(new Vector3(0, 180, 0));
     }
 }

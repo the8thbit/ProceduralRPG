@@ -38,6 +38,18 @@ public class Inventory
             InventoryObject.OnRemoveItem();
     }
 
+    public void RemoveItem(Item item)
+    {
+        ItemStack itst = ContainsItemStack(item);
+        if(itst != null)
+        {
+            itst.RemoveFromStack();
+            if (itst.Count == 0)
+                RemoveItemStack(itst);
+        }
+        itst?.RemoveFromStack();
+
+    }
 
     public ItemStack ContainsItemStack(Item item)
     {

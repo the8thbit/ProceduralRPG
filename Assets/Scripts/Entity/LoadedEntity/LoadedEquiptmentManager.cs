@@ -1,219 +1,136 @@
 ﻿using UnityEngine;
+using UnityEditor;
+using System.Collections.Generic;
 using System.Collections;
-
-/// <summary>
-/// Deals with equipted items (weapon + armour) for loaded entities
-/// </summary>
+public enum LoadedEquiptmentPlacement
+{
+    head, chest, legs, feet, handR, handL, weaponSheath, backSheath
+}
 public class LoadedEquiptmentManager : MonoBehaviour
 {
 
-
-
-    public GameObject HEAD, CHEST, LEGS, FOOT_L, FOOT_R, HAND_L, HAND_R;
-   // public GameObject CHEST;
-    //public GameObject LEGS;
-
-    private GameObject[] EquiptItems;
+    
+    //references to the bone transforms for each equiptment placement
+    public GameObject HEAD, CHEST, LEGS, FOOT_L, FOOT_R, HAND_L, HAND_L_END, HAND_R, HAND_R_END;
+    public GameObject WEAPONSHEATH, WEAPONSHEATH_END, BACKSHEATH, BACKSHEATH_END;
+    private Dictionary<LoadedEquiptmentPlacement, GameObject> EquiptObjects;
 
 
     private LoadedEntity LoadedEntity;
-
-    private Weapon Weapon;
-    private GameObject WeaponObject;
-    /// <summary>
-    /// Sets the loaded entity of this instance to the specified LoadedEntity.
-    /// Initiates 
-    /// </summary>
-    /// <param name="le"></param>
-    public void SetLoadedEntity(LoadedEntity le)
+    private void OnEnable()
     {
-        LoadedEntity = le;
-        EquiptItems = new GameObject[9];
+        LoadedEntity = GetComponent<LoadedEntity>();
+        EquiptObjects = new Dictionary<LoadedEquiptmentPlacement, GameObject>();
+    }
 
-        //RightHand = transform.Find("Human/Armature/Hips/Spine/Chest/Shoulder.R/Upper Arm.R/Lower Arm.R/Hand.R").gameObject;
+    private void Start()
+    {
+        (LoadedEntity.Entity as HumanoidEntity).EquiptmentManager.SetLoadedEquiptmentManager(this);
 
     }
 
-
-    /// <summary>
-    /// Sets the current weapon to the specified weapon.
-    /// If a weapon is already equipt, un-equipt it and destroy the game object
-    /// If specified weapon is not null, then initiate its game object
-    /// </summary>
-    /// <param name="weapon"></param>
-    public void SetEquiptWeapon(Weapon weapon)
+    public void SetEquiptmentItem(LoadedEquiptmentPlacement slot, Item item)
     {
-        //If no change, return
-        if (weapon == Weapon)
-            return;
-        //If currently equipt is not null, destroy the game object
-        if(Weapon != null)
+        Debug.Log("[LoadedEquiptmentManager] Adding item " + item + " to slot " + slot);
+        GameObject remove;
+        EquiptObjects.TryGetValue(slot, out remove);
+        if(remove != null)
         {
-            Destroy(WeaponObject);
+            DestroyImmediate(remove);
         }
-        if(weapon != null)
-        {
-            //Equipt and load in weapon
-            Weapon = weapon;
-            WeaponObject = Instantiate(weapon.GetEquiptItem());
-            //WeaponObject.transform.parent = RightHand.transform;
-            WeaponObject.transform.localPosition = Vector3.zero;
-            Debug.Log("HERERERERE");
-        }
-    }
 
-
-    public void EquiptItem(Item item, EquiptmentSlot slot)
-    {
         if (item == null)
-            UnequiptItem(slot);
-        if (item.EquiptableSlot != slot)
-            throw new System.Exception("Equiptment not in correct slot");
+            return;
 
-        GameObject itemObj =   Instantiate(item.GetEquiptItem());
-        GameObject secondObj = null;
-        if(slot == EquiptmentSlot.hands || slot == EquiptmentSlot.feet)
-        {
-            secondObj = Instantiate(item.GetEquiptItem());
-        }
-        
-        Debug.Log(itemObj);
-
+        GameObject obj = Instantiate(item.GetEquiptItem());
         switch (slot)
         {
-            case EquiptmentSlot.head:
-                if (EquiptItems[0] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[0] = itemObj;
-                EquiptItems[0].transform.parent = HEAD.transform;
-                EquiptItems[0].transform.localPosition = Vector3.zero;
-                return;
-            case EquiptmentSlot.chest:
-                if (EquiptItems[1] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[1] = itemObj;
-                EquiptItems[1].transform.parent = CHEST.transform;
-                EquiptItems[1].transform.localPosition = Vector3.zero;
-                return;
-            case EquiptmentSlot.legs:
-                if (EquiptItems[2] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[2] = itemObj;
-                EquiptItems[2].transform.parent = LEGS.transform;
-                EquiptItems[2].transform.localPosition = Vector3.zero;
-                return;
-            case EquiptmentSlot.feet:
-                if (EquiptItems[3] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[3] = itemObj;
-                EquiptItems[3].transform.parent = FOOT_L.transform;
-                EquiptItems[3].transform.localPosition = Vector3.zero;
-                if (EquiptItems[4] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[4] = secondObj;
-                EquiptItems[4].transform.parent = FOOT_R.transform;
-                EquiptItems[4].transform.localPosition = Vector3.zero;
-                return;
-
-            case EquiptmentSlot.hands:
-                if (EquiptItems[5] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[5] = itemObj;
-                EquiptItems[5].transform.parent = HAND_L.transform;
-                EquiptItems[5].transform.localPosition = Vector3.zero;
-                if (EquiptItems[6] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[6] = secondObj;
-                EquiptItems[6].transform.parent = HAND_R.transform;
-                EquiptItems[6].transform.localPosition = Vector3.zero;
-                return;
-            case EquiptmentSlot.offhand:
-                if (EquiptItems[7] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[7] = itemObj;
-                EquiptItems[7].transform.parent = HAND_L.transform;
-                EquiptItems[7].transform.localPosition = Vector3.zero;
-                return;
-            case EquiptmentSlot.weapon:
-                if (EquiptItems[8] != null)
-                {
-                    UnequiptItem(slot);
-                }
-                EquiptItems[8] = itemObj;
-                Debug.Log(HAND_R + "_" + EquiptItems[8]);
-                EquiptItems[8].transform.parent = HAND_R.transform;
-                EquiptItems[8].transform.localPosition = Vector3.zero;
-                return;
+            case LoadedEquiptmentPlacement.weaponSheath:
+                obj.transform.parent = WEAPONSHEATH.transform;
+                break;
+            case LoadedEquiptmentPlacement.handR:
+                obj.transform.parent = HAND_R.transform;
+                break;
         }
+        obj.transform.localPosition = Vector3.zero;
+        obj.transform.localRotation = Quaternion.identity;
+        if (EquiptObjects.ContainsKey(slot))
+            EquiptObjects[slot] = obj;
+        else
+            EquiptObjects.Add(slot, obj);
+    }
+
+
+    public void UnsheathWeapon(LoadedEquiptmentPlacement slot)
+    {
+        GameObject sheathed = GetObjectInSlot(slot);
+        LoadedEntity.AnimationManager.HumanoidCast().DrawFromSheath(HAND_R, sheathed);
+        StartCoroutine(WaitToUnsheath(slot));
 
     }
 
-    public void EquiptItemStack(ItemStack itSt, EquiptmentSlot slot)
+    private IEnumerator WaitToUnsheath(LoadedEquiptmentPlacement slot)
     {
-        if (itSt == null)
-        {
-            UnequiptItem(slot);
-        }
+        yield return new WaitForSeconds(LoadedHumanoidAnimatorManager.GRAB_SHEATHED_WEAPON_ANI_TIME);
+        EquiptObjects[LoadedEquiptmentPlacement.handR] = EquiptObjects[slot];
+        EquiptObjects[slot] = null;
+    }
+
+    public GameObject GetObjectInSlot(LoadedEquiptmentPlacement place)
+    {
+        if (EquiptObjects.ContainsKey(place))
+            return EquiptObjects[place];
+        return null;
+    }
+    public void AddObjectInSlot(LoadedEquiptmentPlacement place, GameObject obj)
+    {
+        if (EquiptObjects.ContainsKey(place))
+            EquiptObjects[place] = obj;
         else
         {
-            EquiptItem(itSt.Item, slot);
+            EquiptObjects.Add(place, obj);
+        }
+    }
+    public void SwapObjectSlots(LoadedEquiptmentPlacement a, LoadedEquiptmentPlacement b)
+    {
+        GameObject A = GetObjectInSlot(a);
+        GameObject B = GetObjectInSlot(b);
+        AddObjectInSlot(a, B);
+        AddObjectInSlot(b, A);
+    }
+
+
+    private void Update()
+    {
+        GameObject weaponObj;
+        if(EquiptObjects.TryGetValue(LoadedEquiptmentPlacement.handR, out weaponObj))
+        {
+            weaponObj.transform.rotation = GetBoneRotation(HAND_R, HAND_R_END);
         }
     }
 
-    public void UnequiptItem(EquiptmentSlot slot)
-    {
-        switch (slot)
-        {
-            case EquiptmentSlot.head:
-                if (EquiptItems[0] != null)
-                    Destroy(EquiptItems[0].gameObject);
-                return;
-            case EquiptmentSlot.chest:
-                if (EquiptItems[1] != null)
-                    Destroy(EquiptItems[1].gameObject);
-                return;
-            case EquiptmentSlot.legs:
-                if (EquiptItems[2] != null)
-                    Destroy(EquiptItems[2].gameObject);
-                return;
-            case EquiptmentSlot.feet:
-                if (EquiptItems[3] != null)
-                    Destroy(EquiptItems[3].gameObject);
-                if (EquiptItems[4] != null)
-                    Destroy(EquiptItems[4].gameObject);
-                return;
 
-            case EquiptmentSlot.hands:
-                if (EquiptItems[5] != null)
-                    Destroy(EquiptItems[5].gameObject);
-                if (EquiptItems[6] != null)
-                    Destroy(EquiptItems[6].gameObject);
-                return;
-            case EquiptmentSlot.offhand:
-                if(EquiptItems[7] != null)
-                    Destroy(EquiptItems[7].gameObject);
-                return;
-            case EquiptmentSlot.weapon:
-                if (EquiptItems[8] != null)
-                    Destroy(EquiptItems[8].gameObject);
-                return;
-        }
+
+
+
+
+
+
+    /// <summary>
+    /// Returns the Quaternion rotation that defines the bone
+    /// rotation starting at t1 and ending at t2
+    /// </summary>
+    /// <param name="t1"></param>
+    /// <param name="t2"></param>
+    /// <returns></returns>
+    public static Quaternion GetBoneRotation(GameObject t1, GameObject t2)
+    {
+        Vector3 dif = (t2.transform.position - t1.transform.position).normalized;
+
+        return Quaternion.FromToRotation(Vector3.up, dif);
+        Debug.Log(t2.transform.localPosition + "_" + t1.transform.localPosition + "_" + dif);
+        return Quaternion.Euler(dif);
+        return Quaternion.LookRotation(t2.transform.localPosition.normalized, Vector3.up);
 
     }
 

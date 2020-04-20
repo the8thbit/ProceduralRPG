@@ -9,6 +9,12 @@ public interface IEvent { }
 public class EventManager 
 {
 
+    public static EventManager Instance;
+    public EventManager()
+    {
+        Instance = this;
+    }
+
     public delegate void PlayerPickupItemEvent(PlayerPickupItem ev);
     public event PlayerPickupItemEvent PlayerPickupItemEvent_;
 

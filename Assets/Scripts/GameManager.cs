@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour
         QuestManager = GetComponent<QuestManager>();
         GUIManager = GetComponentInChildren<GUIManager2>();
         EventManager = new EventManager();
+
         Console = GetComponentInChildren<Console>();
         ResourceManager.LoadAllResources();
 

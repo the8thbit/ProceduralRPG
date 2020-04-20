@@ -37,23 +37,23 @@ public class DisplayInventoryGUI : MonoBehaviour
     {
         Debug.Log("equipting");
         //If not equiptable, we do nothing (return)
-        if (!itBut.ItemStack.Item.IsEquiptable)
+        if (!itBut.Item.IsEquiptable)
         {
             Debug.Log("not equiptable");
             return;
         }
             
         //Remove it from out inventory, and equipt it
-        Inventory.RemoveItemStack(itBut.ItemStack);
-        ItemStack toAdd = GameManager.PlayerManager.Player.EquiptmentManager.EquiptItem(itBut.ItemStack, itBut.ItemStack.Item.EquiptableSlot);
+        Inventory.RemoveItem(itBut.Item);
+        Item toAdd = GameManager.PlayerManager.Player.EquiptmentManager.EquiptItem(itBut.Item);
         Destroy(itBut.gameObject);
         //If the relevent slot had an item in before
         if(toAdd != null)
         {
             //Add item to inventory
-            Inventory.AddItemStack(toAdd);
+            Inventory.AddItem(toAdd);
             //If its the current display item tag, add it to the display
-            if (toAdd.Item.HasTag(CurrentItemTag))
+            if (toAdd.HasTag(CurrentItemTag))
                 AddItemToSpace(toAdd);
         }
 
@@ -64,7 +64,7 @@ public class DisplayInventoryGUI : MonoBehaviour
                 Inventory = null;
                 gameObject.SetActive(false);
             }
-            GameManager.EventManager.InvokeNewEvent(new PlayerPickupItem(itBut.ItemStack.Item));
+            GameManager.EventManager.InvokeNewEvent(new PlayerPickupItem(itBut.Item));
         }
 
     }
@@ -84,27 +84,27 @@ public class DisplayInventoryGUI : MonoBehaviour
             if (second == null)
                 return;
             //We add the item to both the invetory, and to its thingy
-            Parent.SecondInventory.Inventory.AddItemStack(itBut.ItemStack);
-            Parent.SecondInventory.AddItemToSpace(itBut.ItemStack);
-            this.Inventory.RemoveItemStack(itBut.ItemStack);
+            Parent.SecondInventory.Inventory.AddItem(itBut.Item);
+            Parent.SecondInventory.AddItemToSpace(itBut.Item);
+            this.Inventory.RemoveItem(itBut.Item);
             Destroy(itBut.gameObject);
         }
         else
         {
             //if this is the second inventory, we add the object to the main inventory          
 
-            Parent.MainInventory.AddItemToSpace(itBut.ItemStack);
-            Parent.MainInventory.Inventory.AddItemStack(itBut.ItemStack);
+            Parent.MainInventory.AddItemToSpace(itBut.Item);
+            Parent.MainInventory.Inventory.AddItem(itBut.Item);
 
             Destroy(itBut.gameObject);
-            Inventory.RemoveItemStack(itBut.ItemStack);
+            Inventory.RemoveItem(itBut.Item);
 
             if (Inventory.IsEmpty)
             {
                 Inventory = null;
                 gameObject.SetActive(false);
             }
-            GameManager.EventManager.InvokeNewEvent(new PlayerPickupItem(itBut.ItemStack.Item));
+            GameManager.EventManager.InvokeNewEvent(new PlayerPickupItem(itBut.Item));
 
 
         }
@@ -124,18 +124,18 @@ public class DisplayInventoryGUI : MonoBehaviour
         {
             if (itst.Item.HasTag(CurrentItemTag))
             {
-                AddItemToSpace(itst);
+                AddItemToSpace(itst.Item);
             }
         }
 
     }
 
 
-    private void AddItemToSpace(ItemStack item)
+    private void AddItemToSpace(Item item, int count=1)
     {
         GameObject but = Instantiate(Parent.ItemButtonPrefab.gameObject);
         ItemButton itb = but.GetComponent<ItemButton>();
-        itb.SetItemStack(item);
+        itb.SetItem(item);
         but.transform.SetParent(InventorySpace.transform, false);
         itb.SetDisplayInventory(this);
     }
