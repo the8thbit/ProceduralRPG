@@ -109,6 +109,11 @@ public class LoadedEquiptmentManager : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(HAND_R.transform.position, HAND_R_END.transform.position);
+    }
+
 
 
 

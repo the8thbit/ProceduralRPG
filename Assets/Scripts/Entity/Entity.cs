@@ -34,6 +34,8 @@ public abstract class Entity
 
     public SkillTree SkillTree { get; private set; }
 
+    public float MaxMoveSpeed { get; private set; }
+
     [System.NonSerialized]
     private LoadedEntity LoadedEntity;
     public LoadedEntity GetLoadedEntity()
@@ -53,6 +55,7 @@ public abstract class Entity
         Inventory = new Inventory();
         CombatManager = new EntityCombatManager(this);
         SkillTree = new SkillTree();
+        MaxMoveSpeed = 20;
     }
 
     /// <summary>

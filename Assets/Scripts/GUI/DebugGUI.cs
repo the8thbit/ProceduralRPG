@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class DebugGUI : MonoBehaviour
 {
-
+    public static DebugGUI Instance;
     private Dictionary<string, string> DebugLines;
     private LoadedEntity SelectedEntity;
     void Awake()
     {
+        Instance = this;
         DebugLines = new Dictionary<string, string>();
     }
 

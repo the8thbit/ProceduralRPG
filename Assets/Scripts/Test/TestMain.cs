@@ -10,7 +10,7 @@ public class TestMain : MonoBehaviour
     public static PlayerManager PlayerManager;
     public static DebugGUI DebugGUI;
     public static WorldManager WorldManager;
-    public static bool TEST_MODE = false;
+    public static bool TEST_MODE = true;
 
 
 
