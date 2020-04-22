@@ -31,6 +31,10 @@ public class EquiptmentManager
     {
         LoadedEquiptmentManager = lem;
     }
+    public LoadedEquiptmentManager GetLoadedEquiptmentManager()
+    {
+        return LoadedEquiptmentManager;
+    }
 
    //Returns true if a weapon is either in hand, or in weapon sheath
     public bool HasWeapon { get {
@@ -171,6 +175,8 @@ public class EquiptmentManager
             EquiptItems.Remove(slot);
         //If entity is loaded, remove equiptment object
         LoadedEquiptmentManager?.SetEquiptmentItem(slot, null);
+
+
         return remove;
     }
     /// <summary>
@@ -186,7 +192,8 @@ public class EquiptmentManager
 
         Debug.Log("Item " + item + " added to slot " + slot);
         LoadedEquiptmentManager?.SetEquiptmentItem(slot, item);
-
+        if (slot == LoadedEquiptmentPlacement.handR)
+            Entity.CombatManager.SetEquiptWeapon(item as Weapon);
         return removed;
     }
 
@@ -207,7 +214,7 @@ public class EquiptmentManager
                 toPut = LoadedEquiptmentPlacement.weaponSheath;
             }
         }
-        Debug.Log("putting " + item + " in " + toPut);
+        
         return EquiptItem(toPut, item);
     }
 
@@ -221,7 +228,8 @@ public class EquiptmentManager
             LoadedEquiptmentManager.UnsheathWeapon(sheathedPosition);
             EquiptItems[LoadedEquiptmentPlacement.handR] = EquiptItems[sheathedPosition];
             EquiptItems[sheathedPosition] = null;
-            
+            Entity.CombatManager.SetEquiptWeapon(EquiptItems[LoadedEquiptmentPlacement.handR] as Weapon);
+
 
         }
 

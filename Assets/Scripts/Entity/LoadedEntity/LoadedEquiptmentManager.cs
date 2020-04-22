@@ -27,6 +27,9 @@ public class LoadedEquiptmentManager : MonoBehaviour
     {
         (LoadedEntity.Entity as HumanoidEntity).EquiptmentManager.SetLoadedEquiptmentManager(this);
 
+        HAND_R.GetComponent<LoadedMeleeWeapon>().SetWeaponDetails(LoadedEntity.Entity, null);
+        LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(HAND_R.GetComponent<LoadedMeleeWeapon>());
+
     }
 
     public void SetEquiptmentItem(LoadedEquiptmentPlacement slot, Item item)
@@ -37,10 +40,20 @@ public class LoadedEquiptmentManager : MonoBehaviour
         if(remove != null)
         {
             DestroyImmediate(remove);
+            EquiptObjects.Remove(slot);
         }
-
+        //If the item is null, we don't need to add an object
         if (item == null)
+        {
+            //But if the slot is the hand, we need to activate the unarmed melee attack
+            if(slot == LoadedEquiptmentPlacement.handR)
+            {
+                LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(HAND_R.GetComponent<LoadedMeleeWeapon>());
+                //Ensure it is enabled so we can deal unarmed attacks
+            }
             return;
+        }
+            
 
         GameObject obj = Instantiate(item.GetEquiptItem());
         switch (slot)
@@ -52,6 +65,17 @@ public class LoadedEquiptmentManager : MonoBehaviour
                 obj.transform.parent = HAND_R.transform;
                 break;
         }
+
+
+
+        if (item is Weapon && !(item is RangeWeapon))
+        {
+            obj.GetComponent<LoadedMeleeWeapon>().SetWeaponDetails(LoadedEntity.Entity, item as Weapon);
+            LoadedMeleeWeapon lmw = obj.GetComponent<LoadedMeleeWeapon>();
+            LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(lmw);
+            Debug.Log("LMW:::" + lmw);
+        }
+
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.identity;
         if (EquiptObjects.ContainsKey(slot))
@@ -105,6 +129,7 @@ public class LoadedEquiptmentManager : MonoBehaviour
         GameObject weaponObj;
         if(EquiptObjects.TryGetValue(LoadedEquiptmentPlacement.handR, out weaponObj))
         {
+
             weaponObj.transform.rotation = GetBoneRotation(HAND_R, HAND_R_END);
         }
     }
