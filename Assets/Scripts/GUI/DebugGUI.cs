@@ -30,11 +30,20 @@ public class DebugGUI : MonoBehaviour
         }
     }
 
+    public void ClearData(string key)
+    {
+        if (DebugLines.ContainsKey(key))
+            DebugLines.Remove(key);
+    }
+
     public void SetSelectedEntity(LoadedEntity e)
     {
 
         SelectedEntity = e;
     }
+
+
+
 
     public void GUIDRAWLINE(Vector3 start, Vector3 end)
     {
