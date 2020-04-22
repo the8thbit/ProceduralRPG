@@ -2,3 +2,6 @@
 
 # CS0659: Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 dotnet_diagnostic.CS0659.severity = silent
+
+# UNT0008: Null propagation on Unity objects
+dotnet_diagnostic.UNT0008.severity = none
