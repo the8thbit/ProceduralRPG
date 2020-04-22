@@ -1,38 +1,35 @@
 fileFormatVersion: 2
-guid: a561fd17d3536644995bfd810019e276
+guid: 0b61a58555d132249885e8db7723676e
 ModelImporter:
-  serializedVersion: 26
+  serializedVersion: 19300
   internalIDToNameTable:
   - first:
-      74: 3105767281831561871
-    second: Armature|attack_left
+      74: 5523681517207194545
+    second: Armature|GrabSheathedWeapon
   - first:
-      74: -7648470962409432515
-    second: Armature|attack_left.001
+      74: -8945691123924629249
+    second: Armature|Idle
   - first:
-      74: 8349542763059015795
-    second: Armature|Walk
+      74: 1079665108409675491
+    second: Armature|Jump
   - first:
-      74: -6544428077046268240
-    second: Armature|Walk.001
+      74: -2400424121681697209
+    second: Armature|JumpLand
   - first:
-      74: 885944232402757753
-    second: Armature|Action
+      74: -7551964380084998518
+    second: Armature|Run
   - first:
-      74: 7661473984823109897
-    second: Armature|attack_right
+      74: 3514657335322204496
+    second: Armature|swing_weapon
   - first:
-      74: -9051496176664730415
-    second: Armature|block_left
+      74: -7372276571388957900
+    second: Armature|UnsheathWeapon
   - first:
-      74: -1978303741906493279
-    second: Armature|idle
-  - first:
-      74: -1744359158341081592
-    second: Armature|spell_right
+      74: -4274770991410265338
+    second: Armature|Walking
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -41,7 +38,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    motionNodeName: 
+    motionNodeName: <Root Transform>
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
@@ -59,11 +56,40 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Action
-      takeName: Armature|Action
+      name: Armature|GrabSheathedWeapon
+      takeName: Armature|GrabSheathedWeapon
       internalID: 0
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 5
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Idle
+      takeName: Armature|Idle
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -88,11 +114,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|attack_right
-      takeName: Armature|attack_right
+      name: Armature|Jump
+      takeName: Armature|Jump
       internalID: 0
       firstFrame: 0
-      lastFrame: 15
+      lastFrame: 8
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -117,11 +143,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|block_left
-      takeName: Armature|block_left
+      name: Armature|JumpLand
+      takeName: Armature|JumpLand
       internalID: 0
       firstFrame: 0
-      lastFrame: 15
+      lastFrame: 7
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -146,11 +172,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|idle
-      takeName: Armature|idle
+      name: Armature|Run
+      takeName: Armature|Run
       internalID: 0
       firstFrame: 0
-      lastFrame: 14
+      lastFrame: 16
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -175,11 +201,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|spell_right
-      takeName: Armature|spell_right
+      name: Armature|swing_weapon
+      takeName: Armature|swing_weapon
       internalID: 0
       firstFrame: 0
-      lastFrame: 14
+      lastFrame: 10
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -204,11 +230,40 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Walk
-      takeName: Armature|Walk
+      name: Armature|UnsheathWeapon
+      takeName: Armature|UnsheathWeapon
       internalID: 0
       firstFrame: 0
-      lastFrame: 27
+      lastFrame: 5
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Walking
+      takeName: Armature|Walking
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 24
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -270,7 +325,6 @@ ModelImporter:
     normalSmoothingSource: 0
   referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -288,8 +342,10 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
   additionalBone: 0
   userData: 
   assetBundleName: 

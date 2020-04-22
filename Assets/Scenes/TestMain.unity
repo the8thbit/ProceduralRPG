@@ -315,6 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa07dc517b16f654e934a3c730e00b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RenderTexture: {fileID: 0}
 --- !u!1 &844103734
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,12 +326,11 @@ GameObject:
   m_Component:
   - component: {fileID: 844103736}
   - component: {fileID: 844103735}
-  - component: {fileID: 844103737}
   - component: {fileID: 844103738}
   - component: {fileID: 844103739}
   - component: {fileID: 844103740}
-  - component: {fileID: 844103741}
   - component: {fileID: 844103742}
+  - component: {fileID: 844103737}
   m_Layer: 0
   m_Name: TestMain
   m_TagString: Untagged
@@ -374,11 +374,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 844103734}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eda136d1322f6d49a10663d810a28dc, type: 3}
+  m_Script: {fileID: 11500000, guid: cbbec367c1dd97241986603e9927053f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Width: 0
-  Height: 0
 --- !u!114 &844103738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,18 +411,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a2e051e1971cf92458eea7e1bcdd080e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &844103741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 844103734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad87d2cf1b4d74d42b11754ed4318f92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &844103742

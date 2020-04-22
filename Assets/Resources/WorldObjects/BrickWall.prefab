@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2581540647203569254}
   - component: {fileID: 2581540647203569273}
   - component: {fileID: 2581540647203569272}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2581540648150732356}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BrickWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

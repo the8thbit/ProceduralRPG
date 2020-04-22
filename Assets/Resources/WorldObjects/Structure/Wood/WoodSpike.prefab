@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5613073698491629869}
   - component: {fileID: 2222858062012972500}
   - component: {fileID: 3856586131230104640}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WoodSpike
   m_TagString: Untagged
   m_Icon: {fileID: 0}

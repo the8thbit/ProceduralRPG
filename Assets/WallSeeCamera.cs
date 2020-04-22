@@ -38,7 +38,7 @@ public class WallSeeCamera : MonoBehaviour
         //Check for all objects blocking camera view to player
         ShouldShow = WorldObjectIntersect(); ;
 
-        RenderTextureDisplayImage.enabled = ShouldShow;
+        RenderTextureDisplayImage.gameObject.SetActive(ShouldShow);
 
 
     }
@@ -80,7 +80,10 @@ public class WallSeeCamera : MonoBehaviour
         return false;
     }
 
-   
+    /// <summary>
+    /// Updates the FOV of the wall see camera, 
+    /// TODO - fix, not perfect
+    /// </summary>
     private void UpdateFOV()
     {
          float wfov = CalculateFOVFromWidth();
@@ -91,6 +94,11 @@ public class WallSeeCamera : MonoBehaviour
         //ThisCamera.fieldOfView = 31;
     }
 
+    /// <summary>
+    /// Calculates the FOV of the wall see
+    /// camera based on the screen width
+    /// </summary>
+    /// <returns></returns>
     private float CalculateFOVFromWidth()
     {
         float halfScreen = Screen.width / 2;
@@ -98,6 +106,11 @@ public class WallSeeCamera : MonoBehaviour
         float fov = Mathf.Asin((renderTextureHalf*2*Mathf.Sin(Mathf.Deg2Rad * MainCamera.fieldOfView/2))/halfScreen);
         return fov * Mathf.Rad2Deg*2;
     }
+    /// <summary>
+    /// Calculates the FOV of the wall see
+    /// camera based on the screen height
+    /// </summary>
+    /// <returns></returns>
     private float CalculateFOVFromHeight()
     {
         float halfScreen = Screen.height / 2;
