@@ -215,6 +215,8 @@ public class WorldManager : MonoBehaviour
 
         LoadedProjectiles.Add(l);
     }
+
+
     public void DestroyProjectile(LoadedProjectile proj)
     {
         LoadedProjectiles.Remove(proj);

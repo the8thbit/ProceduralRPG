@@ -88,6 +88,23 @@ public class ChunkRegionManager : MonoBehaviour
         SubworldChunks.Clear();
     }
 
+    /// <summary>
+    /// Checks if the specified chunk coordinate is currently loaded, 
+    /// checking both the world, and checking if a subworld is loaded
+    /// </summary>
+    /// <param name="chunkPos"></param>
+    /// <returns></returns>
+    public bool IsCurrentChunkPositionLoaded(Vec2i chunkPos)
+    {
+        if (InSubworld)
+        {
+            return SubworldChunks.ContainsKey(chunkPos);
+        }
+        return LoadedChunks.ContainsKey(chunkPos);
+    }
+
+
+
     public ChunkData GetChunk(int x, int z)
     {
         return GetChunk(new Vec2i(x, z));
@@ -224,7 +241,9 @@ public class ChunkRegionManager : MonoBehaviour
         if (ToLoadIn.Count == 0)
         {
             Debug.Log("none to load in");
+            DebugGUI.Instance.ClearData("chunks_loading_in");
         }
+        DebugGUI.Instance.SetData("chunks_loading_in", ToLoadIn.Count);
            
         if (ToLoadIn.Count < maxToGen)
         {
