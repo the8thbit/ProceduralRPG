@@ -49,6 +49,8 @@ public class EntityCombatManager : IGamePauseEvent
     [System.NonSerialized]
     private Stopwatch stopwatch;
 
+    [System.NonSerialized]
+    private LoadedMeleeWeapon LoadedMeleeWeapon;
 
     public EntitySpellManager SpellManager { get; private set; }
 
@@ -136,6 +138,11 @@ public class EntityCombatManager : IGamePauseEvent
     public void SetEquiptWeapon(Weapon weapon)
     {
         EquiptWeapon = weapon;
+    }
+
+    public void SetLoadedMeleeWeapon(LoadedMeleeWeapon lmw)
+    {
+        LoadedMeleeWeapon = lmw;
     }
 
     public Weapon GetEquiptWeapon()
@@ -228,7 +235,6 @@ public class EntityCombatManager : IGamePauseEvent
 
         }
 
-
         CurrentStamina -= staminaUse;
         if (EquiptWeapon is RangeWeapon)
         {
@@ -237,12 +243,14 @@ public class EntityCombatManager : IGamePauseEvent
         }
         else
         {
-            Vector3 bot = Entity.GetLoadedEntity().transform.position + EntityLookAngleToEulerLook(Entity.LookAngle) * 2;
-            Vector3 top = Entity.GetLoadedEntity().transform.position + EntityLookAngleToEulerLook(Entity.LookAngle) * 2 + new Vector3(0, 2, 0);
-            WeaponDamageRegion region = new WeaponDamageRegion(bot, top, 5f);
+            //Instruct animation manager to play attack animation
             Entity.GetLoadedEntity().AnimationManager.HumanoidCast().AttackLeft();
 
-            GameManager.EventManager.InvokeNewEvent(new NewDamageRegion(Entity, damage, damageType, region));
+            //Calculate the final dealth damage, based on entity skill tree modifiers and the weapons base damage.
+
+
+            LoadedMeleeWeapon?.SwingWeapon(damage);
+
         }
     }
 
@@ -250,6 +258,7 @@ public class EntityCombatManager : IGamePauseEvent
 
     public void DealDamage(float damage, DamageType type, Entity source=null, object[] args=null)
     {
+        Debug.Log("Test here");
         CurrentHealth -= CalculateDamageValue(damage, type);
         if (CurrentHealth <= 0)
         {
@@ -271,38 +280,6 @@ public class EntityCombatManager : IGamePauseEvent
             }
         }
     }
-    /// <summary>
-    /// Applies the DamageRegion to the entity this combat manager belongs to
-    /// </summary>
-    /// <param name="damage"></param>
-    public void DealDamageRegion(NewDamageRegion damage)
-    {
-
-
-
-        //Calculate actual damage dealth, then check for death.
-        CurrentHealth -= CalculateDamageValue(damage.Damage, damage.DamageType);
-
-        if (CurrentHealth <= 0)
-        {
-            Entity.Kill();
-            return;
-        }
-        //If the attack hasn't killed the entity, check for damage region effects
-        if (damage.HasArgs)
-        {
-            //Iterate each one and apply.
-            foreach(object arg in damage.args)
-            {
-                if (arg is DamageRegionArgKockback)
-                    ApplyKnockback(arg as DamageRegionArgKockback);
-                if(arg is DamageRegionArgBurning)
-                {
-                    //TODO add burning effect.
-                }
-            }         
-        }
-    }
 
     /// <summary>
     /// Calculates the final damage dealt to entity after taking into account
@@ -315,9 +292,13 @@ public class EntityCombatManager : IGamePauseEvent
     {
         if(Entity is HumanoidEntity)
         {
+
+
             HumanoidEntity hum = Entity as HumanoidEntity;
             float armourVal = hum.EquiptmentManager.GetArmourValue();
-            return Mathf.Sqrt(armourVal);
+            if (armourVal <= 1)
+                return baseDamage;
+            return baseDamage/Mathf.Sqrt(armourVal);
 
         }
         return baseDamage;
