@@ -10,8 +10,8 @@ public abstract class HumanoidEntity : Entity {
 
 
     public EquiptmentManager EquiptmentManager { get; private set; }
-    public HumanoidEntity(EntityCombatAI combatAI, EntityTaskAI taskAI, string name = "un-named_entity", bool isFixed = false) 
-        : base(combatAI, taskAI, name, isFixed)
+    public HumanoidEntity(EntityCombatAI combatAI, EntityTaskAI taskAI, EntityMovementData movementData,string name = "un-named_entity", bool isFixed = false) 
+        : base(combatAI, taskAI, movementData, name, isFixed)
     {
         EquiptmentManager = new EquiptmentManager(this);
     }

@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine.Animations;
 using System.Collections.Generic;
 using System.Collections;
-public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEvent
+public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 {
 
 
@@ -28,7 +28,7 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
 
     //public WeaponController WeaponController { get; private set; }
 
-
+    //Used to check for entities, if Idle 
     public bool IsIdle { get; private set; }
 
     //private Vector3 moveDirection = Vector3.zero;
@@ -121,6 +121,8 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
     private bool IsJumping;
     private bool IsWaitingForJump;
     private bool IsFalling;
+    private bool IsRunning;
+
     /// <summary>
     /// Causes the entity to jump. 
     /// Checks if the entity is grounded, and if
@@ -132,37 +134,42 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             return;
         IsWaitingForJump = true;
         StartCoroutine(WaitForJumpAnimation());
-        return;
-        //Cannot jump if already jumping
-        if (IsJumping)
-            return;
-        
-        IsIdle = false;
-        if (OnGround())
-        {
-            StartCoroutine(WaitForJumpAnimation());
-        }
-        else
-        {
-
-        }
     }
 
-
+    /// <summary>
+    /// Internal method used for jumping.
+    /// Waits for the Jump animation to play before setting variables
+    /// such that jumping occurs
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator WaitForJumpAnimation()
     {
         AnimationManager.Jump();
         yield return new WaitForSeconds(AnimationManager.JumpAnimationTime);
-        VerticalVelocity = 20;
+        VerticalVelocity = 5;
         IsJumping = true;
         IsWaitingForJump = false;
     }
+
+    /// <summary>
+    /// Sets if the entity should currently be running or not
+    /// </summary>
+    /// <param name="running"></param>
+    public void SetRunning(bool running)
+    {
+        IsRunning = running;
+    }
+
+
 
     private System.Diagnostics.Stopwatch Stopwatch;
     
 
 
-
+    /// <summary>
+    /// Causes entity to look towards the specified point
+    /// </summary>
+    /// <param name="v">Point of interest to face towards</param>
     public void LookTowardsPoint(Vector3 v)
     {
         IsIdle = false;
@@ -209,17 +216,12 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 
         Vec2i cPos = World.GetChunkPosition(transform.position);
-        if (GameManager.WorldManager.InSubworld)
+
+        //Check if the current chunk is loaded
+        if (!GameManager.WorldManager.CRManager.IsCurrentChunkPositionLoaded(cPos))
         {
-            if (!GameManager.WorldManager.CRManager.SubworldChunks.ContainsKey(cPos))
-            {
-                transform.position = new Vector3(transform.position.x, 1, transform.position.z);
-                return;
-            }
-        }else if (!GameManager.WorldManager.CRManager.LoadedChunks.ContainsKey(cPos))
-        {
+            //If not, keep position dixed with +ve y value, to prevent falling through world.
             transform.position = new Vector3(transform.position.x, 1, transform.position.z);
-            return;
         }
 
         RigidBody.angularVelocity = Vector3.zero;
@@ -231,13 +233,13 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             return;
         }
 
+        //If we have a specified move direction
         if (MoveDirection != Vector2.zero)
         {
-
-
             float tileSpeed = 1; //TODO - get tile speed
-            float entitySpeed = Entity.MaxMoveSpeed; //TODO - get entity speed
-
+            //Finds correct speed associated with running/walking for this entity
+            float entitySpeed = IsRunning?Entity.MovementData.RunSpeed:Entity.MovementData.WalkSpeed;
+            Debug.Log(entitySpeed);
             Vector2 v2Pos = new Vector2(transform.position.x, transform.position.z);
             Vector2 targetDisp = TargetPosition - v2Pos;
             float targetMag = targetDisp.magnitude;
@@ -257,6 +259,7 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
         {
 
         }
+        //If we have a specified look direction
         if (LookTowards != Vector3.zero)
         {
             float angle = Vector3.SignedAngle(Vector3.forward, LookTowards - transform.position, Vector3.up);
@@ -265,10 +268,10 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             Entity.SetLookAngle(transform.rotation.eulerAngles.y);
         }
 
-
+        //Check if we are on the ground
         bool IsOnGround = OnGround();
-        bool IsPlayer = Entity is Player;
 
+        //Debug info for player Jumping
         if(Entity is Player)
         {
             DebugGUI.Instance.SetData("jump_vel", VerticalVelocity);
@@ -277,9 +280,6 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             DebugGUI.Instance.SetData("isFalling", IsFalling);
 
         }
-
-
-
 
         //Check if we are off the ground
         if (!IsOnGround)
@@ -314,77 +314,7 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
             AnimationManager.LandJump();
         }
 
-        /*
-        //Check if we are currently jumping
-        if (IsJumping)
-        {
-            //If we are not on the ground, we update the jump velocity
-            if (!IsOnGround)
-            {
-                VerticalVelocity -= 9.81f * Time.fixedDeltaTime;
-                transform.position += Vector3.up * VerticalVelocity * Time.fixedDeltaTime;
-            }         
-            //If we are on the ground, we check if our velocity is negative (i.e, we are falling)
-            if (IsOnGround && VerticalVelocity < 0)
-            {
-                //We play the JumpLand animation, and stop jumping
-                IsJumping = false;
-                VerticalVelocity = 0;
-                AnimationManager.LandJump();
-            }
-
-        }else if (!IsOnGround)
-        {//If not jumping, but also not on the ground, we check if we are falling
-            if (!IsFalling)
-            {
-                //If we are not falling, we set IsFalling to true, as in reality, we are falling
-                AnimationManager.SetFalling();
-                IsFalling = true;
-            }          
-            
-        }
-        else
-        {
-            //If we are not jumping, and are on the ground, check if we were falling
-            if (IsFalling)
-            {
-                //If we WERE falling, we no longer are, so we stop
-                AnimationManager.LandJump();
-                IsFalling = false;
-                VerticalVelocity = 0;
-            }
-        }*/
-
-
-
-        /*
-        //If we are not on the ground 
-        if (!OnGround())
-        {
-            VerticalVelocity -= 9.81f * Time.fixedDeltaTime;
-            transform.position += Vector3.up * VerticalVelocity * Time.fixedDeltaTime;
-            if (OnGround())
-            {
-                AnimationManager.LandJump();
-            }
-        }*/
-        /*
-        //Check if jumping
-        if(VerticalVelocity != 0)
-        {
-            //Alter height by correct amount
-            
-            //alter velocity by correct ammount
-            VerticalVelocity -= 9.81f * Time.fixedDeltaTime;
-
-
-            if (OnGround())
-            {
-                VerticalVelocity = 0;
-                AnimationManager.LandJump();
-            }
-        }
-        */
+        //Reset variables 
         LookTowards = Vector3.zero;
         MoveDirection = Vector2.zero;
         Entity.SetPosition(transform.position);
@@ -394,20 +324,6 @@ public class LoadedEntity : MonoBehaviour, INewDamageRegionEvent, IGamePauseEven
      
     }
 
-
-    public void NewDamageRegionEvent(NewDamageRegion ev)
-    {
-        if (ev.Cause == Entity)
-            return;
-        if (ev.DamageRegion.CauseDamage(Collider))
-        {
-            Entity.CombatManager.DealDamageRegion(ev);
-        }
-        else
-        {
-            //Debug.Log("nope");
-        }
-    }
 
     public void GamePauseEvent(bool pause)
     {

@@ -34,7 +34,8 @@ public abstract class Entity
 
     public SkillTree SkillTree { get; private set; }
 
-    public float MaxMoveSpeed { get; private set; }
+    public EntityMovementData MovementData { get; private set; }
+
 
     [System.NonSerialized]
     private LoadedEntity LoadedEntity;
@@ -43,7 +44,7 @@ public abstract class Entity
         return LoadedEntity;
     }
     #endregion
-    public Entity(EntityCombatAI combatAI, EntityTaskAI taskAI, string name = "un-named_entity", bool isFixed = false)
+    public Entity(EntityCombatAI combatAI, EntityTaskAI taskAI, EntityMovementData movementData, string name = "un-named_entity", bool isFixed = false)
     {
         Name = name;
         IsFixed = isFixed;
@@ -55,7 +56,7 @@ public abstract class Entity
         Inventory = new Inventory();
         CombatManager = new EntityCombatManager(this);
         SkillTree = new SkillTree();
-        MaxMoveSpeed = 20;
+        MovementData = movementData;
     }
 
     /// <summary>
@@ -201,5 +202,27 @@ public abstract class Entity
         
         return debugOut.ToArray();
     }
+
+}
+/// <summary>
+/// Data structure containing variables associated with EntityMovement
+/// </summary>
+[System.Serializable]
+public struct EntityMovementData
+{
+
+    public float WalkSpeed;
+    public float RunSpeed;
+    public float JumpVelocity;
+
+
+    public EntityMovementData(float walkSpeed, float runSpeed, float jumpVel)
+    {
+        Debug.Log("runspeed" + runSpeed);
+        WalkSpeed = walkSpeed;
+        RunSpeed = runSpeed;
+        JumpVelocity = jumpVel;
+    }
+
 
 }

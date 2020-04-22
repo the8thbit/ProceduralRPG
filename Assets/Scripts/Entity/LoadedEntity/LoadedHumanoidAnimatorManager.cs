@@ -6,16 +6,10 @@ public class LoadedHumanoidAnimatorManager : LoadedEntityAnimationManager
 {
     public static readonly float GRAB_SHEATHED_WEAPON_ANI_TIME = 0.200f;
 
-    private LoadedEntity LoadedEntity;
-    private void Awake()
-    {
-        LoadedEntity = GetComponent<LoadedEntity>();
-    }
 
-
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
     }
 
     protected override void Update()
