@@ -4,7 +4,7 @@ using UnityEditor;
 public class Bandit : HumanoidEntity
 {
 
-    public Bandit() :base (new BasicHumanoidCombatAI(), new CreatureTaskAI())
+    public Bandit() :base (new BasicHumanoidCombatAI(), new CreatureTaskAI(), new EntityMovementData())
     {
 
     }

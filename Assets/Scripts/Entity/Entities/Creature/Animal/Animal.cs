@@ -5,7 +5,7 @@ public abstract class Animal : Entity
 {
     private bool closeEnough;
     public Animal(string name = "un-named_entity", string entityGameObjectSource = "default" ,bool isFixed = false) 
-        : base(new PassiveAnimalCombatAI(), new CreatureTaskAI(), name:name, isFixed: isFixed)
+        : base(new PassiveAnimalCombatAI(), new CreatureTaskAI(), new EntityMovementData(), name:name, isFixed: isFixed)
     {
 
     }

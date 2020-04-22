@@ -96,11 +96,14 @@ public class PlayerManager : MonoBehaviour
         if (GameManager.Paused)
             return;
 
+        Vector3 worldMousePos = GetWorldMousePosition();
+
+
         Player.Update();
         Debug.BeginDeepProfile("PlayerManagerUpdate");
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        //GameManager.DebugGUI.SetData("player_xy_input", new Vector2(x, z).ToString());
+
 
         float ud = x * Mathf.Cos(-PlayerCameraScript.Theta * Mathf.Deg2Rad) + z * Mathf.Sin(-PlayerCameraScript.Theta * Mathf.Deg2Rad);
         float lr = x * Mathf.Sin(-PlayerCameraScript.Theta * Mathf.Deg2Rad) - z * Mathf.Cos(-PlayerCameraScript.Theta * Mathf.Deg2Rad);
@@ -111,7 +114,7 @@ public class PlayerManager : MonoBehaviour
         LoadedPlayer.MoveInDirection(new Vector2(lr, ud));
 
 
-        Vector3 worldMousePos = GetWorldMousePosition();
+        
 
         GameManager.DebugGUI.SetData("world_mouse_pos", worldMousePos.ToString());
         LoadedPlayer.LookTowardsPoint(worldMousePos);
@@ -137,6 +140,8 @@ public class PlayerManager : MonoBehaviour
         {
             LoadedPlayer.Jump();
         }
+
+        LoadedPlayer.SetRunning(Input.GetKey(KeyCode.LeftControl));
 
         Debug.EndDeepProfile("PlayerManagerUpdate");
     }

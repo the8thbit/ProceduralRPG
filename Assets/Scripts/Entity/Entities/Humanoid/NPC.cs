@@ -9,7 +9,7 @@ public class NPC : HumanoidEntity
 
     public override string EntityGameObjectSource => "human";
 
-    public NPC(string name = "un-named_entity", bool isFixed = false) : base(new NonAggresiveNPCCombatAI(), new CreatureTaskAI(), name:name, isFixed:isFixed)
+    public NPC(string name = "un-named_entity", bool isFixed = false) : base(new NonAggresiveNPCCombatAI(), new CreatureTaskAI(),new EntityMovementData(), name:name, isFixed:isFixed)
     {
         NPCData = new BasicNPCData();
     }

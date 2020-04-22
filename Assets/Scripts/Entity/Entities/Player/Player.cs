@@ -6,9 +6,9 @@ public class Player : HumanoidEntity
     private NPC CurrentDialog;
 
 
-    public Player(): base(null, null, name:"Player")
+    public Player(): base(null, null, new EntityMovementData(5,8,5), name:"Player")
     {
-
+        Debug.Log("RUN!!!: " + this.MovementData.RunSpeed);
     }
 
     public override string EntityGameObjectSource => "human";
