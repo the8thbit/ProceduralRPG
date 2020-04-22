@@ -18,5 +18,6 @@ public abstract class Weapon : Item
     public abstract DamageType DamageType { get; }
     public abstract bool IsTwoHanded { get; }
 
+    //TODO - add weapon damage args (enchantments, knockback)
 
 }

@@ -24,8 +24,7 @@ public class EventManager
     public delegate void PlayerTalkToNPCEvent(PlayerTalkToNPC ev);
     public event PlayerTalkToNPCEvent PlayerTalkToNPCEvent_;
 
-    public delegate void WorldDamageRegionEvent(NewDamageRegion ev);
-    public event WorldDamageRegionEvent WorldDamageRegionEvent_;
+
 
     public delegate void GamePauseEvent(bool pause);
     public event GamePauseEvent GamePauseEvent_;
@@ -49,8 +48,7 @@ public class EventManager
             PlayerDropItemEvent_ += (list as IPlayerDropItemEvent).PlayerDropItemEvent;
         if (list is IPlayerTalkToNPCEvent)
             PlayerTalkToNPCEvent_ += (list as IPlayerTalkToNPCEvent).PlayerTalkToNPCEvent;
-        if(list is INewDamageRegionEvent)        
-            WorldDamageRegionEvent_ += (list as INewDamageRegionEvent).NewDamageRegionEvent;
+
         if(list is IGamePauseEvent)        
             GamePauseEvent_ += (list as IGamePauseEvent).GamePauseEvent;
         if (list is IWorldCombatEvent)
@@ -74,8 +72,7 @@ public class EventManager
             PlayerDropItemEvent_ -= (list as IPlayerDropItemEvent).PlayerDropItemEvent;
         if (list is IPlayerTalkToNPCEvent)
             PlayerTalkToNPCEvent_ -= (list as IPlayerTalkToNPCEvent).PlayerTalkToNPCEvent;
-        if (list is INewDamageRegionEvent)
-            WorldDamageRegionEvent_ -= (list as INewDamageRegionEvent).NewDamageRegionEvent;
+
         if (list is IGamePauseEvent)
             GamePauseEvent_ -= (list as IGamePauseEvent).GamePauseEvent;
         if (list is IWorldCombatEvent)
@@ -97,10 +94,7 @@ public class EventManager
             PlayerDropItemEvent_?.Invoke(ev as PlayerDropItem);
         if (ev is PlayerTalkToNPC)
             PlayerTalkToNPCEvent_?.Invoke(ev as PlayerTalkToNPC);
-        if(ev is NewDamageRegion)
-        {
-            WorldDamageRegionEvent_?.Invoke(ev as NewDamageRegion);
-        }
+  
         if(ev is GamePause)
         {
             GamePauseEvent_?.Invoke((ev as GamePause).Pause);
