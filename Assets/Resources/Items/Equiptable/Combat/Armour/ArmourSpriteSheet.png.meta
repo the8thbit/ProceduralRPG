@@ -1,0 +1,2516 @@
+fileFormatVersion: 2
+guid: 28ec569563a33514aac8ef2ab39a0c1f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 84879141237793662
+    second: SteelLegs
+  - first:
+      213: -165656960432535402
+    second: ArmourSpriteSheet_1
+  - first:
+      213: -8998675930127341037
+    second: ArmourSpriteSheet_2
+  - first:
+      213: 8591403592054000889
+    second: ArmourSpriteSheet_3
+  - first:
+      213: 6281666378334460946
+    second: ArmourSpriteSheet_4
+  - first:
+      213: 4509037728457264853
+    second: ArmourSpriteSheet_5
+  - first:
+      213: 6057001709530736967
+    second: ArmourSpriteSheet_6
+  - first:
+      213: -1213667900473557220
+    second: ArmourSpriteSheet_7
+  - first:
+      213: -4993699340893067364
+    second: ArmourSpriteSheet_8
+  - first:
+      213: -1287544745843862680
+    second: ArmourSpriteSheet_9
+  - first:
+      213: 563686697603621470
+    second: ArmourSpriteSheet_10
+  - first:
+      213: 5106250161685620918
+    second: ArmourSpriteSheet_11
+  - first:
+      213: -461736061455486053
+    second: ArmourSpriteSheet_12
+  - first:
+      213: 1021253034512607058
+    second: ArmourSpriteSheet_13
+  - first:
+      213: 7278641067668164810
+    second: ArmourSpriteSheet_14
+  - first:
+      213: 2602875803805154718
+    second: ArmourSpriteSheet_15
+  - first:
+      213: 3777411063490877672
+    second: ArmourSpriteSheet_16
+  - first:
+      213: -8847469344646878135
+    second: ArmourSpriteSheet_17
+  - first:
+      213: -1750001028292014664
+    second: ArmourSpriteSheet_18
+  - first:
+      213: -3321312319785366107
+    second: ArmourSpriteSheet_19
+  - first:
+      213: 234410057973435520
+    second: ArmourSpriteSheet_20
+  - first:
+      213: 6299137406529823214
+    second: ArmourSpriteSheet_21
+  - first:
+      213: 510413502152770600
+    second: ArmourSpriteSheet_22
+  - first:
+      213: -7466225479699300460
+    second: ArmourSpriteSheet_23
+  - first:
+      213: -6264511743509843509
+    second: ArmourSpriteSheet_24
+  - first:
+      213: 7202754842126965824
+    second: ArmourSpriteSheet_25
+  - first:
+      213: 5990260619813866224
+    second: ArmourSpriteSheet_26
+  - first:
+      213: 593642114400110926
+    second: ArmourSpriteSheet_27
+  - first:
+      213: -2087794905023879142
+    second: ArmourSpriteSheet_28
+  - first:
+      213: -2959279833402503042
+    second: ArmourSpriteSheet_29
+  - first:
+      213: -1557643216409742491
+    second: ArmourSpriteSheet_30
+  - first:
+      213: -9165321130470761354
+    second: ArmourSpriteSheet_31
+  - first:
+      213: -3696677493358764618
+    second: ArmourSpriteSheet_32
+  - first:
+      213: 3109767669889721888
+    second: ArmourSpriteSheet_33
+  - first:
+      213: -9198983351684167049
+    second: ArmourSpriteSheet_34
+  - first:
+      213: -1726658236422390146
+    second: ArmourSpriteSheet_35
+  - first:
+      213: -6720186907736765681
+    second: ArmourSpriteSheet_36
+  - first:
+      213: 6000883265740817162
+    second: ArmourSpriteSheet_37
+  - first:
+      213: -7936330871451727159
+    second: ArmourSpriteSheet_38
+  - first:
+      213: 8766422599639368445
+    second: ArmourSpriteSheet_39
+  - first:
+      213: 7612108927179422954
+    second: ArmourSpriteSheet_40
+  - first:
+      213: 2259184645230503707
+    second: ArmourSpriteSheet_41
+  - first:
+      213: -1532037088048845068
+    second: ArmourSpriteSheet_42
+  - first:
+      213: -5489405651653316128
+    second: ArmourSpriteSheet_43
+  - first:
+      213: -593477866381415882
+    second: ArmourSpriteSheet_44
+  - first:
+      213: -8882991403100593786
+    second: ArmourSpriteSheet_45
+  - first:
+      213: 86029463416412085
+    second: ArmourSpriteSheet_46
+  - first:
+      213: 5019849875910812828
+    second: ArmourSpriteSheet_47
+  - first:
+      213: -7668193640449703806
+    second: ArmourSpriteSheet_48
+  - first:
+      213: -7526524185819398395
+    second: ArmourSpriteSheet_49
+  - first:
+      213: 5267308072705298128
+    second: ArmourSpriteSheet_50
+  - first:
+      213: 8236130681237831751
+    second: ArmourSpriteSheet_51
+  - first:
+      213: -3974358168907148860
+    second: ArmourSpriteSheet_52
+  - first:
+      213: 1041710027051673510
+    second: ArmourSpriteSheet_53
+  - first:
+      213: 3552248433510265850
+    second: ArmourSpriteSheet_54
+  - first:
+      213: -4610064623456273369
+    second: ArmourSpriteSheet_55
+  - first:
+      213: 8813815600923415140
+    second: ArmourSpriteSheet_56
+  - first:
+      213: 7156380347514693788
+    second: ArmourSpriteSheet_57
+  - first:
+      213: -9051443094517968341
+    second: ArmourSpriteSheet_58
+  - first:
+      213: -6620936485502752798
+    second: ArmourSpriteSheet_59
+  - first:
+      213: -2049842513451539460
+    second: ArmourSpriteSheet_60
+  - first:
+      213: -8127727977675851500
+    second: ArmourSpriteSheet_61
+  - first:
+      213: -5844627551550383740
+    second: ArmourSpriteSheet_62
+  - first:
+      213: 6602628559973820877
+    second: ArmourSpriteSheet_63
+  - first:
+      213: -2046159893034876099
+    second: ArmourSpriteSheet_64
+  - first:
+      213: -4528182146517671298
+    second: ArmourSpriteSheet_65
+  - first:
+      213: 5284179563207655043
+    second: ArmourSpriteSheet_66
+  - first:
+      213: 4448177652890926189
+    second: ArmourSpriteSheet_67
+  - first:
+      213: -6284866936009919604
+    second: ArmourSpriteSheet_68
+  - first:
+      213: -5808908066658817917
+    second: ArmourSpriteSheet_69
+  - first:
+      213: -4238039078668496006
+    second: ArmourSpriteSheet_70
+  - first:
+      213: -1319882646082894572
+    second: ArmourSpriteSheet_71
+  - first:
+      213: -18201626023791387
+    second: ArmourSpriteSheet_72
+  - first:
+      213: 5403890140279293962
+    second: ArmourSpriteSheet_73
+  - first:
+      213: -8703215321617612594
+    second: ArmourSpriteSheet_74
+  - first:
+      213: 6915259158434155859
+    second: ArmourSpriteSheet_75
+  - first:
+      213: 4917951865191018752
+    second: ArmourSpriteSheet_76
+  - first:
+      213: -299531906269163432
+    second: ArmourSpriteSheet_77
+  - first:
+      213: 6441195734467553635
+    second: ArmourSpriteSheet_78
+  - first:
+      213: -2491969969444866835
+    second: ArmourSpriteSheet_79
+  - first:
+      213: 6871432121733361707
+    second: ArmourSpriteSheet_80
+  - first:
+      213: -5661915452669499928
+    second: ArmourSpriteSheet_81
+  - first:
+      213: 8915524939795314573
+    second: ArmourSpriteSheet_82
+  - first:
+      213: -5604357202780004694
+    second: ArmourSpriteSheet_83
+  - first:
+      213: 2326692574610273061
+    second: ArmourSpriteSheet_84
+  - first:
+      213: 6480005790274892563
+    second: ArmourSpriteSheet_85
+  - first:
+      213: -4872646880585590731
+    second: ArmourSpriteSheet_86
+  - first:
+      213: 2262724410043466851
+    second: ArmourSpriteSheet_87
+  - first:
+      213: -1136143197787456851
+    second: ArmourSpriteSheet_88
+  - first:
+      213: 2728248265749040063
+    second: ArmourSpriteSheet_89
+  - first:
+      213: 5034469740306349685
+    second: ArmourSpriteSheet_90
+  - first:
+      213: 2645615612878280517
+    second: ArmourSpriteSheet_91
+  - first:
+      213: 5829879081780637427
+    second: ArmourSpriteSheet_92
+  - first:
+      213: -8850859828101968421
+    second: ArmourSpriteSheet_93
+  - first:
+      213: -4997154263944758578
+    second: ArmourSpriteSheet_94
+  - first:
+      213: 6789070186221029242
+    second: ArmourSpriteSheet_95
+  - first:
+      213: 2952996662737734195
+    second: ArmourSpriteSheet_96
+  - first:
+      213: 7269391385899580698
+    second: ArmourSpriteSheet_97
+  - first:
+      213: -372438092405559427
+    second: ArmourSpriteSheet_98
+  - first:
+      213: 615532698915340585
+    second: ArmourSpriteSheet_99
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SteelLegs
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e73a156112d8d2100800000000000000
+      internalID: 84879141237793662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_1
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69809d64fd773bdf0800000000000000
+      internalID: -165656960432535402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_2
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31ae6e72be74e1380800000000000000
+      internalID: -8998675930127341037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_3
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fcc46a3c0cca3770800000000000000
+      internalID: 8591403592054000889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_4
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21cd3261a46fc2750800000000000000
+      internalID: 6281666378334460946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_5
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5de87839ce1539e30800000000000000
+      internalID: 4509037728457264853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_6
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 464
+        width: 35
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7496384a6face0450800000000000000
+      internalID: 6057001709530736967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_7
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1fbafc897f282fe0800000000000000
+      internalID: -1213667900473557220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_8
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 464
+        width: 36
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9767fe38e0d2bab0800000000000000
+      internalID: -4993699340893067364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_9
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 473
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8635e8710e8b12ee0800000000000000
+      internalID: -1287544745843862680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_10
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 422
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e52e64f901e92d700800000000000000
+      internalID: 563686697603621470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_11
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 422
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b86d8dc77b0dd640800000000000000
+      internalID: 5106250161685620918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_12
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 424
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9335fc9f759799f0800000000000000
+      internalID: -461736061455486053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_13
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 422
+        width: 21
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 257e9eb59383c2e00800000000000000
+      internalID: 1021253034512607058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_14
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 419
+        width: 31
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac05ee5bc7de20560800000000000000
+      internalID: 7278641067668164810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_15
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 422
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9df340c0c54f1420800000000000000
+      internalID: 2602875803805154718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_16
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 422
+        width: 34
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e81102495f0c6430800000000000000
+      internalID: 3777411063490877672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_17
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 422
+        width: 34
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94c2a27c189773580800000000000000
+      internalID: -8847469344646878135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_18
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 417
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bd0610365fb6b7e0800000000000000
+      internalID: -1750001028292014664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_19
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 419
+        width: 35
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ad801fca0458e1d0800000000000000
+      internalID: -3321312319785366107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_20
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 367
+        width: 34
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08c094da4bac04300800000000000000
+      internalID: 234410057973435520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_21
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 367
+        width: 34
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee1e593d8180b6750800000000000000
+      internalID: 6299137406529823214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_22
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 367
+        width: 35
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 824016c306a551700800000000000000
+      internalID: 510413502152770600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_23
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 366
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49f7d85eb73a26890800000000000000
+      internalID: -7466225479699300460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_24
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 366
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc135d492cbff09a0800000000000000
+      internalID: -6264511743509843509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_25
+      rect:
+        serializedVersion: 2
+        x: 267
+        y: 366
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04cd339fd5355f360800000000000000
+      internalID: 7202754842126965824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_26
+      rect:
+        serializedVersion: 2
+        x: 319
+        y: 363
+        width: 29
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fa4404cb4ea12350800000000000000
+      internalID: 5990260619813866224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_27
+      rect:
+        serializedVersion: 2
+        x: 370
+        y: 363
+        width: 29
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e49c7889b5a0d3800800000000000000
+      internalID: 593642114400110926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_28
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 364
+        width: 34
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a186e227899a603e0800000000000000
+      internalID: -2087794905023879142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_29
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 359
+        width: 45
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e701113aba68ee6d0800000000000000
+      internalID: -2959279833402503042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_30
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 318
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 563b9175fb3226ae0800000000000000
+      internalID: -1557643216409742491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_31
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 310
+        width: 33
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67c98e5edfc3ec080800000000000000
+      internalID: -9165321130470761354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_32
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 310
+        width: 42
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bd5b27d763c2bcc0800000000000000
+      internalID: -3696677493358764618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_33
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 313
+        width: 29
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02665c1383d182b20800000000000000
+      internalID: 3109767669889721888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_34
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 310
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77a02244165a65080800000000000000
+      internalID: -9198983351684167049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_35
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 310
+        width: 41
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7e7a817b7da908e0800000000000000
+      internalID: -1726658236422390146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_36
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 310
+        width: 41
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0b8e1ccc991db2a0800000000000000
+      internalID: -6720186907736765681
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_37
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 310
+        width: 40
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a034111498b674350800000000000000
+      internalID: 6000883265740817162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_38
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 316
+        width: 38
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ca4723fe1d7cd190800000000000000
+      internalID: -7936330871451727159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_39
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 316
+        width: 37
+        height: 33
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df2067a68e698a970800000000000000
+      internalID: 8766422599639368445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_40
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 265
+        width: 38
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aecfb141db4a3a960800000000000000
+      internalID: 7612108927179422954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_41
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 265
+        width: 38
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b172bf4177c3a5f10800000000000000
+      internalID: 2259184645230503707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_42
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 260
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4feef10b26c1dbae0800000000000000
+      internalID: -1532037088048845068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_43
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 260
+        width: 45
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e1be29d4a6b1d3b0800000000000000
+      internalID: -5489405651653316128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_44
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 260
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63a6740660b83c7f0800000000000000
+      internalID: -593477866381415882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_45
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 260
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 681275b026649b480800000000000000
+      internalID: -8882991403100593786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_46
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 260
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b717275753a13100800000000000000
+      internalID: 86029463416412085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_47
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 260
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c94e377add61aa540800000000000000
+      internalID: 5019849875910812828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_48
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 260
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2800618038a159590800000000000000
+      internalID: -7668193640449703806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_49
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 262
+        width: 37
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50f39d6512a6c8790800000000000000
+      internalID: -7526524185819398395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_50
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 214
+        width: 38
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0de8524e8cc391940800000000000000
+      internalID: 5267308072705298128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_51
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 207
+        width: 44
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74080eab73d9c4270800000000000000
+      internalID: 8236130681237831751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_52
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 210
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c11e1c6d4e38d8c0800000000000000
+      internalID: -3974358168907148860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_53
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 210
+        width: 41
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a7a06910c5e47e00800000000000000
+      internalID: 1041710027051673510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_54
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 209
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af33151312f1c4130800000000000000
+      internalID: 3552248433510265850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_55
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 210
+        width: 44
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72c3b4f66a2c500c0800000000000000
+      internalID: -4610064623456273369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_56
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 205
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46216d86796f05a70800000000000000
+      internalID: 8813815600923415140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_57
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 205
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c98233b8202905360800000000000000
+      internalID: 7156380347514693788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_58
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 205
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b22189e4670d26280800000000000000
+      internalID: -9051443094517968341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_59
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 205
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e76f2d7855bd14a0800000000000000
+      internalID: -6620936485502752798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_60
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf32a34381f7d83e0800000000000000
+      internalID: -2049842513451539460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_61
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41970a38772843f80800000000000000
+      internalID: -8127727977675851500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_62
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 489d0614536b3eea0800000000000000
+      internalID: -5844627551550383740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_63
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc9a61d61bf31ab50800000000000000
+      internalID: 6602628559973820877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_64
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3341061b649a93e0800000000000000
+      internalID: -2046159893034876099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_65
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e726c8e345aa821c0800000000000000
+      internalID: -4528182146517671298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_66
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38efe52e05d255940800000000000000
+      internalID: 5284179563207655043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_67
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6cf462020a1bbd30800000000000000
+      internalID: 4448177652890926189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_68
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c83f78202daa7c8a0800000000000000
+      internalID: -6284866936009919604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_69
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 154
+        width: 44
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38866e9e3ec926fa0800000000000000
+      internalID: -5808908066658817917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_70
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 116
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a739dbb79e57f25c0800000000000000
+      internalID: -4238039078668496006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_71
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 113
+        width: 28
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 415c607f9b5deade0800000000000000
+      internalID: -1319882646082894572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_72
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 106
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e47482b7b55fbff0800000000000000
+      internalID: -18201626023791387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_73
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 106
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a08459893797efa40800000000000000
+      internalID: 5403890140279293962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_74
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 111
+        width: 34
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec0ce3fc6c7f73780800000000000000
+      internalID: -8703215321617612594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_75
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 109
+        width: 31
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35d0c34e09fe7ff50800000000000000
+      internalID: 6915259158434155859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_76
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 106
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0013e2b3a23104440800000000000000
+      internalID: 4917951865191018752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_77
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 106
+        width: 44
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8505ee77159d7dbf0800000000000000
+      internalID: -299531906269163432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_78
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 108
+        width: 44
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36923b1c469b36950800000000000000
+      internalID: 6441195734467553635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_79
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 108
+        width: 44
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de43c4c048eba6dd0800000000000000
+      internalID: -2491969969444866835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_80
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 56
+        width: 44
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b20302abb1b3c5f50800000000000000
+      internalID: 6871432121733361707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_81
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 56
+        width: 44
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e5e657d4e5dc61b0800000000000000
+      internalID: -5661915452669499928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_82
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 56
+        width: 44
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d87b2ae32be4abb70800000000000000
+      internalID: 8915524939795314573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_83
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 56
+        width: 44
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aae55e531d25932b0800000000000000
+      internalID: -5604357202780004694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_84
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 55
+        width: 36
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5233f2bb1921a4020800000000000000
+      internalID: 2326692574610273061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_85
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 56
+        width: 31
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3133fc70fea9de950800000000000000
+      internalID: 6480005790274892563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_86
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 55
+        width: 33
+        height: 42
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 538d7ce7a71e06cb0800000000000000
+      internalID: -4872646880585590731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_87
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 55
+        width: 33
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3640f3dccdfc66f10800000000000000
+      internalID: 2262724410043466851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_88
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 55
+        width: 31
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: daaf6e9f7cb9b30f0800000000000000
+      internalID: -1136143197787456851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_89
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 52
+        width: 36
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbb0c03c75facd520800000000000000
+      internalID: 2728248265749040063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_90
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 3
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57eb9671e870ed540800000000000000
+      internalID: 5034469740306349685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_91
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 3
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54756d1026d17b420800000000000000
+      internalID: 2645615612878280517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_92
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 3
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fee3090324e7e050800000000000000
+      internalID: 5829879081780637427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_93
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 3
+        width: 43
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdd053551ed6b2580800000000000000
+      internalID: -8850859828101968421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_94
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 5
+        width: 32
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eca7eb94caa86aab0800000000000000
+      internalID: -4997154263944758578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_95
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 3
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7746e44d5f973e50800000000000000
+      internalID: 6789070186221029242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_96
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 3
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33a8561b1d62bf820800000000000000
+      internalID: 2952996662737734195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_97
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 3
+        width: 32
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1d34d953f012e460800000000000000
+      internalID: 7269391385899580698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_98
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 3
+        width: 31
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7fa7593785d4daf0800000000000000
+      internalID: -372438092405559427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ArmourSpriteSheet_99
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 3
+        width: 31
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9218c7a7abfca8800800000000000000
+      internalID: 615532698915340585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
