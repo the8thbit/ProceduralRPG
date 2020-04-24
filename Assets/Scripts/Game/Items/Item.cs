@@ -6,15 +6,12 @@ public abstract class Item
     public static int STEEL_CHEST_PLATE = 0, STEEL_HELM = 1, STEEL_LEGS = 2, STEEL_BOOTS = 3, STEEL_GLOVES = 4,
         STEEL_LONG_SWORD = 5, SHORT_BOW = 6, SIMPLE_DUNGEON_KEY=7;
 
-
-    public abstract int ID { get; }
+    public abstract ItemID ID { get; }
     public abstract string Name { get; }
-    public abstract bool IsEquiptable { get; }
-    public abstract EquiptmentSlot EquiptableSlot { get; }
     public abstract string SpriteTag { get; }
     public abstract string SpriteSheetTag { get; }
     public ItemTag[] Tags { get; private set; }
-    public ItemMetaData MetaData { get; private set; }
+    public ItemMetaData MetaData { get; protected set; }
     public bool HasMetaData { get { return MetaData != null; } }
 
     protected Item(ItemTag[] tags, ItemMetaData meta=null)
@@ -35,10 +32,7 @@ public abstract class Item
         return ResourceManager.GetItemSprite(SpriteSheetTag, SpriteTag);
     }
 
-    public GameObject GetEquiptItem()
-    {
-        return ResourceManager.GetEquiptableItemObject(0);
-    }
+
     public bool HasTag(ItemTag tag)
     {
         return System.Array.IndexOf(Tags, tag) > -1;
@@ -68,4 +62,13 @@ public abstract class Item
     }
 
 
+}
+
+public enum ItemID
+{
+    Shirt, Trousers,
+    SteelChest, SteelLegs, SteelHelm, SteelBoots,SteelGauntlets,
+    SteelLongSword, 
+    ShortBow, 
+    SimpDungeonKey
 }

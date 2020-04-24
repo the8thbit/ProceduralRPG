@@ -7,13 +7,10 @@ public class SimpleDungeonKey : Key
     {
     }
 
-    public override int ID => Item.SIMPLE_DUNGEON_KEY;
+    public override ItemID ID => ItemID.SimpDungeonKey;
 
     public override string Name => "Simple dungeon key";
 
-    public override bool IsEquiptable => false;
-
-    public override EquiptmentSlot EquiptableSlot => throw new System.NotImplementedException();
 
     public override string SpriteTag => "simp_key";
 

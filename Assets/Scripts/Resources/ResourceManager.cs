@@ -15,7 +15,7 @@ public class ResourceManager
     private static Dictionary<string, GameObject> EntityGameObjects;
     private static Dictionary<int, GameObject> AllWorldObjects;
     private static Dictionary<int, Texture2D> ItemImages;
-    private static Dictionary<int, GameObject> EquiptableItemObjects;
+    private static Dictionary<ItemID, GameObject> EquiptableItemObjects;
     private static Dictionary<string, Sprite[]> SpriteSheets;
     private static Dictionary<string, GameObject> ProjectileObjects;
     private static Dictionary<string, GameObject> BeamObjects;
@@ -114,16 +114,20 @@ public class ResourceManager
 
     private static void LoadEquiptableItemObjects()
     {
-        EquiptableItemObjects = new Dictionary<int, GameObject>();
-        string root = "Items/Combat/Weapon/Sword/";
-        EquiptableItemObjects.Add(0, Resources.Load<GameObject>(root + "Sword"));
+        EquiptableItemObjects = new Dictionary<ItemID, GameObject>();
+        string root = "Items/Equiptable/";
+        EquiptableItemObjects.Add(ItemID.Trousers, Resources.Load<GameObject>(root + "Default/Clothes/Trousers"));
+        EquiptableItemObjects.Add(ItemID.Shirt, Resources.Load<GameObject>(root + "Default/Clothes/Shirt"));
+
+        EquiptableItemObjects.Add(ItemID.SteelLongSword, Resources.Load<GameObject>(root + "Combat/Weapon/Sword/Longsword"));
     }
 
     private static void LoadSpriteSheets()
     {
         SpriteSheets = new Dictionary<string, Sprite[]>
         {
-            { "weapons", Resources.LoadAll<Sprite>("ItemImages/WeaponSpriteSheet") }
+            { "weapons", Resources.LoadAll<Sprite>("Items/Equiptable/Combat/Weapon/WeaponSpriteSheet") },
+            { "armour", Resources.LoadAll<Sprite>("Items/Equiptable/Combat/Armour/ArmourSpriteSheet") }
         };
     }
     private static void LoadProjectileObjects()
@@ -167,14 +171,24 @@ public class ResourceManager
     }
     public static Sprite GetItemSprite(string sheetTag, string itemTag)
     {
-        Sprite[] sheet = SpriteSheets[sheetTag];
-        Sprite sprite = sheet.Single(s => s.name == itemTag);
-        return sprite;
+        try
+        {
+            Sprite[] sheet = SpriteSheets[sheetTag];
+            Sprite sprite = sheet.Single(s => s.name == itemTag);
+            return sprite;
+
+        }
+        catch (System.Exception e)
+        {
+            Debug.Error("Sprite coulf not be found: " + sheetTag + "/" + itemTag);
+        }
+        
+        return null;
     }
 
-    public static GameObject GetEquiptableItemObject(int id)
+    public static GameObject GetEquiptableItemObject(ItemID key)
     {
-        return EquiptableItemObjects[id];
+        return EquiptableItemObjects[key];
     }
     public static GameObject GetProjectileObject(string key)
     {

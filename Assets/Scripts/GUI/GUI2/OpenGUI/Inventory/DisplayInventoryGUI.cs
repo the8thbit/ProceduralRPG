@@ -37,7 +37,7 @@ public class DisplayInventoryGUI : MonoBehaviour
     {
         Debug.Log("equipting");
         //If not equiptable, we do nothing (return)
-        if (!itBut.Item.IsEquiptable)
+        if (!(itBut.Item is EquiptableItem))
         {
             Debug.Log("not equiptable");
             return;
