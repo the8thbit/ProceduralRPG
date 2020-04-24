@@ -39,6 +39,7 @@ public class PathFinder
     /// <param name="chunkRegion"></param>
     public void LoadRegion(ChunkRegion chunkRegion)
     {
+        Debug.Log("[PathFinding] Chunk Region " + chunkRegion.X + "," + chunkRegion.Z + " loading");
         //Get region position & generate empty array
         Vec2i rPos = new Vec2i(chunkRegion.X, chunkRegion.Z);
         float[,] tileData = new float[RegionTileSize, RegionTileSize];
@@ -61,7 +62,9 @@ public class PathFinder
                         float val = tileData[cx * World.ChunkSize + x, cz * World.ChunkSize + z] = c.GetTile(x, z).SpeedMultiplier;
                         if (c.Objects != null && c.GetObject(x,z) != null)
                         {
-                            val = Mathf.Infinity;
+                            WorldObjectData wod = c.GetObject(x, z);
+                            if(wod.IsCollision)
+                                val = Mathf.Infinity;
                         }
 
                         tileData[cx * World.ChunkSize + x, cz * World.ChunkSize + z] = val;

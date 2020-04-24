@@ -45,18 +45,27 @@ public class EntityAI
         //if no target, null previous paths and return.
         if (target == null)
         {
+            Debug.Log("Target is null - no path");
             EntityPathTarget = null;
             EntityPath = null;
             return false;
         }
         Vec2i tilePos = Vec2i.FromVector3(Entity.Position);
+        if(GameManager.PathFinder.NodeValue(tilePos) > 100)
+        {
+            tilePos = Vec2i.FromVector3(Entity.Position + new Vector3(0.5f, 0, 0.5f));
+            if(GameManager.PathFinder.NodeValue(tilePos) > 100)
+            {
+                Debug.Log("hm");
+            }
+        }
         if (EntityPath == null)
         {
             //If there is no path, Attempt to generate it
             List<Vec2i> path = GameManager.PathFinder.GeneratePath(tilePos, target);
             if (path.Count == 0)
             {
-
+                Debug.Log("Path from " + tilePos + " to " + target + " not found");
                 return false;
             }
             EntityPathTarget = target;

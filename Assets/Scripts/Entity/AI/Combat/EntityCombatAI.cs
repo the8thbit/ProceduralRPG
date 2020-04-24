@@ -193,19 +193,24 @@ public abstract class EntityCombatAI : IWorldCombatEvent
     protected virtual void RunToCombat()
     {
         Entity.LookAt(CurrentTarget.Position2);
-        
+        Entity.GetLoadedEntity().SetRunning(true);
+
         if (LineOfSight(CurrentTarget))
         {
+            DebugGUI.Instance.SetData(Entity.Name, "line of sight");
             Vector2 movement = CurrentTarget.Position2 - Entity.Position2;
             Entity.GetLoadedEntity().MoveInDirection(movement);
         }
         else if (Entity.EntityAI.GeneratePath(Vec2i.FromVector3(CurrentTarget.Position)))
         {
+            DebugGUI.Instance.SetData(Entity.Name, "path found");
             //If a valid path can/has been generated
             Entity.EntityAI.FollowPath();
         }
         else
         {
+            DebugGUI.Instance.SetData(Entity.Name, "no line of sight");
+
             Vector2 movement = CurrentTarget.Position2 - Entity.Position2;
             Entity.GetLoadedEntity().MoveInDirection(movement);
         }
@@ -232,9 +237,13 @@ public abstract class EntityCombatAI : IWorldCombatEvent
         float fov = Entity.fov;
 
 
-        Vector3 entityLookDirection = new Vector3(Mathf.Cos(LookAngle * Mathf.Deg2Rad), 0, Mathf.Sin(LookAngle * Mathf.Deg2Rad));
-        Vector3 difPos = new Vector3(other.Position.x - Position.x, 0, other.Position.z - other.Position.z);
-        float angle = Vector3.Angle(entityLookDirection, difPos);
+        Vector3 entityLookDirection = new Vector3(Mathf.Sin(LookAngle * Mathf.Deg2Rad), 0, Mathf.Cos(LookAngle * Mathf.Deg2Rad));
+        Vector3 difPos = new Vector3(other.Position.x - Position.x, 0, other.Position.z - Position.z).normalized;
+        //float angle = Vector3.Angle(entityLookDirection, difPos);
+        float dot = Vector3.Dot(entityLookDirection, difPos);
+        
+        float angle = Mathf.Abs(Mathf.Acos(dot) * Mathf.Rad2Deg);
+        DebugGUI.Instance.SetData("ent_look", entityLookDirection + "/" + difPos + " : " + angle);
         //Debug.Log(entityLookDirection + ", " + difPos + ", " + angle);
         if (angle > fov)
             return false;
