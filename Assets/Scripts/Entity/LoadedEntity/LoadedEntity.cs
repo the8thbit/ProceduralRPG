@@ -39,6 +39,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
     void OnDrawGizmos()
     {
+        return;
         Color prev = Gizmos.color;
         Color col = OnGround() ? Color.green : Color.red;
         Gizmos.color = col;
@@ -130,6 +131,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
     /// </summary>
     public void Jump()
     {
+        IsIdle = false;
         if (!OnGround() || IsJumping || IsWaitingForJump)
             return;
         IsWaitingForJump = true;
@@ -146,7 +148,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
     {
         AnimationManager.Jump();
         yield return new WaitForSeconds(AnimationManager.JumpAnimationTime);
-        VerticalVelocity = 5;
+        VerticalVelocity = 10;
         IsJumping = true;
         IsWaitingForJump = false;
     }
@@ -157,6 +159,8 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
     /// <param name="running"></param>
     public void SetRunning(bool running)
     {
+        IsIdle = false;
+
         IsRunning = running;
     }
 
@@ -172,6 +176,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
     /// <param name="v">Point of interest to face towards</param>
     public void LookTowardsPoint(Vector3 v)
     {
+
         IsIdle = false;
         LookTowards = v;
     }
@@ -202,6 +207,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
     public void MoveInDirection(Vector2 direction)
     {
+        Debug.Log("Entity " + Entity + " is moving in direction " + direction);
         MoveTowards(transform.position + new Vector3(direction.x, 0, direction.y).normalized);
     }
     /// <summary>
@@ -209,6 +215,12 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
     /// 
     /// </summary>
     private void FixedUpdate() {
+
+    
+        if(!(Entity is Player))
+        {
+            DebugGUI.Instance.SetData("ent", GameManager.Paused + "_" + IsIdle + "_" + MoveDirection);
+        }
 
         EntityHealthBar.SetHealthPct(Entity.CombatManager.CurrentHealth / Entity.CombatManager.MaxHealth);
 
@@ -224,7 +236,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
             transform.position = new Vector3(transform.position.x, 1, transform.position.z);
         }
 
-        RigidBody.angularVelocity = Vector3.zero;
+        //RigidBody.angularVelocity = Vector3.zero;
         if (GameManager.Paused)
             return;
         if (IsIdle)
@@ -239,25 +251,33 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
             float tileSpeed = 1; //TODO - get tile speed
             //Finds correct speed associated with running/walking for this entity
             float entitySpeed = IsRunning?Entity.MovementData.RunSpeed:Entity.MovementData.WalkSpeed;
-            Debug.Log(entitySpeed);
+
+            AnimationManager.SetSpeedPercentage(entitySpeed / Entity.MovementData.RunSpeed);
+
             Vector2 v2Pos = new Vector2(transform.position.x, transform.position.z);
             Vector2 targetDisp = TargetPosition - v2Pos;
             float targetMag = targetDisp.magnitude;
-
-
+            Vector3 vel = new Vector3(MoveDirection.x, 0, MoveDirection.y) * tileSpeed * entitySpeed;
             RigidBody.velocity = new Vector3(MoveDirection.x, 0, MoveDirection.y) * tileSpeed * entitySpeed;
+
             //If the distance the body will move in a frame (|velocity|*dt) is more than the desired amount (target mag)
             //Then we must scale the velocity down
             if(RigidBody.velocity.magnitude*Time.fixedDeltaTime > targetMag)
             {
 
-                RigidBody.velocity = RigidBody.velocity * targetMag/(Time.fixedDeltaTime* RigidBody.velocity.magnitude);
+               RigidBody.velocity = RigidBody.velocity * targetMag/(Time.fixedDeltaTime* RigidBody.velocity.magnitude);
+            }
+
+
+            if (Entity is Player)
+            {
+                DebugGUI.Instance.SetData("Vel", RigidBody.velocity + " | " + vel);
             }
 
         }
         else
         {
-
+            AnimationManager.SetSpeedPercentage(0);
         }
         //If we have a specified look direction
         if (LookTowards != Vector3.zero)

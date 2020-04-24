@@ -14,6 +14,25 @@ public class PlayerCamera : MonoBehaviour
     public float R { get; private set; }
     public float Phi { get; private set; }
 
+    public CameraController CameraController;
+
+    public void SetFirstPersonCamera()
+    {
+
+        if(CameraController != null)
+        {
+            Destroy(CameraController);
+        }
+        CameraController = gameObject.AddComponent<FirstPersonCC>();
+
+    }
+
+    public void SetCameraController()
+    {
+        CameraController oldCC = GetComponent<CameraController>();
+    }
+
+
     /// <summary>
     /// Initialises the camera, sets the initial relative coordinates and collects
     /// various game object and component references.
@@ -34,6 +53,7 @@ public class PlayerCamera : MonoBehaviour
         R = 15;
         Phi = 45;
         Dif = CartesianCoord();
+        SetFirstPersonCamera();
     }
 
     public void ClockwiseMove(float amount)
@@ -43,12 +63,14 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
+        CameraController.Update();
+        /*
         if(PlayerManager.Player != null)
         {
             Dif = CartesianCoord();
             transform.position = PlayerManager.LoadedPlayer.transform.position + Dif;
             transform.LookAt(PlayerManager.LoadedPlayer.transform);
-        }
+        }*/
     }
 
     /// <summary>

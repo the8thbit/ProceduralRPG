@@ -13,17 +13,20 @@ public class EquiptmentManager
     public HumanoidEntity Entity { get; private set; }
     private Armor[] EquiptArmor;
 
+    private Dictionary<LoadedEquiptmentPlacement, EquiptableItem> DefaultItems;
+
     [System.NonSerialized]
     private LoadedEquiptmentManager LoadedEquiptmentManager;
 
-    private Dictionary<LoadedEquiptmentPlacement, Item> EquiptItems;
+    private Dictionary<LoadedEquiptmentPlacement, EquiptableItem> EquiptItems;
 
 
     public EquiptmentManager(HumanoidEntity entity)
     {
         Entity = entity;
-        EquiptItems = new Dictionary<LoadedEquiptmentPlacement, Item>();
+        EquiptItems = new Dictionary<LoadedEquiptmentPlacement, EquiptableItem>();
         EquiptArmor = new Armor[5];
+        DefaultItems = new Dictionary<LoadedEquiptmentPlacement, EquiptableItem>();
     }
 
 
@@ -34,6 +37,13 @@ public class EquiptmentManager
     public LoadedEquiptmentManager GetLoadedEquiptmentManager()
     {
         return LoadedEquiptmentManager;
+    }
+
+    public EquiptableItem GetDefaultItem(LoadedEquiptmentPlacement lep)
+    {
+        EquiptableItem item;
+        DefaultItems.TryGetValue(lep, out item);
+        return item;
     }
 
    //Returns true if a weapon is either in hand, or in weapon sheath
@@ -53,7 +63,7 @@ public class EquiptmentManager
     public bool HasMeleeWeapon()
     {
 
-        Item weapon;
+        EquiptableItem weapon;
 
         //Check sheath and hand for melee weapon
         EquiptItems.TryGetValue(LoadedEquiptmentPlacement.weaponSheath, out weapon);        
@@ -80,7 +90,7 @@ public class EquiptmentManager
     public void EquiptMeleeWeapon(bool inHand=false)
     {
 
-        Item weapon;
+        EquiptableItem weapon;
 
         //Check sheath for melee weapon
         EquiptItems.TryGetValue(LoadedEquiptmentPlacement.weaponSheath, out weapon);
@@ -101,7 +111,7 @@ public class EquiptmentManager
         {
             if (itStack.Item is Weapon && !(itStack.Item is RangeWeapon))
             {
-                EquiptItem(LoadedEquiptmentPlacement.handR, itStack.Item);
+                EquiptItem(LoadedEquiptmentPlacement.handR, itStack.Item as EquiptableItem);
                 return;
             }
         }
@@ -113,7 +123,7 @@ public class EquiptmentManager
     /// <returns></returns>
     public bool HasRangeWeapon()
     {
-        Item weapon;
+        EquiptableItem weapon;
 
         //Check sheath and hand for melee weapon
         EquiptItems.TryGetValue(LoadedEquiptmentPlacement.backSheath, out weapon);
@@ -134,7 +144,7 @@ public class EquiptmentManager
     }
     public void EquiptRangeWeapon()
     {
-        Item weapon;
+        EquiptableItem weapon;
 
         //Check sheath for melee weapon
         EquiptItems.TryGetValue(LoadedEquiptmentPlacement.backSheath, out weapon);
@@ -154,7 +164,7 @@ public class EquiptmentManager
         {
             if (itStack.Item is Weapon && (itStack.Item is RangeWeapon))
             {
-                EquiptItem(LoadedEquiptmentPlacement.handR, itStack.Item);
+                EquiptItem(LoadedEquiptmentPlacement.handR, itStack.Item as EquiptableItem);
                 return;
             }
         }
@@ -167,14 +177,20 @@ public class EquiptmentManager
     /// </summary>
     /// <param name="slot"></param>
     /// <returns></returns>
-    public Item UnequiptItem(LoadedEquiptmentPlacement slot)
+    public EquiptableItem UnequiptItem(LoadedEquiptmentPlacement slot)
     {
-        Item remove;
+        EquiptableItem remove;
         EquiptItems.TryGetValue(slot, out remove);
         if (remove != null)
             EquiptItems.Remove(slot);
         //If entity is loaded, remove equiptment object
         LoadedEquiptmentManager?.SetEquiptmentItem(slot, null);
+
+        //Check if a default item exists for this slot
+        if (DefaultItems.ContainsKey(slot))
+        {
+            LoadedEquiptmentManager?.SetEquiptmentItem(slot, DefaultItems[slot]);
+        }
 
 
         return remove;
@@ -185,9 +201,9 @@ public class EquiptmentManager
     /// </summary>
     /// <param name="slot"></param>
     /// <returns></returns>
-    public Item EquiptItem(LoadedEquiptmentPlacement slot, Item item)
+    public EquiptableItem EquiptItem(LoadedEquiptmentPlacement slot, EquiptableItem item)
     {
-        Item removed = UnequiptItem(slot);
+        EquiptableItem removed = UnequiptItem(slot);
         EquiptItems.Add(slot, item);
 
         Debug.Log("Item " + item + " added to slot " + slot);
@@ -197,8 +213,11 @@ public class EquiptmentManager
         return removed;
     }
 
-    public Item EquiptItem(Item item, bool unsheathed=false)
+    public EquiptableItem EquiptItem(Item item_, bool unsheathed=false)
     {
+        if (!(item_ is EquiptableItem))
+            return null;
+        EquiptableItem item = item_ as EquiptableItem;
         LoadedEquiptmentPlacement toPut = (LoadedEquiptmentPlacement)item.EquiptableSlot;
         if(item is Weapon)
         {
@@ -244,9 +263,9 @@ public class EquiptmentManager
     /// </summary>
     /// <param name="slot"></param>
     /// <returns></returns>
-    public Item GetEquiptItem(LoadedEquiptmentPlacement slot)
+    public EquiptableItem GetEquiptItem(LoadedEquiptmentPlacement slot)
     {
-        Item equipt;
+        EquiptableItem equipt;
         EquiptItems.TryGetValue(slot, out equipt);
         return equipt;
     }
@@ -278,6 +297,32 @@ public class EquiptmentManager
             }
         }
         return sum;
+    }
+
+    /// <summary>
+    /// Adds a new default item to its relevent slot
+    /// </summary>
+    /// <param name="item"></param>
+    public void AddDefaultItem(EquiptableItem item)
+    {
+        //item must be of type default
+        if (!item.IsDefault)
+        {
+            Debug.LogError("Default items must be of type default");
+            return;
+        }
+        LoadedEquiptmentPlacement slot = (LoadedEquiptmentPlacement)item.EquiptableSlot;
+        //Check if we have a default item in this slot already
+        if (DefaultItems.ContainsKey(slot))
+        {
+            Debug.LogError("Entity " + Entity + " already has a default item in slot " + slot.ToString());
+            return;
+        }
+        //If valid, we add the item
+        DefaultItems.Add(slot, item);
+        //If there is currently no item equipt in this slot, we equipt it
+        if (GetEquiptItem(slot) == null)
+            LoadedEquiptmentManager?.SetEquiptmentItem(slot, item);
     }
 }
 

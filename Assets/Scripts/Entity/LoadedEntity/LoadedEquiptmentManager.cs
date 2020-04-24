@@ -15,10 +15,11 @@ public class LoadedEquiptmentManager : MonoBehaviour
     public GameObject WEAPONSHEATH, WEAPONSHEATH_END, BACKSHEATH, BACKSHEATH_END;
     private Dictionary<LoadedEquiptmentPlacement, GameObject> EquiptObjects;
 
-
+    private SkinnedMeshRenderer SMR;
     private LoadedEntity LoadedEntity;
     private void OnEnable()
     {
+        SMR = GetComponentInChildren<SkinnedMeshRenderer>();
         LoadedEntity = GetComponent<LoadedEntity>();
         EquiptObjects = new Dictionary<LoadedEquiptmentPlacement, GameObject>();
     }
@@ -29,7 +30,29 @@ public class LoadedEquiptmentManager : MonoBehaviour
 
         HAND_R.GetComponent<LoadedMeleeWeapon>().SetWeaponDetails(LoadedEntity.Entity, null);
         LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(HAND_R.GetComponent<LoadedMeleeWeapon>());
-
+        EquiptStartItems((LoadedEntity.Entity as HumanoidEntity).EquiptmentManager);
+    }
+    /// <summary>
+    /// Equipts all items that are currently equipt
+    /// </summary>
+    /// <param name="eqMan"></param>
+    private void EquiptStartItems(EquiptmentManager eqMan)
+    {
+        //Iterate all possible slots
+        foreach(LoadedEquiptmentPlacement lep in MiscUtils.GetValues<LoadedEquiptmentPlacement>())
+        {
+            EquiptableItem eqIt = eqMan.GetEquiptItem(lep);
+            if (eqIt != null)
+            {
+                SetEquiptmentItem(lep, eqIt);
+            }
+            else
+            {
+                eqIt = eqMan.GetDefaultItem(lep);
+                if (eqIt != null)
+                    SetEquiptmentItem(lep, eqIt);
+            }
+        }
     }
 
     public void SetEquiptmentItem(LoadedEquiptmentPlacement slot, Item item)
@@ -41,6 +64,13 @@ public class LoadedEquiptmentManager : MonoBehaviour
         {
             DestroyImmediate(remove);
             EquiptObjects.Remove(slot);
+
+            if(slot == LoadedEquiptmentPlacement.legs)
+            {
+                SMR.SetBlendShapeWeight(0, 0);
+                    
+            }
+
         }
         //If the item is null, we don't need to add an object
         if (item == null)
@@ -50,12 +80,22 @@ public class LoadedEquiptmentManager : MonoBehaviour
             {
                 LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(HAND_R.GetComponent<LoadedMeleeWeapon>());
                 //Ensure it is enabled so we can deal unarmed attacks
+            }else if(slot == LoadedEquiptmentPlacement.legs) {
+                SMR.SetBlendShapeWeight(0, 0);
             }
+            else if (slot == LoadedEquiptmentPlacement.chest)
+            {
+                SMR.SetBlendShapeWeight(1, 0);
+            }
+
+
+
             return;
         }
             
 
-        GameObject obj = Instantiate(item.GetEquiptItem());
+        GameObject obj = Instantiate((item as EquiptableItem).GetEquiptItem());
+        LoadedEquiptment le = obj.GetComponent<LoadedEquiptment>();
         switch (slot)
         {
             case LoadedEquiptmentPlacement.weaponSheath:
@@ -64,8 +104,33 @@ public class LoadedEquiptmentManager : MonoBehaviour
             case LoadedEquiptmentPlacement.handR:
                 obj.transform.parent = HAND_R.transform;
                 break;
+            case LoadedEquiptmentPlacement.legs:
+                
+                le.transform.parent = SMR.transform;
+                le.SMR.bones = SMR.bones;
+                le.SMR.rootBone = SMR.rootBone;
+                SMR.SetBlendShapeWeight(0, 100);
+                break;
+            case LoadedEquiptmentPlacement.chest:
+                le.transform.parent = SMR.transform;
+                le.SMR.bones = SMR.bones;
+                le.SMR.rootBone = SMR.rootBone;
+                SMR.SetBlendShapeWeight(1, 100);
+                break;
+
         }
 
+        if (item.HasMetaData)
+        {
+            Color c = item.MetaData.Color;
+            if (c != null)
+            {
+                if (obj.GetComponent<MeshRenderer>() != null)
+                    obj.GetComponent<MeshRenderer>().material.SetColor("MainColor", c);
+                else if(obj.GetComponent<SkinnedMeshRenderer>() != null)
+                    obj.GetComponent<SkinnedMeshRenderer>().material.SetColor("MainColor", c);
+            }
+        }
 
 
         if (item is Weapon && !(item is RangeWeapon))

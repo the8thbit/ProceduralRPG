@@ -5786,6 +5786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RenderTexture: {fileID: 8400000, guid: 8e21497cfa6d5b84198f240c558c012b, type: 2}
+  CameraController: {fileID: 0}
 --- !u!114 &1002651742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9282,7 +9283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1765686183
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9381,7 +9382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1804333107
 Transform:
   m_ObjectHideFlags: 0

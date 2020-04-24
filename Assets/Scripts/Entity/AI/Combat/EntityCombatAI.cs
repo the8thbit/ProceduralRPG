@@ -193,7 +193,7 @@ public abstract class EntityCombatAI : IWorldCombatEvent
     protected virtual void RunToCombat()
     {
         Entity.LookAt(CurrentTarget.Position2);
-
+        
         if (LineOfSight(CurrentTarget))
         {
             Vector2 movement = CurrentTarget.Position2 - Entity.Position2;

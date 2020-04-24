@@ -50,7 +50,10 @@ public class PlayerManager : MonoBehaviour
 
         Player.Inventory.AddItem(new SteelLongSword());
         Player.Inventory.AddItem(new SimpleDungeonKey(0));
-
+        //Player.Inventory.AddItem(new SteelLegs());
+        Player.EquiptmentManager.AddDefaultItem(new Trousers());
+        Player.EquiptmentManager.AddDefaultItem(new Shirt());
+       // Player.EquiptmentManager.AddDefaultItem(new Trousers());
         LoadedPlayer = loadedEntity;
         if (TestMain.TEST_MODE)
         {
@@ -101,6 +104,9 @@ public class PlayerManager : MonoBehaviour
 
         Player.Update();
         Debug.BeginDeepProfile("PlayerManagerUpdate");
+
+        MovementUpdate();
+        /*
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
@@ -113,7 +119,7 @@ public class PlayerManager : MonoBehaviour
 
         LoadedPlayer.MoveInDirection(new Vector2(lr, ud));
 
-
+    */
         
 
         GameManager.DebugGUI.SetData("world_mouse_pos", worldMousePos.ToString());
@@ -146,6 +152,23 @@ public class PlayerManager : MonoBehaviour
         Debug.EndDeepProfile("PlayerManagerUpdate");
     }
     
+
+    private void MovementUpdate()
+    {
+
+        float hor = Input.GetAxis("Horizontal"); //A,D
+        float vert = Input.GetAxis("Vertical"); //S,W 
+
+        //If the camera is a first person type
+        if (PlayerCameraScript.CameraController is FirstPersonCC)
+        {
+            float dz = hor * Mathf.Sin(-Player.LookAngle * Mathf.Deg2Rad) + vert * Mathf.Cos(-Player.LookAngle * Mathf.Deg2Rad);
+            float dx = hor * Mathf.Cos(-Player.LookAngle * Mathf.Deg2Rad) - vert * Mathf.Sin(-Player.LookAngle * Mathf.Deg2Rad);
+
+            LoadedPlayer.MoveInDirection(new Vector2(dx, dz));
+        }
+    }
+
     public Vector3 GetWorldMousePosition()
     {
         Ray ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);

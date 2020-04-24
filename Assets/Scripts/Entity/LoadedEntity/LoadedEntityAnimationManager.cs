@@ -11,6 +11,9 @@ public class LoadedEntityAnimationManager : MonoBehaviour, IGamePauseEvent
 
     protected LoadedEntity LoadedEntity;
     protected Animator Animator;
+
+    private float SpeedPercentage;
+
     protected virtual void Awake()
     {
         LoadedEntity = GetComponent<LoadedEntity>();
@@ -18,13 +21,17 @@ public class LoadedEntityAnimationManager : MonoBehaviour, IGamePauseEvent
         EventManager.Instance.AddListener(this);
     }
 
+    public void SetSpeedPercentage(float speedPercent)
+    {
+        SpeedPercentage = speedPercent;
+    }
+
 
     protected virtual void Update()
     {
-        float maxSpeed = LoadedEntity.Entity.MovementData.RunSpeed;
-        float curSpeed = LoadedEntity.RigidBody.velocity.magnitude;
-        float speedPercent = curSpeed / maxSpeed;
-        Animator.SetFloat("SpeedPercent", speedPercent, 0.1f, Time.deltaTime);
+
+        Animator.SetFloat("SpeedPercent", SpeedPercentage, 0.1f, Time.deltaTime);
+
 
     }
 
