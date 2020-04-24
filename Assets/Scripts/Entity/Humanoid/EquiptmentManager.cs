@@ -48,10 +48,10 @@ public class EquiptmentManager
 
    //Returns true if a weapon is either in hand, or in weapon sheath
     public bool HasWeapon { get {
-            return (EquiptItems.ContainsKey(LoadedEquiptmentPlacement.handR) && EquiptItems[LoadedEquiptmentPlacement.handR] != null) ||
+            return (EquiptItems.ContainsKey(LoadedEquiptmentPlacement.weaponHand) && EquiptItems[LoadedEquiptmentPlacement.weaponHand] != null) ||
                   (EquiptItems.ContainsKey(LoadedEquiptmentPlacement.weaponSheath) && EquiptItems[LoadedEquiptmentPlacement.weaponSheath] != null);} }
     //Returns true if a weapon is in hand
-    public bool WeaponReady { get { return (EquiptItems.ContainsKey(LoadedEquiptmentPlacement.handR) && EquiptItems[LoadedEquiptmentPlacement.handR] != null); } }
+    public bool WeaponReady { get { return (EquiptItems.ContainsKey(LoadedEquiptmentPlacement.weaponHand) && EquiptItems[LoadedEquiptmentPlacement.weaponHand] != null); } }
 
 
 
@@ -70,7 +70,7 @@ public class EquiptmentManager
         if (weapon != null && !(weapon is RangeWeapon))
             return true;
 
-        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.handR, out weapon);
+        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.weaponHand, out weapon);
         if (weapon != null && !(weapon is RangeWeapon))
             return true;
 
@@ -98,11 +98,11 @@ public class EquiptmentManager
         {
             //If there is one, we check if we should put it directly in hand
             UnequiptItem(LoadedEquiptmentPlacement.weaponSheath);
-            EquiptItem(LoadedEquiptmentPlacement.handR, weapon);
+            EquiptItem(LoadedEquiptmentPlacement.weaponHand, weapon);
         }
         
         //If the hand already has a melee weapon, return
-        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.handR, out weapon);
+        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.weaponHand, out weapon);
         if (weapon != null && !(weapon is RangeWeapon))
             return;
 
@@ -111,7 +111,7 @@ public class EquiptmentManager
         {
             if (itStack.Item is Weapon && !(itStack.Item is RangeWeapon))
             {
-                EquiptItem(LoadedEquiptmentPlacement.handR, itStack.Item as EquiptableItem);
+                EquiptItem(LoadedEquiptmentPlacement.weaponHand, itStack.Item as EquiptableItem);
                 return;
             }
         }
@@ -130,7 +130,7 @@ public class EquiptmentManager
         if (weapon != null && (weapon is RangeWeapon))
             return true;
 
-        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.handR, out weapon);
+        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.weaponHand, out weapon);
         if (weapon != null && (weapon is RangeWeapon))
             return true;
 
@@ -155,7 +155,7 @@ public class EquiptmentManager
         }
 
         //If the hand already has a melee weapon, return
-        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.handR, out weapon);
+        EquiptItems.TryGetValue(LoadedEquiptmentPlacement.weaponHand, out weapon);
         if (weapon != null && (weapon is RangeWeapon))
             return;
 
@@ -164,7 +164,7 @@ public class EquiptmentManager
         {
             if (itStack.Item is Weapon && (itStack.Item is RangeWeapon))
             {
-                EquiptItem(LoadedEquiptmentPlacement.handR, itStack.Item as EquiptableItem);
+                EquiptItem(LoadedEquiptmentPlacement.weaponHand, itStack.Item as EquiptableItem);
                 return;
             }
         }
@@ -180,9 +180,12 @@ public class EquiptmentManager
     public EquiptableItem UnequiptItem(LoadedEquiptmentPlacement slot)
     {
         EquiptableItem remove;
-        EquiptItems.TryGetValue(slot, out remove);
-        if (remove != null)
+        if (EquiptItems.TryGetValue(slot, out remove))
+        {
+            Debug.Log("[EquiptmentManager] Entity " + Entity + " Unequipt " + remove + " from slot " + slot);
             EquiptItems.Remove(slot);
+        }
+            
         //If entity is loaded, remove equiptment object
         LoadedEquiptmentManager?.SetEquiptmentItem(slot, null);
 
@@ -208,7 +211,7 @@ public class EquiptmentManager
 
         Debug.Log("Item " + item + " added to slot " + slot);
         LoadedEquiptmentManager?.SetEquiptmentItem(slot, item);
-        if (slot == LoadedEquiptmentPlacement.handR)
+        if (slot == LoadedEquiptmentPlacement.weaponHand)
             Entity.CombatManager.SetEquiptWeapon(item as Weapon);
         return removed;
     }
@@ -219,11 +222,12 @@ public class EquiptmentManager
             return null;
         EquiptableItem item = item_ as EquiptableItem;
         LoadedEquiptmentPlacement toPut = (LoadedEquiptmentPlacement)item.EquiptableSlot;
+        Debug.Log("[EquiptmentManager] " + item.EquiptableSlot + "_" + toPut);
         if(item is Weapon)
         {
             if (unsheathed)
             {
-                toPut = LoadedEquiptmentPlacement.handR;
+                toPut = LoadedEquiptmentPlacement.weaponHand;
             }else if(item is RangeWeapon)
             {
                 toPut = LoadedEquiptmentPlacement.backSheath;
@@ -245,9 +249,9 @@ public class EquiptmentManager
         {
             Debug.Log(LoadedEquiptmentManager.HAND_R + "_" + LoadedEquiptmentManager.GetObjectInSlot(sheathedPosition));
             LoadedEquiptmentManager.UnsheathWeapon(sheathedPosition);
-            EquiptItems[LoadedEquiptmentPlacement.handR] = EquiptItems[sheathedPosition];
+            EquiptItems[LoadedEquiptmentPlacement.weaponHand] = EquiptItems[sheathedPosition];
             EquiptItems[sheathedPosition] = null;
-            Entity.CombatManager.SetEquiptWeapon(EquiptItems[LoadedEquiptmentPlacement.handR] as Weapon);
+            Entity.CombatManager.SetEquiptWeapon(EquiptItems[LoadedEquiptmentPlacement.weaponHand] as Weapon);
 
 
         }

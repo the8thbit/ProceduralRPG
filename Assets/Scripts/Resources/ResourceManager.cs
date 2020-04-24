@@ -119,6 +119,9 @@ public class ResourceManager
         EquiptableItemObjects.Add(ItemID.Trousers, Resources.Load<GameObject>(root + "Default/Clothes/Trousers"));
         EquiptableItemObjects.Add(ItemID.Shirt, Resources.Load<GameObject>(root + "Default/Clothes/Shirt"));
 
+        EquiptableItemObjects.Add(ItemID.Torch, Resources.Load<GameObject>(root + "Other/Torch"));
+
+
         EquiptableItemObjects.Add(ItemID.SteelLongSword, Resources.Load<GameObject>(root + "Combat/Weapon/Sword/Longsword"));
     }
 

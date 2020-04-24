@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Collections;
 public enum LoadedEquiptmentPlacement
 {
-    head, chest, legs, feet, handR, handL, weaponSheath, backSheath
+    head, chest, legs, feet, hands, weaponHand, offHand, weaponSheath, backSheath
 }
 public class LoadedEquiptmentManager : MonoBehaviour
 {
@@ -58,17 +58,22 @@ public class LoadedEquiptmentManager : MonoBehaviour
     public void SetEquiptmentItem(LoadedEquiptmentPlacement slot, Item item)
     {
         Debug.Log("[LoadedEquiptmentManager] Adding item " + item + " to slot " + slot);
+        
+        //Check if an item exists in this slot, if so we destroy it
         GameObject remove;
         EquiptObjects.TryGetValue(slot, out remove);
         if(remove != null)
         {
             DestroyImmediate(remove);
             EquiptObjects.Remove(slot);
-
+            //If the equipt slot required a blendShape, we reset it now
             if(slot == LoadedEquiptmentPlacement.legs)
             {
-                SMR.SetBlendShapeWeight(0, 0);
-                    
+                SMR.SetBlendShapeWeight(0, 0);                    
+            }
+            else if (slot == LoadedEquiptmentPlacement.chest)
+            {
+                SMR.SetBlendShapeWeight(1, 0);
             }
 
         }
@@ -76,7 +81,7 @@ public class LoadedEquiptmentManager : MonoBehaviour
         if (item == null)
         {
             //But if the slot is the hand, we need to activate the unarmed melee attack
-            if(slot == LoadedEquiptmentPlacement.handR)
+            if(slot == LoadedEquiptmentPlacement.weaponHand)
             {
                 LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(HAND_R.GetComponent<LoadedMeleeWeapon>());
                 //Ensure it is enabled so we can deal unarmed attacks
@@ -93,16 +98,21 @@ public class LoadedEquiptmentManager : MonoBehaviour
             return;
         }
             
-
+        //We create the object
         GameObject obj = Instantiate((item as EquiptableItem).GetEquiptItem());
+        //Non weapons will have a 
         LoadedEquiptment le = obj.GetComponent<LoadedEquiptment>();
+
         switch (slot)
         {
             case LoadedEquiptmentPlacement.weaponSheath:
                 obj.transform.parent = WEAPONSHEATH.transform;
                 break;
-            case LoadedEquiptmentPlacement.handR:
+            case LoadedEquiptmentPlacement.weaponHand:
                 obj.transform.parent = HAND_R.transform;
+                break;
+            case LoadedEquiptmentPlacement.offHand:
+                obj.transform.parent = HAND_L.transform;
                 break;
             case LoadedEquiptmentPlacement.legs:
                 
@@ -125,10 +135,17 @@ public class LoadedEquiptmentManager : MonoBehaviour
             Color c = item.MetaData.Color;
             if (c != null)
             {
-                if (obj.GetComponent<MeshRenderer>() != null)
-                    obj.GetComponent<MeshRenderer>().material.SetColor("MainColor", c);
+                if(le != null)
+                {
+                    le.SMR.material.SetColor("MainColour", c);
+                }else if (obj.GetComponent<MeshRenderer>() != null)
+                    obj.GetComponent<MeshRenderer>().material.SetColor("MainColour", c);
                 else if(obj.GetComponent<SkinnedMeshRenderer>() != null)
-                    obj.GetComponent<SkinnedMeshRenderer>().material.SetColor("MainColor", c);
+                    obj.GetComponent<SkinnedMeshRenderer>().material.SetColor("MainColour", c);
+                else if (obj.GetComponentInChildren<MeshRenderer>() != null)
+                    obj.GetComponentInChildren<MeshRenderer>().material.SetColor("MainColour", c);
+                else if (obj.GetComponentInChildren<SkinnedMeshRenderer>() != null)
+                    obj.GetComponentInChildren<SkinnedMeshRenderer>().material.SetColor("MainColour", c);
             }
         }
 
@@ -138,7 +155,6 @@ public class LoadedEquiptmentManager : MonoBehaviour
             obj.GetComponent<LoadedMeleeWeapon>().SetWeaponDetails(LoadedEntity.Entity, item as Weapon);
             LoadedMeleeWeapon lmw = obj.GetComponent<LoadedMeleeWeapon>();
             LoadedEntity.Entity.CombatManager.SetLoadedMeleeWeapon(lmw);
-            Debug.Log("LMW:::" + lmw);
         }
 
         obj.transform.localPosition = Vector3.zero;
@@ -161,7 +177,7 @@ public class LoadedEquiptmentManager : MonoBehaviour
     private IEnumerator WaitToUnsheath(LoadedEquiptmentPlacement slot)
     {
         yield return new WaitForSeconds(LoadedHumanoidAnimatorManager.GRAB_SHEATHED_WEAPON_ANI_TIME);
-        EquiptObjects[LoadedEquiptmentPlacement.handR] = EquiptObjects[slot];
+        EquiptObjects[LoadedEquiptmentPlacement.weaponHand] = EquiptObjects[slot];
         EquiptObjects[slot] = null;
     }
 
@@ -192,10 +208,15 @@ public class LoadedEquiptmentManager : MonoBehaviour
     private void Update()
     {
         GameObject weaponObj;
-        if(EquiptObjects.TryGetValue(LoadedEquiptmentPlacement.handR, out weaponObj))
+        if(EquiptObjects.TryGetValue(LoadedEquiptmentPlacement.weaponHand, out weaponObj))
         {
 
             weaponObj.transform.rotation = GetBoneRotation(HAND_R, HAND_R_END);
+        }
+        if(EquiptObjects.TryGetValue(LoadedEquiptmentPlacement.offHand, out weaponObj))
+        {
+            weaponObj.transform.rotation = GetBoneRotation(HAND_L, HAND_L_END);
+
         }
     }
 

@@ -67,6 +67,7 @@ public abstract class Item
 public enum ItemID
 {
     Shirt, Trousers,
+    Torch,
     SteelChest, SteelLegs, SteelHelm, SteelBoots,SteelGauntlets,
     SteelLongSword, 
     ShortBow, 

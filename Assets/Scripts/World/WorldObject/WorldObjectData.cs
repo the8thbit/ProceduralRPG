@@ -11,6 +11,10 @@ public abstract class WorldObjectData
     public int ID { get { return (int)ObjID; } }
     public abstract string Name { get; }
    
+    /// <summary>
+    /// Used by pathfinder to check if the tile containing this game object is passable.
+    /// </summary>
+    public bool IsCollision { get; protected set; }
 
     public Vec2i WorldPosition { get; private set; }
     private float[] ObjectDeltaPosition_;
@@ -25,6 +29,7 @@ public abstract class WorldObjectData
         ObjectDeltaPosition_ = new float[]{ delta.x,delta.y,delta.z};
         MetaData = meta;
         Size = size;
+        IsCollision = true;
     }
     public WorldObjectData(Vec2i worldPosition, WorldObjectMetaData meta=null, Vec2i size=null)
     {

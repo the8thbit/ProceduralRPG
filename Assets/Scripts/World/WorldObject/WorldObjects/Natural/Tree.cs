@@ -102,6 +102,7 @@ public class TreeCanopy : WorldObjectData, IProcedualGeneratedObject
 
     public override WorldObjects ObjID => WorldObjects.TREE_CANOPY;
 
+
     private GenerationRandom genRan;
 
     /// <summary>
@@ -126,7 +127,7 @@ public class TreeCanopy : WorldObjectData, IProcedualGeneratedObject
             float dist_f = 1 + distort_amp * perlin;
             verticies[i].Scale(scale*dist_f);
         }
-
+        //obj.GetComponent<SphereCollider>().radius = Mathf.Max(scale.x, scale.y, scale.z);
 
         mesh.vertices = verticies;
         mesh.RecalculateNormals();

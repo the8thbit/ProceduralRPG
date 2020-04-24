@@ -39,7 +39,6 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
     void OnDrawGizmos()
     {
-        return;
         Color prev = Gizmos.color;
         Color col = OnGround() ? Color.green : Color.red;
         Gizmos.color = col;
@@ -47,6 +46,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
         Gizmos.color = prev;
         if (Entity.EntityAI != null)
         {
+            
             if(Entity.EntityAI.EntityPath != null)
             {
                 foreach(Vec2i v in Entity.EntityAI.EntityPath.Path)
@@ -55,7 +55,6 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
                 }
             }
         }
-
         if(NearEntities != null)
         {
             GameManager.DebugGUI.SetData("Entity_" + Entity.ID + "_near:", NearEntities.Count);
@@ -207,7 +206,6 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
     public void MoveInDirection(Vector2 direction)
     {
-        Debug.Log("Entity " + Entity + " is moving in direction " + direction);
         MoveTowards(transform.position + new Vector3(direction.x, 0, direction.y).normalized);
     }
     /// <summary>

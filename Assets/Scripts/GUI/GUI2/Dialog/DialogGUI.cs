@@ -32,6 +32,7 @@ public class DialogGUI : MonoBehaviour
         {
             Clear();
             gameObject.SetActive(false);
+            GameManager.PlayerManager.EndDialog();
         }
         else
         {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
+[System.Serializable]
 public class Shirt : EquiptableItem
 {
     public Shirt(ItemMetaData meta = null) : base(new ItemTag[] { ItemTag.ARMOR, ItemTag.ITEM}, meta)

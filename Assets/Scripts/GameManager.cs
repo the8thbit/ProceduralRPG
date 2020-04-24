@@ -158,8 +158,8 @@ public class GameManager : MonoBehaviour
         QuestManager.SetQuests(GameGenerator.GenerateQuests(WorldManager.World));
 
 
-        //Vec2i wpos = Vec2i.FromVector2(QuestManager.Unstarted[0].Initiator.GetNPC().Position2);
-        Vec2i wpos = WorldManager.World.GetChunkStructure(0).Position * World.ChunkSize + new Vec2i(2, 2);
+        Vec2i wpos = Vec2i.FromVector2(QuestManager.Unstarted[0].Initiator.GetNPC().Position2);
+        //Vec2i wpos = WorldManager.World.GetChunkStructure(0).Position * World.ChunkSize + new Vec2i(2, 2);
         Vec2i wEntr = WorldManager.World.GetSubworld(1).WorldEntrance;
 
 
@@ -178,6 +178,7 @@ public class GameManager : MonoBehaviour
         player.SetPosition(start);
         PlayerManager.SetPlayer(player);
         player.Inventory.AddItem(new SteelLongSword());
+        player.Inventory.AddItem(new Torch());
     }
  
 

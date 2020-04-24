@@ -109,7 +109,7 @@ TextureImporter:
     second: WeaponSpriteSheet_34
   - first:
       213: -6223296455115316661
-    second: WeaponSpriteSheet_35
+    second: Torch
   - first:
       213: 1836099141120311964
     second: WeaponSpriteSheet_36
@@ -1002,7 +1002,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WeaponSpriteSheet_35
+      name: Torch
       rect:
         serializedVersion: 2
         x: 37

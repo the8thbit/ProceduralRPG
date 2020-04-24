@@ -78,6 +78,7 @@ public class EntityManager : MonoBehaviour
         //TODO - Split entities into a series of arrays which each take 
         //a turn to do AI update - reduce lag?
         timer += Time.deltaTime;
+    
         timer2 += Time.deltaTime;
         if (timer > 0.1f)
         {

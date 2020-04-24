@@ -19,7 +19,7 @@ public class WorldObject : MonoBehaviour
     {
 
         GameObject gameObject = Instantiate(ResourceManager.GetWorldObject(data.ID));
-        gameObject.layer = 8;
+        //gameObject.layer = 8;
         WorldObject obj = gameObject.AddComponent<WorldObject>();
         
 

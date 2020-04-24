@@ -13,6 +13,11 @@ public class PlayerManager : MonoBehaviour
     public Camera PlayerCamera { get; private set; }
     public PlayerCamera PlayerCameraScript { get; private set; }
     private NPC CurrentlySelected;
+
+
+    private Vector3 WorldLookPosition;
+    private GameObject LookObject;
+
     private void Awake()
     {
         Instance = this;
@@ -106,6 +111,8 @@ public class PlayerManager : MonoBehaviour
         Debug.BeginDeepProfile("PlayerManagerUpdate");
 
         MovementUpdate();
+
+        PlayerSelectUpdate();
         /*
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
@@ -120,7 +127,7 @@ public class PlayerManager : MonoBehaviour
         LoadedPlayer.MoveInDirection(new Vector2(lr, ud));
 
     */
-        
+
 
         GameManager.DebugGUI.SetData("world_mouse_pos", worldMousePos.ToString());
         LoadedPlayer.LookTowardsPoint(worldMousePos);
@@ -152,7 +159,9 @@ public class PlayerManager : MonoBehaviour
         Debug.EndDeepProfile("PlayerManagerUpdate");
     }
     
-
+    /// <summary>
+    /// Controlls the movement of the player
+    /// </summary>
     private void MovementUpdate()
     {
 
@@ -168,6 +177,28 @@ public class PlayerManager : MonoBehaviour
             LoadedPlayer.MoveInDirection(new Vector2(dx, dz));
         }
     }
+
+    /// <summary>
+    /// Finds the gameobject the player is currently looking at, and 
+    /// deals with it
+    /// </summary>
+    void PlayerSelectUpdate()
+    {
+        LookObject = PlayerCameraScript.CameraController.GetViewObject();
+
+        if(LookObject == null)
+        {
+            DebugGUI.Instance.ClearData("player_view");
+        }
+        else
+        {
+            DebugGUI.Instance.SetData("player_view", LookObject.ToString());
+        }
+
+        WorldLookPosition = PlayerCameraScript.CameraController.GetWorldLookPosition();
+        DebugGUI.Instance.SetData("look_wpos", WorldLookPosition);
+    }
+
 
     public Vector3 GetWorldMousePosition()
     {
@@ -209,6 +240,31 @@ public class PlayerManager : MonoBehaviour
 
     public void RightMouseButton()
     {
+
+        if(LookObject != null)
+        {
+
+            LoadedEntity lEnt = LookObject.GetComponent<LoadedEntity>();
+            if(lEnt != null)
+            {
+                Entity ent = lEnt.Entity;
+                if(ent is NPC)
+                {
+                    NPC npc = ent as NPC;
+
+                    if (npc.HasDialog())
+                    {
+                        StartDialog(npc);
+                    }
+
+
+                }
+            }
+
+
+        }
+        return;
+
         Ray ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);
         bool entSelect = false;
         Debug.Log("hmmm");
@@ -272,6 +328,20 @@ public class PlayerManager : MonoBehaviour
 
         if (!entSelect)
             GameManager.DebugGUI.SetSelectedEntity(null);
+    }
+
+
+    private void StartDialog(NPC npc)
+    {
+        npc.Dialog.StartDialog();
+        GameManager.GUIManager.StartDialog(npc);
+        GameManager.EventManager.InvokeNewEvent(new PlayerTalkToNPC(npc));
+        GameManager.EventManager.InvokeNewEvent(new GamePause(true));
+    }
+
+    public void EndDialog()
+    {
+        GameManager.EventManager.InvokeNewEvent(new GamePause(false));
     }
 
 

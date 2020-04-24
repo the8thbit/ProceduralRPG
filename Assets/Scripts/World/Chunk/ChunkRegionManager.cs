@@ -145,6 +145,8 @@ public class ChunkRegionManager : MonoBehaviour
         {
             LoadedRegions[rPos.x, rPos.z] = GameManager.ChunkRegionGenerator.ForceGenerateRegion(rPos);
         }
+        GameManager.PathFinder.LoadRegion(LoadedRegions[rPos.x, rPos.z]);
+
     }
 
 
