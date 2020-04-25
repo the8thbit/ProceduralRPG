@@ -7,6 +7,7 @@ using System.Linq;
 public class Settlement
 {
 
+    public SettlementPathNode IMPORTANT;
 
     public int SettlementID { get; private set; }
     public int KingdomID { get; private set; }
@@ -29,11 +30,13 @@ public class Settlement
     public List<Vec2i> TEST_PATH_NODES;
     public List<SettlementPathNode> TEST_NODES;
 
+    public SettlementPathNode[,] tNodes;
 
     public WorldMapLocation WorldMapLocation { get; private set; }
 
     public Settlement(Kingdom kingdom, string name, SettlementBuilder builder)
     {
+        IMPORTANT = builder.ENTR_NODE;
         Name = name;
         KingdomID = kingdom.KingdomID;
         TileSize = builder.TileSize;
@@ -45,6 +48,7 @@ public class Settlement
         SettlementNPCIDs = new List<int>();
         SettlementLeaderNPCIDs = new List<int>();
         TEST_NODES = builder.TestNodes;
+        tNodes = builder.TestNodes2;
         //SettlementNPCs = new List<NPC>();
         //setBuild = builder;
 

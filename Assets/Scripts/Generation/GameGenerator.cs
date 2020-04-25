@@ -254,7 +254,7 @@ public class GameGenerator
         Debug.BeginDeepProfile("entity_gen");
 
         //initiate a new instance of EntityGenerator, and then use this to general all entities that belong to a kingdom (most NPCs)
-        EntityGenerator entityGen = new EntityGenerator(world, GameManager.EntityManager);
+        EntityGenerator entityGen = new EntityGenerator(this, GameManager.EntityManager);
         entityGen.GenerateAllKingdomEntities();
 
 

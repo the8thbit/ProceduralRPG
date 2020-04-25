@@ -8,7 +8,7 @@ public enum SettlementType
 }
 public class SettlementBuilder
 {
-
+    public static int NODE_RES = 16;
     public static bool TEST = true;
 
     private GenerationRandom GenerationRandom;
@@ -45,6 +45,8 @@ public class SettlementBuilder
     public List<Recti> BuildingPlots { get; }
     //Used to generate paths inside this settlement
 
+    public SettlementPathNode[,] TestNodes2;
+
     public Tile PathTile { get; private set; }
 
     public SettlementBuilder(GameGenerator gameGen, SettlementBase set)
@@ -68,12 +70,14 @@ public class SettlementBuilder
         BuildingPlots = new List<Recti>();
         SettlementType = set.SettlementType;
         TestNodes = new List<SettlementPathNode>();
+        TestNodes2 = new SettlementPathNode[TileSize / NODE_RES, TileSize / NODE_RES];
     }
 
 
     public void GenerateSettlement()
     {
-        ChooseRandomEntrancePoints();
+        //ChooseRandomEntrancePoints();
+        AddInitPaths();
         List<BuildingPlan> mustAdd = new List<BuildingPlan>();
         
         BuildingPlan defaultRemaining = Building.HOUSE;
@@ -82,7 +86,16 @@ public class SettlementBuilder
             case SettlementType.CAPITAL:
 
                 AddMainBuilding(BuildingGenerator.GenerateCastle(48));
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.BLACKSMITH);
 
+                /*
                 mustAdd.Add(Building.MARKET);
                 mustAdd.Add(Building.BARACKSCITY);
                 mustAdd.Add(Building.TAVERN);
@@ -94,8 +107,8 @@ public class SettlementBuilder
                 mustAdd.Add(Building.GENERALMERCHANT);
                 mustAdd.Add(Building.ARCHERYSTORE);
                 mustAdd.Add(Building.SWORDSELLER);
-                
-                for(int i=0; i<40; i++)
+                */
+                for (int i=0; i<40; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
                 }
@@ -104,12 +117,13 @@ public class SettlementBuilder
                 break;
             case SettlementType.CITY:
                 AddMainBuilding(BuildingGenerator.GenerateCastle(32));
-                mustAdd.Add(Building.BARACKSCITY);
+                //mustAdd.Add(Building.BARACKSCITY);
                 mustAdd.Add(Building.BLACKSMITH);
+                /*
                 mustAdd.Add(Building.GENERALMERCHANT);
                 mustAdd.Add(Building.TAVERN);
                 mustAdd.Add(Building.MARKET);
-
+                */
                 for (int i = 0; i < 30; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
@@ -117,11 +131,12 @@ public class SettlementBuilder
                 break;
             case SettlementType.TOWN:
                 AddMainBuilding(BuildingGenerator.CreateBuilding(Building.HOLD));
-                mustAdd.Add(Building.BARACKSTOWN);
+                //mustAdd.Add(Building.BARACKSTOWN);
+
                 mustAdd.Add(Building.BLACKSMITH);
-                mustAdd.Add(Building.GENERALMERCHANT);
+                /*mustAdd.Add(Building.GENERALMERCHANT);
                 mustAdd.Add(Building.TAVERN);
-                mustAdd.Add(Building.MARKET);
+                mustAdd.Add(Building.MARKET);*/
                 for (int i = 0; i < 20; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
@@ -131,9 +146,10 @@ public class SettlementBuilder
             case SettlementType.VILLAGE:
                 AddMainBuilding(BuildingGenerator.CreateBuilding(Building.VILLAGEHALL));
                 mustAdd.Add(Building.BLACKSMITH);
+                /*
                 mustAdd.Add(Building.GENERALMERCHANT);
                 mustAdd.Add(Building.TAVERN);
-                mustAdd.Add(Building.MARKET);
+                mustAdd.Add(Building.MARKET);*/
                 for (int i = 0; i < 15; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
@@ -142,7 +158,324 @@ public class SettlementBuilder
         }
 
         PlaceBuildings(mustAdd);
+        CreatePathNodes();
+    }
+    public SettlementPathNode ENTR_NODE;
+    private void AddInitPaths()
+    {
 
+        int nodeSize = TileSize / NODE_RES;
+
+        int xStart = GenerationRandom.RandomInt(0+3, nodeSize - 3);
+        int zLen = nodeSize - GenerationRandom.RandomInt(0, 3); //Ends 0-3 chunks from settlement end
+
+        int zStartEast = GenerationRandom.RandomInt(2, nodeSize - 3);
+        int xLenEast = GenerationRandom.RandomInt(nodeSize - xStart - 2, nodeSize - xStart);
+
+
+        int zStartWest = GenerationRandom.RandomInt(2, nodeSize - 3);
+        int xLenWest = GenerationRandom.RandomInt(xStart-2, xStart);
+
+
+        //Add the path nodes along the z direction (start at south -> north)
+        for (int z=0; z<zLen; z++)
+        {
+            TestNodes2[xStart, z] = new SettlementPathNode(new Vec2i(xStart * NODE_RES, z * NODE_RES));
+            TestNodes2[xStart, z].IsMain = true;
+            SetTile(xStart * NODE_RES, z * NODE_RES, Tile.TEST_BLUE);
+        }
+        ENTR_NODE = TestNodes2[xStart, 0];
+
+
+
+
+        for (int x=0; x<xLenEast; x++)
+        {
+            TestNodes2[xStart + x, zStartEast] = new SettlementPathNode(new Vec2i((xStart + x) * NODE_RES, zStartEast * NODE_RES));
+            TestNodes2[xStart + x, zStartEast].IsMain = true;
+        }
+
+
+        for(int x=0; x<xLenWest; x++)
+        {
+            TestNodes2[xStart - x, zStartWest] = new SettlementPathNode(new Vec2i((xStart - x) * NODE_RES, zStartWest * NODE_RES));
+            TestNodes2[xStart - x, zStartWest].IsMain = true;
+        }
+
+
+        //Iterate all points, and connect everything
+        //Note, this can be made faster. We can half iterations with some TODO
+        for(int x=0; x<nodeSize; x++)
+        {
+            for (int z = 0; z < nodeSize; z++)
+            {
+                if (TestNodes2[x, z] == null)
+                    continue;
+                if (x > 0 && TestNodes2[x - 1, z] != null)
+                {
+                    TestNodes2[x, z].AddConnection(SettlementPathNode.WEST, TestNodes2[x - 1, z]);
+                    ConnectNodes(TestNodes2[x, z], TestNodes2[x - 1, z], 5);
+                }
+                if (z > 0 && TestNodes2[x, z - 1] != null)
+                {
+                    TestNodes2[x, z].AddConnection(SettlementPathNode.SOUTH, TestNodes2[x , z - 1]);
+                    ConnectNodes(TestNodes2[x, z], TestNodes2[x , z - 1], 5);
+
+                }
+                if (x<nodeSize-1 && TestNodes2[x+1, z] != null)
+                {
+                    TestNodes2[x, z].AddConnection(SettlementPathNode.EAST, TestNodes2[x + 1, z]);
+                    ConnectNodes(TestNodes2[x, z], TestNodes2[x + 1, z], 5);
+
+                }
+                if (z < nodeSize-1 && TestNodes2[x, z + 1] != null)
+                {
+                    TestNodes2[x, z].AddConnection(SettlementPathNode.NORTH, TestNodes2[x, z + 1]);
+                    ConnectNodes(TestNodes2[x, z], TestNodes2[x, z + 1], 5);
+
+                }
+            }
+        }
+        /*
+        for(int z=0; z<zLen-1; z++)
+        {
+            ConnectNodes(TestNodes2[xStart, z], TestNodes2[xStart, z + 1], 5);
+            TestNodes2[xStart, z].AddConnection(SettlementPathNode.NORTH, TestNodes2[xStart, z + 1]);
+            TestNodes2[xStart, z+1].AddConnection(SettlementPathNode.SOUTH, TestNodes2[xStart, z]);
+
+        }*/
+    }
+    private void CreatePathNodes()
+    {
+        int tSize = TileSize/ NODE_RES;
+        int checkDist = 4;
+        //Create a node at every node position not inside a building
+        for(int x=0; x<tSize; x++)
+        {
+            for (int z = 0; z < tSize; z++)
+            {
+                if (TestNodes2[x, z] != null)
+                    continue;
+
+                //Define the position of this node in the settlement
+                
+                Vec2i pos = new Vec2i(x * NODE_RES, z * NODE_RES);
+                if(IsTileFree(pos.x, pos.z))
+                    TestNodes2[x, z] = new SettlementPathNode(new Vec2i(x * NODE_RES, z * NODE_RES));
+                
+            }
+        }
+      
+        //Connect all nodes
+        for (int x = 0; x < tSize; x++)
+        {
+            for (int z = 0; z < tSize; z++)
+            {
+                if (TestNodes2[x, z] == null)
+                    continue;
+                if(x != 0)
+                {
+                    SettlementPathNode minX=null;
+                    //Iterate x values below this value until non-null value found
+                    for(int i=1; i<Mathf.Min(x, checkDist); i++)
+                    {
+                        minX = TestNodes2[x - i, z];
+                        if (minX == null)
+                            continue;
+
+                        if (IsAreaFree(minX.Position.x, minX.Position.z - 1, i * World.ChunkSize, 3, Tile.TEST_BLUE))
+                            break;
+                        else
+                            minX = null;
+                    }
+                    if(minX!=null)
+                        TestNodes2[x, z].AddConnection(SettlementPathNode.WEST, minX);
+
+                }if(z != 0)
+                {
+                    SettlementPathNode minZ = null;
+                    //Iterate z values below this value until non-null value found
+                    for (int i = 1; i < Mathf.Min(z, checkDist); i++)
+                    {
+                        minZ = TestNodes2[x, z - i];
+                        if (minZ == null)
+                            continue;
+
+                        if (IsAreaFree(minZ.Position.x, minZ.Position.z - 1, 3, i * World.ChunkSize, Tile.TEST_BLUE))
+                            break;
+                        else
+                            minZ = null;
+                    }
+                    if (minZ != null)
+                        TestNodes2[x, z].AddConnection(SettlementPathNode.SOUTH, minZ);
+
+
+                }
+                if(x != tSize - 1)
+                {
+
+                    SettlementPathNode maxX = null;
+                    //Iterate x values below this value until non-null value found
+                    for (int i = 1; i < Mathf.Min(tSize - x, checkDist); i++)
+                    {
+                        maxX = TestNodes2[x + i, z];
+                        if (maxX == null)
+                            continue;
+
+                        if (IsAreaFree(TestNodes2[x, z].Position.x, TestNodes2[x, z].Position.z - 1, i * World.ChunkSize, 3, Tile.TEST_BLUE))
+                            break;
+                        else
+                            maxX = null;
+                    }
+                    if (maxX != null)
+                        TestNodes2[x, z].AddConnection(SettlementPathNode.EAST, maxX);
+
+                    //TestNodes2[x, z].AddConnection(SettlementPathNode.EAST, TestNodes2[x + 1, z]);
+
+                }
+                if (z != tSize - 1)
+                {
+                    SettlementPathNode maxZ = null;
+                    //Iterate x values below this value until non-null value found
+                    for (int i = 1; i < Mathf.Min(tSize - z, checkDist); i++)
+                    {
+                        maxZ = TestNodes2[x, z+i];
+                        if (maxZ == null)
+                            continue;
+
+                        if (IsAreaFree(TestNodes2[x, z].Position.x, TestNodes2[x, z].Position.z - 1,3,  i * World.ChunkSize, Tile.TEST_BLUE))
+                            break;
+                        else
+                            maxZ = null;
+                    }
+                    if (maxZ != null)
+                        TestNodes2[x, z].AddConnection(SettlementPathNode.NORTH, maxZ);
+
+                    // TestNodes2[x, z].AddConnection(SettlementPathNode.NORTH, TestNodes2[x, z+1]);
+
+                }
+
+            }
+            
+        }
+        SettlementPathNode[] nodes = new SettlementPathNode[4];
+        //Remove circular path nodes
+        for(int x=0; x<tSize-1; x++)
+        {
+            for (int z = 0; z < tSize - 1; z++)
+            {
+                nodes[0] = TestNodes2[x, z];
+                nodes[1] = TestNodes2[x+1, z];
+                nodes[2] = TestNodes2[x+1, z+1];
+                nodes[3] = TestNodes2[x, z+1];
+                //If all nodes are non null
+                if (nodes[0] != null && nodes[1] != null && nodes[2] != null && nodes[3] != null)
+                {
+                    int destroy = GenerationRandom.RandomInt(0, 4);
+                    while (nodes[destroy].IsMain)
+                        destroy = GenerationRandom.RandomInt(0, 4);
+
+                    int minCount = nodes[destroy].ConnectedCount;
+                    for (int i = 1; i < 4; i++)
+                    {
+                        if (nodes[i].ConnectedCount < minCount && !nodes[i].IsMain)
+                            destroy = i;
+                    }
+
+                    if (destroy == 0)
+                    {
+                        DestroyNode(x, z);
+                        SettlementObjects[x * NODE_RES, z * NODE_RES] = new Tree(new Vec2i(x * NODE_RES, z * NODE_RES));
+                    }
+
+                    if (destroy == 1)
+                    {
+                        DestroyNode(x + 1, z);
+                        SettlementObjects[(x+1) * NODE_RES, z * NODE_RES] = new Tree(new Vec2i((x+1) * NODE_RES, z * NODE_RES));
+
+                    }
+                    if (destroy == 2) { 
+                        DestroyNode(x + 1, z + 1);
+                        SettlementObjects[(x+1) * NODE_RES, (z+1) * NODE_RES] = new Tree(new Vec2i((x+1) * NODE_RES, (z+1) * NODE_RES));
+
+                    }
+                    if (destroy == 3){
+                        DestroyNode(x, z + 1);
+                        SettlementObjects[x * NODE_RES, (z + 1) * NODE_RES] = new Tree(new Vec2i(x * NODE_RES, (z + 1) * NODE_RES));
+
+                    }
+                }
+            }
+        }
+        List<SettlementPathNode> island = new List<SettlementPathNode>();
+        List<SettlementPathNode> tested = new List<SettlementPathNode>();
+        //Remove islands
+        for(int x=0; x<tSize; x++)
+        {
+            for (int z = 0; z < tSize; z++)
+            {
+                if (TestNodes2[x, z] == null)
+                    continue;
+                if (TestNodes2[x, z].ConnectedCount == 0)
+                {
+                    DestroyNode(x, z);
+                    continue;
+                }
+                if (tested.Contains(TestNodes2[x, z]))
+                    continue;
+                if(TestNodes2[x,z].ConnectedCount == 1)
+                {
+                    
+                    //If no path is found
+                    if(!SettlementPathFinder.SettlementPath(TestNodes2[x, z], ENTR_NODE, out island))
+                    {
+                        Debug.Log("[SettlementBuilder] Island found");
+                        foreach(SettlementPathNode node in island)
+                        {
+                            DestroyNode(node.Position.x / NODE_RES, node.Position.z / NODE_RES);
+                        }
+                        island.Clear();
+                    }
+                    else
+                    {
+                        tested.AddRange(island);
+                        island.Clear();
+                    }
+                }
+                   
+            }
+        }
+        foreach(SettlementPathNode pn in TestNodes2)
+        {
+            if (pn == null)
+                continue;
+            
+            for(int i=0; i<4; i++)
+            {
+                if(pn.Connected[i] != null)
+                {
+                    if (!(pn.IsMain && pn.Connected[i].IsMain))
+                         ConnectNodes(pn, pn.Connected[i], 3);
+                }
+                   
+            }
+        }
+    }
+
+    private void DestroyNode(int x, int z)
+    {
+        SettlementPathNode node = TestNodes2[x, z];
+        if (node == null)
+            return;
+        for(int i=0; i<4; i++)
+        {
+            SettlementPathNode coni = node.Connected[i];
+            if(coni != null)
+            {
+                coni.Connected[SettlementPathNode.OppositeDirection(i)] = null;
+            }
+        }
+        TestNodes2[x, z] = null;
     }
 
     private void PlaceBuildings(List<BuildingPlan> buildings)
@@ -162,7 +495,7 @@ public class SettlementBuilder
             if (r == null)
                 continue;
 
-            SurroundByPath(r.X, r.Y, r.Width, r.Height, 2);
+            //SurroundByPath(r.X, r.Y, r.Width, r.Height, 2);
             SettlementPathNode[] nodes = AddPlot(r);
 
 
@@ -299,7 +632,6 @@ public class SettlementBuilder
 
         if (dirs[0])
         {
-            Entrance = 
             Entrance = new Vec2i(0, GenerationRandom.RandomInt(eMin, eMax));
             EntranceNodeDirection = SettlementPathNode.EAST;
         }
@@ -354,6 +686,8 @@ public class SettlementBuilder
         //Add the plot and collect the path nodes
         SettlementPathNode[] nodes = AddPlot(r);
 
+
+        return;
         //Find which node is nearest the settlement entrance.
         int nearestNodeToEntrace = 0;
         for (int i = 0; i < 4; i++)
@@ -597,8 +931,24 @@ public class SettlementBuilder
         return new Recti(pos.x, pos.z, b.Width, b.Height);
     }
 
-    public bool IsAreaFree(int x, int z, int width, int height)
+
+    public bool IsTileFree(int x, int z)
     {
+        if (x < 0 || z < 0 || x >= TileSize || z >= TileSize)
+            return false;
+
+        /* foreach (Recti ri in BuildingPlots)
+             if (ri.ContainsPoint(x, z))
+                 return false;
+                 */
+        if (Tiles[x, z] != null)
+            return false;
+        return true;
+    }
+    public bool IsAreaFree(int x, int z, int width, int height, Tile ignoreTile=null)
+    {
+        if (x < 0 || z < 0)
+            return false;
         if(GameGenerator != null)
         {
             Vec2i baseChunk = BaseChunk + new Vec2i(Mathf.FloorToInt((float)x / World.ChunkSize), Mathf.FloorToInt((float)z / World.ChunkSize));
@@ -634,11 +984,15 @@ public class SettlementBuilder
         {
             for (int z_ = z; z_ < z + height; z_++)
             {
-                if (z_ >= TileSize || x_ >= TileSize)
+                if (z_ >= TileSize-1 || x_ >= TileSize-1)
                 {
                     return false;
                 }
-                if (Tiles[x_, z_] != null)
+                if(ignoreTile != null)
+                {
+                    if (Tiles[x_, z_] != null && Tiles[x_, z_] != ignoreTile)
+                        return false;
+                }else if (Tiles[x_, z_] != null)
                     return false;
             }
         }

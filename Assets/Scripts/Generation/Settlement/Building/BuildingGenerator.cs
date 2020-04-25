@@ -49,6 +49,7 @@ public class BuildingGenerator
             b.SetBuilding(buildingBase, buildingObjects);
             return GenerateBlacksmith(b, BuildingStyle.stone);
         }
+        /*
         if(plan == Building.MARKET)
         {
             MarketPlace market = new MarketPlace(width, height);
@@ -64,7 +65,7 @@ public class BuildingGenerator
         if (plan == Building.BARACKSCITY || plan == Building.BARACKSTOWN)
         {
             
-        }
+        }*/
 
         //Default for now
         House ht = new House(width, height);
@@ -75,7 +76,7 @@ public class BuildingGenerator
 
     /// <summary>
     /// Generates the basic walls, floor, and entrance for any building.
-    /// Picks the exact position of entrance, and returns in
+    /// Picks the exact position of entrance, and returns it
     /// </summary>
     /// <param name="width"></param>
     /// <param name="height"></param>
@@ -162,7 +163,7 @@ public class BuildingGenerator
                 }
             }
         }
-        (buildingObjects[0, 0] as BuildingWall).AddRoof(new Roof(new Vec2i(0, 0), new Vec2i(width, height)));
+        //(buildingObjects[0, 0] as BuildingWall).AddRoof(new Roof(new Vec2i(0, 0), new Vec2i(width, height)));
 
         return entrance;
     }
@@ -175,9 +176,10 @@ public class BuildingGenerator
     /// <param name="nObj"></param>
     /// <param name="x"></param>
     /// <param name="z"></param>
-    public static void AddObject(WorldObjectData[,] current, WorldObjectData nObj, int x, int z, bool nInstance=false)
+    public static void AddObject(Building building, WorldObjectData nObj, int x, int z, bool nInstance=false)
     {
-        current[x, z] = nObj;
+        building.BuildingObjects[x, z] = nObj;
+        building.AddObjectReference(nObj);
         /*
         if (nObj.HasMetaData && nObj.MetaData.IsMulticell)
         {
@@ -226,7 +228,7 @@ public class BuildingGenerator
     {
         int width = building.Width;
         int height = building.Height;
-        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, BuildingStyle.stone);
+        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, BuildingStyle.stone, tileType:Tile.TEST_RED);
         //AddObject(building.BuildingObjects, WorldObject.BED, 2, 3);
         
         return building as House;
@@ -236,66 +238,24 @@ public class BuildingGenerator
     {
         int width = building.Width;
         int height = building.Height;
-        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style);
+        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType:Tile.TEST_MAGENTA);
 
         WorkEquiptmentData anvil = new Anvil(new Vec2i(1, 3));
         WorkEquiptmentData forge = new Anvil(new Vec2i(4,4));
-        AddObject(building.BuildingObjects, anvil, 1,3);
-        AddObject(building.BuildingObjects, forge, 4, 4);
-        building.WorkEquiptment.Add(new WorkEquiptmentPlacement(anvil, new Vec2i(1, 3)));
-        building.WorkEquiptment.Add(new WorkEquiptmentPlacement(forge, new Vec2i(4, 4)));
+        AddObject(building, anvil, 1,3);
+        AddObject(building, forge, 4, 4);
+
+        NPCJob[] jobs = new NPCJob[] { new NPCJobBlackSmith(building), 
+                                       new NPCJobBlackSmith(building), 
+                                       new NPCJobBlackSmith(building) };
+
+        building.SetWorkBuildingData(new WorkBuildingData(jobs));
+
+        //building.WorkEquiptment.Add(new WorkEquiptmentPlacement(anvil, new Vec2i(1, 3)));
+        //building.WorkEquiptment.Add(new WorkEquiptmentPlacement(forge, new Vec2i(4, 4)));
         return building;
     }
 
-    public static MarketPlace GenerateMarket(MarketPlace building, BuildingStyle style = BuildingStyle.stone)
-    {
-        int width = building.Width;
-        int height = building.Height;
-        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType:Tile.TEST_BLUE);
-        /*WorkEquiptment stall1 = (WorkEquiptment)WorldObject.CreateNewInstance(WorldObject.MARKETSTALL);
-        WorkEquiptment stall2 = (WorkEquiptment)WorldObject.CreateNewInstance(WorldObject.MARKETSTALL);
-        WorkEquiptment stall3 = (WorkEquiptment)WorldObject.CreateNewInstance(WorldObject.MARKETSTALL);
-        WorkEquiptment stall4 = (WorkEquiptment)WorldObject.CreateNewInstance(WorldObject.MARKETSTALL);*/
-        /*
-        building.WorkEquiptment.Add(new WorkEquiptmentPlacement(stall1, new Vec2i(2, 2)));
-        AddObject(building.BuildingObjects, stall1, 2, 2);
-        building.AddJob(new NPCJobMarketStall("Market stall", building, stall1));
-
-        building.WorkEquiptment.Add(new WorkEquiptmentPlacement(stall2, new Vec2i(5, 2)));
-        AddObject(building.BuildingObjects, stall2, 5, 2);
-        building.AddJob(new NPCJobMarketStall("Market stall", building, stall2));
-
-        building.WorkEquiptment.Add(new WorkEquiptmentPlacement(stall3, new Vec2i(5, 5)));
-        AddObject(building.BuildingObjects, stall3, 5, 5);
-        building.AddJob(new NPCJobMarketStall("Market stall", building, stall3));
-
-        building.WorkEquiptment.Add(new WorkEquiptmentPlacement(stall4, new Vec2i(2, 2)));
-        AddObject(building.BuildingObjects, stall4, 2, 5);
-        building.AddJob(new NPCJobMarketStall("Market stall", building, stall4));
-
-        */
-
-        return building;
-    }
-
-    public static Baracks GenerateCityBaracks(Baracks building, BuildingStyle style = BuildingStyle.stone)
-    {
-        int width = building.Width;
-        int height = building.Height;
-        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType: Tile.TEST_YELLOW);
-
-        for(int bedCount = 0; bedCount < width/3; bedCount++)
-        {
-            //AddObject(building.BuildingObjects, WorldObject.BED, bedCount*3, 3);
-            //WorldObject c = WorldObject.CreateNewInstance(WorldObject.CHEST);
-
-            //AddObject(building.BuildingObjects, c, bedCount * 3+1, 3);
-            building.AddJob(new NPCJobSoldier(building));
-        }
-
-
-        return building;
-    }
 
 
     /// <summary>
@@ -308,7 +268,7 @@ public class BuildingGenerator
         WorldObjectData[,] buildingObjects = new WorldObjectData[size, size];
         Castle c = new Castle(size, size);
         c.SetBuilding(buildingBase, buildingObjects);
-        c.Entrances.Add(new BuildingEntrance(new Vec2i(1, size / 2 - 2), new Vec2i(1, size / 2 + 2)));
+        //c.Entrances.Add(new BuildingEntrance(new Vec2i(1, size / 2 - 2), new Vec2i(1, size / 2 + 2)));
         Vec2i entr = GenerateWallsFloorAndEntrance(size, size, c.BuildingObjects, c.BuildingTiles, 0, BuildingStyle.stone, entraceDis:size/2);
         
         
