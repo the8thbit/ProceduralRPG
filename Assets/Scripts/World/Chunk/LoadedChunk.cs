@@ -26,7 +26,8 @@ public class LoadedChunk : MonoBehaviour
 
     public void SetChunkData(ChunkData chunk, ChunkData[] neighbors, bool forceLoad=false)
     {
-        Debug.BeginProfile("set_data");
+        Debug.BeginDeepProfile("set_data");
+        //Debug.BeginProfile("set_data");
         Chunk = chunk;
         transform.position = new Vector3(Chunk.X * World.ChunkSize, 0, Chunk.Z * World.ChunkSize);
         LoadedWorldObjects = new WorldObject[World.ChunkSize, World.ChunkSize];
@@ -315,7 +316,9 @@ public class LoadedChunk : MonoBehaviour
                 }
             }
         }
-        Debug.EndProfile();
+        Debug.EndDeepProfile("set_data");
+
+        //Debug.EndProfile();
     }
 
 

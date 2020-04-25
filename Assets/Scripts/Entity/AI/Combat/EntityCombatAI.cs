@@ -243,7 +243,6 @@ public abstract class EntityCombatAI : IWorldCombatEvent
         float dot = Vector3.Dot(entityLookDirection, difPos);
         
         float angle = Mathf.Abs(Mathf.Acos(dot) * Mathf.Rad2Deg);
-        DebugGUI.Instance.SetData("ent_look", entityLookDirection + "/" + difPos + " : " + angle);
         //Debug.Log(entityLookDirection + ", " + difPos + ", " + angle);
         if (angle > fov)
             return false;

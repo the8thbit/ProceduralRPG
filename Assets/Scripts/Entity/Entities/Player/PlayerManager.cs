@@ -15,6 +15,68 @@ public class PlayerManager : MonoBehaviour
     private NPC CurrentlySelected;
 
 
+
+    private SettlementPathNode NearestNode;
+    private List<SettlementPathNode> path;
+    private void OnDrawGizmos()
+    {
+        if(NearestNode == null)
+        {
+            Settlement t = GameManager.TestSettle;
+            if (t == null)
+                return;
+            int curDist = -1;
+            Vec2i pPos = Vec2i.FromVector2(Player.Position2);
+            foreach(SettlementPathNode pn in t.tNodes)
+            {
+                if (pn == null)
+                    continue;
+
+                if(NearestNode == null)
+                {
+                    NearestNode = pn;
+                    curDist = Vec2i.QuickDistance(pn.Position + t.BaseCoord, pPos);
+                }
+                else
+                {
+                    if(Vec2i.QuickDistance(pn.Position + t.BaseCoord, pPos) < curDist)
+                    {
+                        curDist = Vec2i.QuickDistance(pn.Position + t.BaseCoord, pPos);
+                        NearestNode = pn;
+                    }
+                }
+            }
+
+            path = new List<SettlementPathNode>();
+            if (SettlementPathFinder.SettlementPath(NearestNode, t.IMPORTANT, out path, debug:true)) {
+                Debug.Log("Path found!");
+            
+            }
+
+            Debug.Log("Path len: " + path.Count);
+            
+           
+
+        }
+        if(path != null)
+        {
+            Color old = Gizmos.color;
+            Gizmos.color = Color.yellow;
+            //Debug.Log(Vec2i.ToVector3(path[0].Position + t.BaseCoord));
+            Gizmos.DrawCube(Vec2i.ToVector3(path[0].Position + GameManager.TestSettle.BaseCoord), Vector3.one * 2);
+
+
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                Gizmos.DrawLine(Vec2i.ToVector3(path[i].Position + GameManager.TestSettle.BaseCoord), Vec2i.ToVector3(path[i + 1].Position + GameManager.TestSettle.BaseCoord));
+            }
+            Gizmos.color = old;
+        }
+        
+    }
+
+
+    
     private Vector3 WorldLookPosition;
     private GameObject LookObject;
 
@@ -154,7 +216,7 @@ public class PlayerManager : MonoBehaviour
             LoadedPlayer.Jump();
         }
 
-        LoadedPlayer.SetRunning(Input.GetKey(KeyCode.LeftControl));
+        LoadedPlayer.SetRunning(Input.GetKey(KeyCode.LeftShift));
 
         Debug.EndDeepProfile("PlayerManagerUpdate");
     }
@@ -189,10 +251,28 @@ public class PlayerManager : MonoBehaviour
         if(LookObject == null)
         {
             DebugGUI.Instance.ClearData("player_view");
+            GameManager.GUIManager.IngameGUI.SetNPC(null);
         }
         else
         {
+
             DebugGUI.Instance.SetData("player_view", LookObject.ToString());
+            if(LookObject.GetComponent<LoadedEntity>()!= null)
+            {
+                if(LookObject.GetComponent<LoadedEntity>().Entity is NPC)
+                {
+                    GameManager.GUIManager.IngameGUI.SetNPC(LookObject.GetComponent<LoadedEntity>().Entity as NPC);
+                }
+                else
+                {
+                    GameManager.GUIManager.IngameGUI.SetNPC(null);
+                }
+            }
+            else
+            {
+                GameManager.GUIManager.IngameGUI.SetNPC(null);
+
+            }
         }
 
         WorldLookPosition = PlayerCameraScript.CameraController.GetWorldLookPosition();

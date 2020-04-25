@@ -131,4 +131,42 @@ public class GenerationRandom
             return arr[0];
         return arr[RandomInt(0, arr.Length)];
     }
+
+    /// <summary>
+    /// Returns a number of a gaussian distribution, with a mean of 0 and 
+    /// a standard deviation of 1.
+    /// 
+    /// 
+    /// Not my code, copied:
+    /// https://stackoverflow.com/questions/5817490/implementing-box-mueller-random-number-generator-in-c-sharp
+    /// </summary>
+    /// <returns></returns>
+    public float GaussianFloat()
+    {
+        float u, v, S;
+
+        do
+        {
+            u = (float)(2.0 * random.NextDouble() - 1.0);
+            v = (float)(2.0 * random.NextDouble() - 1.0);
+            S = u * u + v * v;
+        }
+        while (S >= 1.0);
+
+        float fac = Mathf.Sqrt(-2.0f * Mathf.Log(S) / S);
+        return u * fac;
+    }
+
+    /// <summary>
+    /// Returns a gaussian distribution with the specified mean and standard distribution
+    /// <see cref="GaussianFloat()"/>
+    /// </summary>
+    /// <param name="mean"></param>
+    /// <param name="std"></param>
+    /// <returns></returns>
+    public float GaussianFloat(float mean, float std)
+    {
+        return GaussianFloat() * std + mean;
+    }
+
 }

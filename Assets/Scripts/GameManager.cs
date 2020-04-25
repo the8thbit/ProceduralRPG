@@ -161,8 +161,8 @@ public class GameManager : MonoBehaviour
         Vec2i wpos = Vec2i.FromVector2(QuestManager.Unstarted[0].Initiator.GetNPC().Position2);
         //Vec2i wpos = WorldManager.World.GetChunkStructure(0).Position * World.ChunkSize + new Vec2i(2, 2);
         Vec2i wEntr = WorldManager.World.GetSubworld(1).WorldEntrance;
-
-
+        TestSettle = QuestManager.Unstarted[0].Initiator.GetNPC().NPCKingdomData.GetSettlement();
+        Debug.Log(TestSettle);
 
 
         Vec2i playerStartreg = World.GetRegionCoordFromChunkCoord(World.GetChunkPosition(wpos));
@@ -187,6 +187,29 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void OnDrawGizmos()
+    {
+        if(TestSettle != null)
+        {
+            foreach(SettlementPathNode spn in TestSettle.tNodes)
+            {
+                if (spn == null)
+                    continue;
+                Vector3 pos = Vec2i.ToVector3(spn.Position + TestSettle.BaseCoord);
+                Gizmos.DrawSphere(pos, 0.5f);
+
+                foreach(SettlementPathNode con in spn.Connected)
+                {
+                    if(con != null)
+                    {
+                        //Debug.Log("not null");
+                        Gizmos.DrawLine(pos, Vec2i.ToVector3(con.Position + TestSettle.BaseCoord));
+
+                    }
+                }
+            }
+        }
+    }
 
 
     private void OnGUI()

@@ -10,6 +10,9 @@ public class BasicNPCData
 
     public NPCJob NPCJob { get; private set; }
     public bool HasJob { get { return NPCJob != null; } }
+
+    public NPCGender Gender { get; private set; }
+
     public void SetJob(NPCJob job)
     {
         NPCJob = job;
@@ -25,11 +28,21 @@ public class BasicNPCData
     //Debug, TODO add check for if npc should go to work.
     public bool ShouldGoToWork { get { return NPCJob != null; } }
 
+    public void SetGender(NPCGender gender)
+    {
+        Gender = gender;
+    }
 
     public override string ToString()
     {
-
-        return base.ToString();
+        string data = "";
+        data += "HasJob: " + HasJob + ((HasJob)? ("-" + NPCJob.ToString()) : "") + "\n";
+        data += "Gender: " + Gender;
+        return data;
     }
 }
 
+public enum NPCGender
+{
+    male, female
+}

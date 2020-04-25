@@ -84,7 +84,7 @@ public class ResourceManager
         AllWorldObjects.Add((int)WorldObjects.GRASS, Resources.Load<GameObject>(root + "Natural/Terrain/Grass/Grass"));
         AllWorldObjects.Add((int)WorldObjects.ROCK, Resources.Load<GameObject>(root + "Natural/Rock/Rock"));
         AllWorldObjects.Add((int)WorldObjects.WOOD_SPIKE, Resources.Load<GameObject>(root + "Structure/Wood/WoodSpike"));
-        AllWorldObjects.Add((int)WorldObjects.ANVIL, Resources.Load<GameObject>(root + "BrickWall"));
+        AllWorldObjects.Add((int)WorldObjects.ANVIL, Resources.Load<GameObject>(root + "Building/Work/Blacksmith/Anvil"));
         AllWorldObjects.Add((int)WorldObjects.GLASS_WINDOW, Resources.Load<GameObject>(root + "Structure/Glass/Window"));
         AllWorldObjects.Add((int)WorldObjects.ROOF, Resources.Load<GameObject>(root + "Building/Roof"));
         AllWorldObjects.Add((int)WorldObjects.DOOR, Resources.Load<GameObject>(root + "Structure/Door/Door"));

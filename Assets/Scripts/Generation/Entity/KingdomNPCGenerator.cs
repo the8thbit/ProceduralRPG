@@ -5,13 +5,35 @@ public class KingdomNPCGenerator
 {
     public readonly Kingdom Kingdom;
     public readonly EntityManager EntityManager;
-    public KingdomNPCGenerator(Kingdom kingdom, EntityManager entityManager)
+    public readonly GameGenerator GameGen;
+
+    private GenerationRandom GenerationRan;
+    public KingdomNPCGenerator(GameGenerator gameGen, Kingdom kingdom, EntityManager entityManager)
     {
+        GameGen = gameGen;
+        //Create a RNG based on this seed and kingdomID
+        GenerationRan = new GenerationRandom(GameGen.Seed*13 + kingdom.KingdomID*27);
         Kingdom = kingdom;
         EntityManager = entityManager;
     }
 
-
+    /// <summary>
+    /// <para>
+    /// Generates all NPCs for this kingdom.
+    /// The overall process takes several steps.
+    /// We iterate all the settlements, generating all NPCs on a settlement by settlement basis. <see cref="GenerateSettlementNPC(Settlement)"/>
+    /// </para>
+    /// <para>
+    /// The next step is the generate the empty shells for each NPC (<see cref="GenerateNPCShells(Settlement)"/>), where
+    /// we generate the initial NPC. This is where we create the NPC object, set its spawn position and home.
+    /// </para>
+    /// <para>
+    /// Next, the basic Kingdom data is set. The NPCs rank is decided (based on their home and their wealth)
+    /// </para>
+    /// <para>Then we generate the personalities for all the NPCs. This is largely random, except for loyalty which is has a higher multiplier 
+    /// depending on the NPCs kingdom rank (i.e, kings have high loyalty to their kingdom, pesents have random)</para>
+    /// <para>We can then generate the NPCs jobs. High loyalty -> solider, etc</para>
+    /// </summary>
     public void GenerateKingdomNPC()
     {
         foreach(int i in Kingdom.SettlementIDs)
@@ -34,6 +56,7 @@ public class KingdomNPCGenerator
         
         List<NPC> npcs = GenerateNPCShells(set);
         GenerateSettlementNPCKingdomData(npcs, set);
+        GenerateNPCPersonalities(npcs);
         GenerateNPCJobs(npcs, set);
         GenerateNPCDialoges(npcs);
         return;
@@ -47,11 +70,17 @@ public class KingdomNPCGenerator
         if (set.Buildings == null)
             return null;
         List<NPC> settlementNPCs = new List<NPC>(250);
+
+        List<NPC> inThisHouse = new List<NPC>(10);
+
         //iterate all building, and check if this is a house
         foreach(Building b in set.Buildings)
         {
-            if(b is House)
+            
+           
+            if (b is House)
             {
+                inThisHouse.Clear();
                 //Define the house and get the possible tiles we can spawn the this houses' NPCs on
                 House h = b as House;
                 List<Vec2i> spawnableTiles = h.GetSpawnableTiles();
@@ -69,10 +98,37 @@ public class KingdomNPCGenerator
                     NPC npc = new NPC(isFixed: true);
                     npc.SetPosition(entitySpawn);
                     npc.NPCData.SetHome(h);
+                    //First two entities should be male and female (husband and wife)
+                    //All others are then randomly assigned
+                    if (i == 0)
+                    {
+                        npc.NPCData.SetGender(NPCGender.male);
+                    }
+                    else if (i == 1)
+                        npc.NPCData.SetGender(NPCGender.female);
+                    else
+                        npc.NPCData.SetGender((NPCGender)GenerationRan.RandomInt(0, 2));
+                    
                     EntityManager.AddFixedEntity(npc);
                     npc.SetName("NPC " + npc.ID);
                     set.AddNPC(npc);
                     settlementNPCs.Add(npc);
+                    inThisHouse.Add(npc);
+                }
+                //If more than 1 person lives in this house, they are family
+                if(inThisHouse.Count > 1)
+                {
+                    //Iterate all pairs of family members in this house
+                    for(int i=0; i<inThisHouse.Count; i++)
+                    {
+                        for(int j=0; j<inThisHouse.Count; j++)
+                        {
+                            if (i == j)
+                                continue;
+                            inThisHouse[i].EntityRelationshipManager.SetRelationshipTag(inThisHouse[j], EntityRelationshipTag.Family);
+                            inThisHouse[j].EntityRelationshipManager.SetRelationshipTag(inThisHouse[i], EntityRelationshipTag.Family);
+                        }
+                    }
                 }
             }
         }
@@ -85,7 +141,7 @@ public class KingdomNPCGenerator
     /// <param name="npcs"></param>
     /// <param name="settlement"></param>
     private void GenerateSettlementNPCKingdomData(List<NPC> npcs, Settlement settlement)
-    {    
+    {           
         foreach(NPC npc in npcs)
         {
             KingdomHierarchy rank = KingdomHierarchy.Peasant;
@@ -140,6 +196,56 @@ public class KingdomNPCGenerator
         }
     }
     
+    private void GenerateNPCPersonalities(List<NPC> npcs)
+    {
+        //iterate all npcs
+        foreach(NPC npc in npcs)
+        {
+            //Personality is random
+            KingdomHierarchy rank = npc.NPCKingdomData.Rank;
+            float loyalty = 1;
+            float wealth = 0;
+            if (rank == KingdomHierarchy.Monarch)
+            {
+                wealth = 1;
+                loyalty = 1;
+            }
+            else if (rank == KingdomHierarchy.Noble)
+            {
+                loyalty = Mathf.Clamp(GenerationRan.GaussianFloat(0.8f, 0.2f), 0, 1);
+                wealth = Mathf.Clamp(GenerationRan.GaussianFloat(0.8f, 0.2f), 0, 1);
+            }
+            else if (rank == KingdomHierarchy.LordLady)
+            {
+                loyalty = Mathf.Clamp(GenerationRan.GaussianFloat(0.7f, 0.3f), 0, 1);
+                wealth = Mathf.Clamp(GenerationRan.GaussianFloat(0.7f, 0.3f), 0, 1);
+            }
+            else if (rank == KingdomHierarchy.Knight || rank == KingdomHierarchy.Mayor)
+            {
+                loyalty = Mathf.Clamp(GenerationRan.GaussianFloat(0.7f, 0.4f), 0, 1);
+                wealth = Mathf.Clamp(GenerationRan.GaussianFloat(0.7f, 0.3f), 0, 1);
+
+            }
+            else if (rank == KingdomHierarchy.Citizen)
+            {
+                loyalty = Mathf.Clamp(GenerationRan.GaussianFloat(0.6f, 0.6f), 0, 1);
+                wealth = Mathf.Clamp(GenerationRan.GaussianFloat(0.5f, 0.3f), 0, 1);
+
+            }
+            else
+            {
+                loyalty = Mathf.Clamp(GenerationRan.GaussianFloat(0.5f, 0.5f), 0, 1);
+                wealth = Mathf.Clamp(GenerationRan.GaussianFloat(0.3f, 0.3f), 0, 1);
+            }
+
+            float kindness = Mathf.Clamp(GenerationRan.GaussianFloat(0.6f, 0.4f), 0, 1);
+            float agression = Mathf.Clamp(GenerationRan.GaussianFloat(0.6f, 0.4f), 0, 1);
+            float greed = Mathf.Clamp(GenerationRan.GaussianFloat(0.6f, 0.4f), 0, 1);
+
+            EntityPersonality pers = new EntityPersonality(agression, kindness, loyalty, greed, wealth);
+            npc.SetPersonality(pers);
+        }
+    }
     private void GenerateNPCJobs(List<NPC> npcs, Settlement set)
     {
         List<NPCJob> workJobs = new List<NPCJob>();
@@ -147,10 +253,10 @@ public class KingdomNPCGenerator
         //Iterate all buildings and select work buildings
         foreach (Building b in set.Buildings)
         {
-            if (b is WorkBuilding)
+            if (b is IWorkBuilding)
             {
-                //Get the job for each building
-                List<NPCJob> js = (b as WorkBuilding).GetJobs();
+                //Get the jobs for each building
+                NPCJob[] js = (b as IWorkBuilding).GetWorkData.BuildingJobs;
                 foreach(NPCJob j in js)
                 {
                     if (!rankedJobs.ContainsKey(j.RequiredRank))

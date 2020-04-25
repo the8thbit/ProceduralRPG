@@ -6,10 +6,11 @@ public class EntityGenerator
 {
     public readonly World World;
     public readonly EntityManager EntityManager;
-
-    public EntityGenerator(World world, EntityManager entityManager)
+    public readonly GameGenerator GameGen;
+    public EntityGenerator(GameGenerator gameGen, EntityManager entityManager)
     {
-        World = world;
+        GameGen = gameGen;
+        World = gameGen.World;
         EntityManager = entityManager;
     }
 
@@ -17,7 +18,7 @@ public class EntityGenerator
     {
         foreach(KeyValuePair<int, Kingdom> kpv in World.WorldKingdoms)
         {
-            KingdomNPCGenerator kingEntGen = new KingdomNPCGenerator(kpv.Value, EntityManager);
+            KingdomNPCGenerator kingEntGen = new KingdomNPCGenerator(GameGen, kpv.Value, EntityManager);
             kingEntGen.GenerateKingdomNPC();
 
         }

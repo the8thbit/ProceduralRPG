@@ -57,7 +57,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
         }
         if(NearEntities != null)
         {
-            GameManager.DebugGUI.SetData("Entity_" + Entity.ID + "_near:", NearEntities.Count);
+           // GameManager.DebugGUI.SetData("Entity_" + Entity.ID + "_near:", NearEntities.Count);
             foreach(Entity e in NearEntities)
             {
                 if (e.Equals(Entity))
@@ -214,10 +214,24 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
     /// </summary>
     private void FixedUpdate() {
 
-    
+        //RigidBody.angularVelocity = Vector3.zero;
+        if (GameManager.Paused)
+            return;
+        if (IsIdle)
+        {
+
+            return;
+        }
+        Debug.BeginDeepProfile("le_fixed_update");
+
         if(!(Entity is Player))
         {
             DebugGUI.Instance.SetData("ent", GameManager.Paused + "_" + IsIdle + "_" + MoveDirection);
+            if (MiscMaths.DistanceSqr(transform.position, GameManager.PlayerManager.Player.Position) > (World.ChunkSize * 3) * (World.ChunkSize * 3))
+            {
+                IsIdle = true;
+            }
+            
         }
 
         EntityHealthBar.SetHealthPct(Entity.CombatManager.CurrentHealth / Entity.CombatManager.MaxHealth);
@@ -234,14 +248,7 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
             transform.position = new Vector3(transform.position.x, 1, transform.position.z);
         }
 
-        //RigidBody.angularVelocity = Vector3.zero;
-        if (GameManager.Paused)
-            return;
-        if (IsIdle)
-        {
 
-            return;
-        }
 
         //If we have a specified move direction
         if (MoveDirection != Vector2.zero)
@@ -336,6 +343,9 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
         LookTowards = Vector3.zero;
         MoveDirection = Vector2.zero;
         Entity.SetPosition(transform.position);
+
+        Debug.EndDeepProfile("le_fixed_update");
+
         return;
 
 

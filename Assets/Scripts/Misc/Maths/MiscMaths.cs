@@ -21,6 +21,11 @@ public class MiscMaths
         return val;
     }
 
+    public static float DistanceSqr(Vector3 a, Vector3 b)
+    {
+        return (a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z) + (a.y - b.y) * (a.y - b.y);
+    }
+
     public static float ThreadSafeRandom()
     {
         float val = -1;

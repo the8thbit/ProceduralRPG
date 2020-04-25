@@ -382,7 +382,7 @@ public class TestMain : MonoBehaviour
 
         WorldManager.SetWorld(world);
 
-        KingdomNPCGenerator npcGen = new KingdomNPCGenerator(k, EntityManager);
+        KingdomNPCGenerator npcGen = new KingdomNPCGenerator(new GameGenerator(0), k, EntityManager);
         Debug.Log("BASE:" + set.BaseCoord);
         Debug.Log(cSize);
         npcGen.GenerateSettlementNPC(set);

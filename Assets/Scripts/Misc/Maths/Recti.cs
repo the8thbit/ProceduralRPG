@@ -42,11 +42,18 @@ public class Recti
         this.BoundedPoints = BoundedPoints.ToArray();
     }
 
+    public bool ContainsPoint(int x, int z)
+    {
+        return x >= X && x <= X + Width && z >= Y && z <= Y + Height;
+    }
+
     public bool ContainsPoint(Vec2i v)
     {
         return System.Array.IndexOf(BoundedPoints, v) > -1;
         return v.x >= X && v.x < X + Width && v.z >= Y && v.z < Y + Height;
     }
+
+
 
     public bool Intersects(Recti r)
     {
