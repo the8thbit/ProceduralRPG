@@ -3,9 +3,10 @@ using UnityEditor;
 
 public class NPCJobSoldier : NPCJob
 {
-    public NPCJobSoldier(WorkBuilding workLocation) : base("Soldier", workLocation, KingdomHierarchy.Citizen)
+
+    public NPCJobSoldier(IWorkBuilding workLocation) : base("Soldier", workLocation, KingdomHierarchy.Citizen)
     {
     }
 
-
+    public override Color GetShirtColor => Color.red;
 }

@@ -25,18 +25,12 @@ public abstract class Building
 
     public static BuildingPlan BLACKSMITH = Blacksmith.BuildingPlan;
     public static BuildingPlan HOUSE = House.BuildingPlan;
-    public static BuildingPlan MARKET = MarketPlace.BuildingPlan;
-    public static BuildingPlan BARACKSCITY = Baracks.BuildingPlanCity;
-    public static BuildingPlan BARACKSTOWN = Baracks.BuildingPlanTown;
-    public static BuildingPlan ALCHEMISTS = Alchemists.BuildingPlan;
-    public static BuildingPlan TAVERN = Tavern.BuildingPlan;
-    public static BuildingPlan GENERALMERCHANT = GeneralMerchant.BuildingPlan;
-    public static BuildingPlan SWORDSELLER = SwordSeller.BuildingPlan;
-    public static BuildingPlan ARCHERYSTORE = ArcheryStore.BuildingPlan;
+
     public int SettlementID { get; private set; }
     public Vec2i SettlementCoord { get; private set; }
     public Tile[,] BuildingTiles { get; private set; }
     public WorldObjectData[,] BuildingObjects { get; private set; }
+    private List<WorldObjectData> BuildingObjects_; 
     public int Width { get; private set; }
     public int Height { get; private set; }
     public float BaseValue { get { return Width * Height; } }
@@ -47,7 +41,6 @@ public abstract class Building
 
     private Recti WorldBounds;
     private List<Vec2i> SpawnableTiles;
-    public List<BuildingEntrance> Entrances;
 
 
     public Vec2i Entrance { get; private set; }
@@ -58,13 +51,33 @@ public abstract class Building
 
         BuildingTiles = new Tile[width, height];
         BuildingObjects = new WorldObjectData[width, height];
-        Entrances = new List<BuildingEntrance>();
+        BuildingObjects_ = new List<WorldObjectData>();
     }
+    /// <summary>
+    /// Called after the building has been added to the world.
+    /// Clears all objects in building from memory, as they are now stored
+    /// in ChunkData 
+    /// </summary>
     public void AfterApplyToWorld()
     {
         BuildingTiles = null;
         BuildingObjects = null;
     }
+
+    public List<WorldObjectData> GetBuildingObjects()
+    {
+        return BuildingObjects_;
+    }
+
+    /// <summary>
+    /// Adds the specified WorldObject to the list containing
+    /// all objects in this building.
+    /// WARNING - this does not add the object to the array of objects itself
+    /// </summary>
+    public void AddObjectReference(WorldObjectData obj) {
+        BuildingObjects_.Add(obj);
+    }
+
     public void SetValueModifier(float v)
     {
         ValueModifier = v;
@@ -88,10 +101,9 @@ public abstract class Building
     {
         WorldPosition = settle.BaseCoord + this.SettlementCoord;
         SettlementID = settle.SettlementID;
-        if(this is WorkBuilding)
-        {
-            (this as WorkBuilding).WorldPositionSet();
-        }
+
+
+        
     }
 
 

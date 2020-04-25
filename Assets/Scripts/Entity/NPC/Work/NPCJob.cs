@@ -9,12 +9,13 @@ using UnityEditor;
 public abstract class NPCJob
 {
 
+    public abstract Color GetShirtColor { get; }
 
    
-    public WorkBuilding WorkLocation { get; private set; }
+    public IWorkBuilding WorkLocation { get; private set; }
     public string Title { get; private set; }
     public KingdomHierarchy RequiredRank { get; private set; }
-    public NPCJob(string title, WorkBuilding workLocation, KingdomHierarchy rankReq = KingdomHierarchy.Citizen)
+    public NPCJob(string title, IWorkBuilding workLocation, KingdomHierarchy rankReq = KingdomHierarchy.Citizen)
     {
         Title = title;
         WorkLocation = workLocation;

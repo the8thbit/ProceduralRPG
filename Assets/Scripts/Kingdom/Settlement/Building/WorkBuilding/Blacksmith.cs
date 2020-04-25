@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
 using UnityEditor;
-[System.Serializable]
-public class Blacksmith : WorkBuilding
+
+public class Blacksmith : Building, IWorkBuilding
 {
-    public static BuildingPlan BuildingPlan = new BuildingPlan("Blacksmith", 15, 25);
+    public static BuildingPlan BuildingPlan = new BuildingPlan("Blacksmith", 10, 20);
+    private WorkBuildingData WorkBuildingData;
     public Blacksmith(int width, int height) : base(width, height)
     {
+    }
+
+    public WorkBuildingData GetWorkData { get => WorkBuildingData;  }
+
+    public void SetWorkBuildingData(WorkBuildingData data)
+    {
+        WorkBuildingData = data;
     }
 }
