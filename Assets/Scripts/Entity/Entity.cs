@@ -36,7 +36,6 @@ public abstract class Entity
 
     public EntityMovementData MovementData { get; private set; }
 
-
     [System.NonSerialized]
     private LoadedEntity LoadedEntity;
     public LoadedEntity GetLoadedEntity()
@@ -58,6 +57,8 @@ public abstract class Entity
         SkillTree = new SkillTree();
         MovementData = movementData;
     }
+
+
 
     /// <summary>
     /// Main update loop for entity, 
