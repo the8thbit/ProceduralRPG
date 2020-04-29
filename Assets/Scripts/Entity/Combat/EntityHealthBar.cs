@@ -20,11 +20,11 @@ public class EntityHealthBar : MonoBehaviour
         image.fillAmount = pct;
         if(pct == 1)
         {
-            canvas.enabled = false;
+            canvas.gameObject.SetActive(false);
         }
         else
         {
-            canvas.enabled = true;
+            canvas.gameObject.SetActive(true);
         }
         transform.LookAt(PlayerManager.Instance.PlayerCamera.transform);
         transform.Rotate(new Vector3(0, 180, 0));

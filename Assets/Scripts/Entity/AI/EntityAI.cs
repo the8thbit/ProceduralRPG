@@ -4,10 +4,12 @@ using System.Collections.Generic;
 [System.Serializable]
 public class EntityAI
 {
+    public static readonly int IDLE_CHUNK_DIST = 5;
+
     private Entity Entity;
     public EntityCombatAI CombatAI;
     public EntityTaskAI TaskAI;
-
+    private EntityPathFinder EPF;
 
 
     private Vec2i EntityPathTarget;
@@ -34,7 +36,9 @@ public class EntityAI
     //Tick is called not every frame
     public void Tick()
     {
+        //Always run combat tick
         CombatAI.Tick();
+        //Only run tasks while not in combat
         if (!CombatAI.InCombat)
             TaskAI.Tick();
     }
@@ -42,6 +46,8 @@ public class EntityAI
 
     public bool GeneratePath(Vec2i target)
     {
+
+
         //if no target, null previous paths and return.
         if (target == null)
         {
@@ -50,27 +56,65 @@ public class EntityAI
             EntityPath = null;
             return false;
         }
+
+        if(EPF == null)
+        {
+            //TODO - get free path finder from parent
+            EPF = new EntityPathFinder(GameManager.PathFinder);
+        }
+        
         Vec2i tilePos = Vec2i.FromVector3(Entity.Position);
-        if(GameManager.PathFinder.NodeValue(tilePos) > 100)
+        Debug.Log("Attempting path from " + tilePos + " to " + target);
+
+        /*if(GameManager.PathFinder.NodeValue(tilePos) > 100)
         {
             tilePos = Vec2i.FromVector3(Entity.Position + new Vector3(0.5f, 0, 0.5f));
             if(GameManager.PathFinder.NodeValue(tilePos) > 100)
             {
                 Debug.Log("hm");
             }
-        }
+        }*/
+        //if we have no path
         if (EntityPath == null)
         {
+            //We check if one is being generated
+            if (!EPF.IsRunning)
+            {
+                //If not, we start generating it
+                EPF.FindPath(tilePos, target);
+                return false;
+            }
+
+            //Check if the path finder has completed its work
+            if (EPF.IsComplete())
+            {
+                //If the path is found, we set it and return true
+                if (EPF.FoundPath)
+                {
+                    EntityPathTarget = target;
+                    EntityPath = new EntityPath(EPF.GetPath());
+                    return true;
+                }
+                else
+                {
+                    Debug.Log("Path from " + tilePos + " to " + target + " not found");
+
+                    return false;
+                }
+            }
+            return false;
+
+            /*
             //If there is no path, Attempt to generate it
             List<Vec2i> path = GameManager.PathFinder.GeneratePath(tilePos, target);
-            if (path.Count == 0)
+            if (path==null || path.Count == 0)
             {
                 Debug.Log("Path from " + tilePos + " to " + target + " not found");
                 return false;
             }
             EntityPathTarget = target;
             EntityPath = new EntityPath(path);
-            return true;
+            return true;*/
         }
         else if(EntityPath.Target == target)
         {//If the current path has the same target, return true
@@ -81,41 +125,55 @@ public class EntityAI
             if(Vec2i.QuickDistance(EntityPath.Target, target) < 5)
             {
                 //If the path exists but doesn't have the same target, but targets are close, we attempt to re-calculate the path
-                return EntityPath.UpdateTarget(target);
+                return EntityPath.UpdateTarget(target, EPF);
             }else
             {
                 EntityPath = null;
+                //We check if one is being generated
+                if (!EPF.IsRunning)
+                {
+                    //If not, we start generating it
+                    EPF.FindPath(tilePos, target);
+                    return false;
+                }/*
                 List<Vec2i> newPath = GameManager.PathFinder.GeneratePath(tilePos, target);
-                if(newPath.Count == 0)
+                if(newPath==null || newPath.Count == 0)
                 {
                     Debug.Log("No path found from " + tilePos + " to " + target + " for entity " + Entity);
                     return false;
                 }
                 EntityPath = new EntityPath(newPath);
-                return true;
+                return true;*/
             }
             
-        }        
+        }
+        return false;
     }
 
     
-    public void FollowPath()
+    public bool FollowPath()
     {
         if (EntityPath == null)
-            return;
-        Vector2 next = EntityPath.CurrentIndex().AsVector2();
-        if (PositionWithinDistance(Entity.GetLoadedEntity().transform.position, next, 0.1f))
+            return false;
+        Vec2i nexti_ = EntityPath.CurrentIndex();
+        if (nexti_ == null)
+            return true;
+        Vector2 next = nexti_.AsVector2();
+        if (PositionWithinDistance(Entity.GetLoadedEntity().transform.position, next + new Vector2(0.5f, 0.5f), 0.1f))
         {
             Vec2i nexti = EntityPath.NextIndex();
             if (nexti == null)
-                return;
+                return true;
             next = nexti.AsVector2();
         }
         
         if(next != null && Entity.GetLoadedEntity()!=null) {
             
-            Entity.GetLoadedEntity().MoveTowards(next);
+            Entity.GetLoadedEntity().MoveTowards(next + new Vector2(0.5f,0.5f));
+            Entity.GetLoadedEntity().LookTowardsPoint(next + new Vector2(0.5f, 0.5f));
+            return false;
         }
+        return false;
     }
 
     /// <summary>

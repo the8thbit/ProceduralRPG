@@ -42,6 +42,8 @@ public class EntityRelationshipManager
         Personality = pers;
     }
 
+
+
     public void SetRelationshipTag(Entity entity, EntityRelationshipTag tag)
     {
         if (!entity.IsFixed)

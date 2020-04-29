@@ -84,20 +84,28 @@ public class ChunkRegionGenerator
 
         Vec2i[] toGen = new Vec2i[3];
         List<Thread> initGenThreads = new List<Thread>();
-        for(int x=-1, i=0; x<=1; x++, i++)
+        for(int x=-2, i=0; x<=2; x++, i++)
         {
-            for(int z=-1; z<=1; z++, i++)
+            for(int z=-2; z<=2; z++, i++)
             {
-                toGen[i] = midpoint + new Vec2i(x, z);
+
+                Vec2i toGen_ = midpoint + new Vec2i(x, z);
+                if (toGen_.x < 0 || toGen_.x >= World.RegionCount || toGen_.z < 0 || toGen_.z >= World.RegionCount)
+                {
+                    continue;
+                    //toGen[i] = null;
+                }
+                    
                 initGenThreads.Add(ThreadGenerateRegions(new Vec2i[] { midpoint + new Vec2i(x, z) }));
 
-                RegionsToGen.Remove(toGen[i]);
+                RegionsToGen.Remove(toGen_);
+                /*
                 if (i == 2)
                 {
                     i = 0;
                 //    initGenThreads.Add(ThreadGenerateRegions(toGen));
                     toGen = new Vec2i[3];
-                }
+                }*/
             }
         }
         initGenThreads.Add(ThreadGenerateRegions(toGen));

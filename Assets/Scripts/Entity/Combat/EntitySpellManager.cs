@@ -38,10 +38,10 @@ public class EntitySpellManager
     /// <summary>
     /// Increases mana by the mana regeneration rate.
     /// </summary>
-    /// <param name="time"></param>
-    public void Tick(float time)
+    /// <param name="dt"></param>
+    public void Tick(float dt)
     {
-        CurrentMana = Mathf.Clamp(CurrentMana + ManaRegenerationRate * time, 0, MaxMana);
+        CurrentMana = Mathf.Clamp(CurrentMana + ManaRegenerationRate * dt, 0, MaxMana);
     }
     /// <summary>
     /// Called for a loaded entity that can cast spells

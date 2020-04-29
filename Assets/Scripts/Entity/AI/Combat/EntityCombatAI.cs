@@ -148,6 +148,13 @@ public abstract class EntityCombatAI : IWorldCombatEvent
         }
     }
 
+    /// <summary>
+    /// Called when an entity is subject to an attack.
+    /// Used to determine how this entity should react
+    /// </summary>
+    /// <param name="source"></param>
+    public abstract void OnDealDamage(Entity source);
+
     protected virtual void RangeCombat()
     {
         //TODO

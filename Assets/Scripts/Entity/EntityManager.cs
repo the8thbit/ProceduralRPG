@@ -5,7 +5,14 @@ using System;
 
 public class EntityManager : MonoBehaviour
 {
-
+    /// <summary>
+    /// IDLE_CHUNK_DISTANCE - An entity that is further than this many chunks away from the player
+    /// will be set to idle.
+    /// When idle, no update calculations are run. The entity is set to idle mode, which prevents physics calculations also
+    /// 
+    /// </summary>
+    public static readonly int IDLE_CHUNK_DISTANCE = 5;
+    public static readonly int IDLE_DISTANCE_SQR = World.ChunkSize * World.ChunkSize * IDLE_CHUNK_DISTANCE * IDLE_CHUNK_DISTANCE;
     public static readonly int ENTITY_CLOSE_TO_PLAYER_RADIUS = World.ChunkSize * 3;
     public static readonly int MAX_LOADED_ENTITIES = 128;
 
@@ -24,6 +31,10 @@ public class EntityManager : MonoBehaviour
     private Subworld Subworld;
     private float timer;
     private float timer2;
+
+    private int CurrentUpdateIndex;
+    private static int TicksPerFrame = 2;
+
     void Awake()
     {
         FixedEntities = new Dictionary<Vec2i, List<int>>();
@@ -57,10 +68,9 @@ public class EntityManager : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        Debug.BeginDeepProfile("entity_update");
-        GameManager.DebugGUI.SetData("loaded_entity_count", LoadedEntities.Count);
+        
         //Check if we are in a subworld, if we are, update its entities
-
+        int idleEnt = 0;
 
 
         if (Subworld == null)
@@ -68,19 +78,64 @@ public class EntityManager : MonoBehaviour
             //Check to see if we need to spawn any entities
             EntitySpawner.Update();
         }
-        
 
-        foreach(LoadedEntity e in LoadedEntities)
+
+
+        foreach (LoadedEntity e in LoadedEntities)
         {
-            e.Entity.Update();
+
+            int quickDist = Vec2i.QuickDistance(e.Entity.TilePos, GameManager.PlayerManager.Player.TilePos);
+            if(quickDist > IDLE_DISTANCE_SQR)
+            {
+                e.SetIdle(true);
+                idleEnt++;
+            }
+            else
+            {
+                e.Entity.Update();
+                e.SetIdle(false);
+            }
+            
         }
+
+        GameManager.DebugGUI.SetData("loaded_entity_count",(LoadedEntities.Count-idleEnt) + "/" + LoadedEntities.Count);
+
+
         //Increminent timer and run AI loop if required.
         //TODO - Split entities into a series of arrays which each take 
         //a turn to do AI update - reduce lag?
         timer += Time.deltaTime;
     
         timer2 += Time.deltaTime;
-        if (timer > 0.1f)
+
+        //If there are less entities than the amount per frame, we update all of them
+        if(LoadedEntities.Count < TicksPerFrame)
+        {
+            foreach (LoadedEntity e in LoadedEntities)
+            {
+                if(!e.IsIdle)
+                    e.Entity.Tick();
+            }
+        }
+        else
+        {
+            //otherwise, we incriment through them
+            for (int i = 0; i < TicksPerFrame; i++)
+            {
+                CurrentUpdateIndex++;
+                CurrentUpdateIndex %= LoadedEntities.Count;
+
+                if(!LoadedEntities[(CurrentUpdateIndex) % LoadedEntities.Count].IsIdle)
+                    LoadedEntities[(CurrentUpdateIndex) % LoadedEntities.Count].Entity.Tick();
+            }
+
+
+        }
+
+        
+        /*
+        Debug.BeginDeepProfile("entity_tick");
+        if (timer > 0.2f)
         {
             WorldCombatEventTick();          
 
@@ -91,20 +146,23 @@ public class EntityManager : MonoBehaviour
             }
             timer = 0;
 
-        }
-        if(timer2 > 1)
+        }*/
+
+        if (timer2 > 1)
         {
             timer2 = 0;
             UpdateNearEntityChunks();
+        
         }
         //TODO - Add slow entity tick management
-        Debug.EndDeepProfile("entity_update");
+
 
     }
 
 
     private void WorldCombatEventTick()
     {
+        Debug.BeginDeepProfile("combat_event_tick");
         List<WorldCombat> toRemoveCombat = new List<WorldCombat>();
         foreach (WorldCombat wce in CurrentWorldCombatEvents)
         {
@@ -121,6 +179,7 @@ public class EntityManager : MonoBehaviour
         {
             GameManager.DebugGUI.SetData(wce.ToString(), wce.Team1.Count + "_" + wce.Team2.Count);
         }
+        Debug.EndDeepProfile("combat_event_tick");
     }
 
     private void SubworldUpdate()
@@ -190,6 +249,7 @@ public class EntityManager : MonoBehaviour
     /// <param name="next"></param>
     public void UpdateEntityChunk(Entity entity, Vec2i last, Vec2i next)
     {
+        Debug.BeginDeepProfile("update_entity_chunk");
         //If the last position is not null, we must remove the entity from said chunk position
         if(last != null && LoadedEntityChunks.ContainsKey(last))
         {
@@ -211,6 +271,7 @@ public class EntityManager : MonoBehaviour
             //Add to correct list
             LoadedEntityChunks[next].Add(entity);
         }
+        Debug.EndDeepProfile("update_entity_chunk");
         //Debug.Log("Entity " + entity + " moved from chunk " + last + " to " + next);
     }
 

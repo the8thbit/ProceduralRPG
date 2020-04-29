@@ -8,11 +8,14 @@ using UnityEditor;
 [System.Serializable]
 public class CreatureTaskAI : EntityTaskAI
 {
-    public override void Tick()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public override EntityTask ChooseIdleTask()
     {
+        return null;
     }
 
-    public override void Update()
-    {
-    }
+
 }

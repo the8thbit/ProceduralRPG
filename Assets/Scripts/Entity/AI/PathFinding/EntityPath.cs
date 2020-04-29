@@ -8,17 +8,20 @@ public class EntityPath
     public Vec2i Target;
     public List<Vec2i> Path;
     private int index;
+    
     public EntityPath(List<Vec2i> path)
     {
         Path = path;
         index = 0;
-        Debug.Log(path.Count);
+        //Debug.Log(path.Count);
         if(path.Count != 0)
             Target = path[Path.Count - 1];
     }
 
     public Vec2i CurrentIndex()
     {
+        if (index >= Path.Count)
+            return null;
         return Path[index];
     }
 
@@ -37,8 +40,32 @@ public class EntityPath
     /// </summary>
     /// <param name="target"></param>
     /// <returns></returns>
-    public bool UpdateTarget(Vec2i target)
+    public bool UpdateTarget(Vec2i target, EntityPathFinder epf)
     {
+
+        if (epf.IsRunning)
+        {
+            if(epf.Target == target)
+            {
+                return false;
+            }
+            else
+            {
+                Debug.LogError("Im not sure what to do here?");
+                return false;
+            }                
+        }
+        if (epf.FoundPath)
+        {
+
+        }
+
+        //Check the finder has the same target.
+        if(epf.Target == target)
+        {
+
+        }
+
         Vec2i closestPoint = Path[index];
         int closestDist = Vec2i.QuickDistance(target, closestPoint);
         int closestPointIndex = index;
@@ -71,7 +98,7 @@ public class EntityPath
 
 
 
-
+        /*
         List<Vec2i> extension = GameManager.PathFinder.GeneratePath(closestPoint, target);
         if (extension.Count == 0)
             return false;
@@ -80,7 +107,7 @@ public class EntityPath
         Path.AddRange(extension);
 
         Target = target;
-
+        */
         return true;
 
     }

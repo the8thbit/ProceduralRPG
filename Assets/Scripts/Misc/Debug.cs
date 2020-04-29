@@ -4,6 +4,7 @@ using Unity.Profiling;
 using System.Collections.Generic;
 public class Debug : ScriptableObject
 {
+    public static bool DEBUG = true;
     private static Dictionary<string, ProfilerMarker> ProfileMarkers;
 
     public static int NORMAL = 0;
@@ -49,6 +50,8 @@ public class Debug : ScriptableObject
 
     public static void BeginDeepProfile(string tag)
     {
+        if (!DEBUG)
+            return;
         if (ProfileMarkers == null)
             ProfileMarkers = new Dictionary<string, ProfilerMarker>();
         if (ProfileMarkers.ContainsKey(tag))
@@ -64,6 +67,8 @@ public class Debug : ScriptableObject
 
     public static void EndDeepProfile(string tag)
     {
+        if (!DEBUG)
+            return;
         if (ProfileMarkers != null)
         {
             if (ProfileMarkers.ContainsKey(tag))

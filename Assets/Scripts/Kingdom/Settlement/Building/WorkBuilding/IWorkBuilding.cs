@@ -21,7 +21,7 @@ public interface IWorkBuilding
     WorkBuildingData GetWorkData { get; }
 
     void SetWorkBuildingData(WorkBuildingData data);
-    
+    Building WorkBuilding { get; }
 
 }
 

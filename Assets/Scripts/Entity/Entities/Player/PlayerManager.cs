@@ -18,8 +18,98 @@ public class PlayerManager : MonoBehaviour
 
     private SettlementPathNode NearestNode;
     private List<SettlementPathNode> path;
+    private List<Vec2i> Path_;
+    bool doPath = false;
+
+    private EntityPathFinder epf;
+
     private void OnDrawGizmos()
     {
+        if (doPath)
+        {
+            if(epf == null)
+            {
+                epf = new EntityPathFinder(GameManager.PathFinder);
+            }
+            Path_ = null;
+            if (epf.IsRunning)
+            {
+                epf.ForceStop();
+            }
+            else
+            {
+                epf.FindPath(Player.TilePos, Player.TilePos + GameManager.RNG.RandomVec2i(-100, 100));
+            }
+
+            /*Debug.Log("calculating path");
+            GenerationRandom genRan = new GenerationRandom(Time.frameCount);
+            Path_ = GameManager.PathFinder.GeneratePath(Vec2i.FromVector3(Player.Position), Vec2i.FromVector3(Player.Position) + genRan.RandomVec2i(-100, 100));
+            */
+            return;
+            Settlement t = GameManager.TestSettle;
+            if (t == null)
+                return;
+            int curDist = -1;
+            Vec2i pPos = Vec2i.FromVector2(Player.Position2);
+            foreach (SettlementPathNode pn in t.tNodes)
+            {
+                if (pn == null)
+                    continue;
+
+                if (NearestNode == null)
+                {
+                    NearestNode = pn;
+                    curDist = Vec2i.QuickDistance(pn.Position + t.BaseCoord, pPos);
+                }
+                else
+                {
+                    if (Vec2i.QuickDistance(pn.Position + t.BaseCoord, pPos) < curDist)
+                    {
+                        curDist = Vec2i.QuickDistance(pn.Position + t.BaseCoord, pPos);
+                        NearestNode = pn;
+                    }
+                }
+            }
+
+            path = new List<SettlementPathNode>();
+            if (SettlementPathFinder.SettlementPath(NearestNode, t.IMPORTANT, out path, debug: true))
+            {
+                Debug.Log("Path found!");
+
+            }
+
+            Debug.Log("Path len: " + path.Count);
+
+
+        }
+        if(Path_ == null && epf != null)
+        {
+            if (epf.IsComplete())
+            {
+                Path_ = epf.GetPath();
+                
+            }
+        }
+        
+        
+        if (Path_ != null && Path_.Count > 1)
+        {
+            Color old = Gizmos.color;
+            Gizmos.color = Color.yellow;
+            //Debug.Log(Vec2i.ToVector3(path[0].Position + t.BaseCoord));
+            //Gizmos.DrawCube(Vec2i.ToVector3(path[0].Position + GameManager.TestSettle.BaseCoord), Vector3.one * 2);
+
+            Gizmos.DrawCube(Vec2i.ToVector3(Path_[0]), Vector3.one * 5);
+            Gizmos.DrawCube(Vec2i.ToVector3(Path_[Path_.Count - 1]), Vector3.one * 5);
+
+            for (int i = 0; i < Path_.Count - 1; i++)
+            {
+                Gizmos.DrawLine(Vec2i.ToVector3(Path_[i]), Vec2i.ToVector3(Path_[i + 1]));
+                Gizmos.DrawCube(Vec2i.ToVector3(Path_[i]), Vector3.one * 0.5f);
+            }
+            Gizmos.color = old;
+        }
+        return;
         if(NearestNode == null)
         {
             Settlement t = GameManager.TestSettle;
@@ -58,20 +148,7 @@ public class PlayerManager : MonoBehaviour
            
 
         }
-        if(path != null)
-        {
-            Color old = Gizmos.color;
-            Gizmos.color = Color.yellow;
-            //Debug.Log(Vec2i.ToVector3(path[0].Position + t.BaseCoord));
-            Gizmos.DrawCube(Vec2i.ToVector3(path[0].Position + GameManager.TestSettle.BaseCoord), Vector3.one * 2);
-
-
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                Gizmos.DrawLine(Vec2i.ToVector3(path[i].Position + GameManager.TestSettle.BaseCoord), Vec2i.ToVector3(path[i + 1].Position + GameManager.TestSettle.BaseCoord));
-            }
-            Gizmos.color = old;
-        }
+  
         
     }
 
@@ -122,6 +199,8 @@ public class PlayerManager : MonoBehaviour
         Player.EquiptmentManager.AddDefaultItem(new Shirt());
        // Player.EquiptmentManager.AddDefaultItem(new Trousers());
         LoadedPlayer = loadedEntity;
+
+
         if (TestMain.TEST_MODE)
         {
 
@@ -137,6 +216,7 @@ public class PlayerManager : MonoBehaviour
     public void Tick(float time)
     {
         Player.CombatManager.Tick(time);
+        GameManager.PathFinder.SetPlayerPosition(Player.TilePos);
     }
 
     void Update()
@@ -149,12 +229,14 @@ public class PlayerManager : MonoBehaviour
         if (GameManager.GUIManager!=null && GameManager.GUIManager.DialogGUI.InConversation)
             return;
 
-        if (Input.GetKey(KeyCode.E))
+
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            PlayerCameraScript.ClockwiseMove(20 * Time.deltaTime);
-        }else if (Input.GetKey(KeyCode.Q))
+            doPath = true;
+        }
+        else
         {
-            PlayerCameraScript.ClockwiseMove(-20 * Time.deltaTime);
+            doPath = false;
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
@@ -166,11 +248,13 @@ public class PlayerManager : MonoBehaviour
         if (GameManager.Paused)
             return;
 
+        Debug.BeginDeepProfile("PlayerManagerUpdate");
+
         Vector3 worldMousePos = GetWorldMousePosition();
+        Tick(Time.deltaTime);
 
 
         Player.Update();
-        Debug.BeginDeepProfile("PlayerManagerUpdate");
 
         MovementUpdate();
 

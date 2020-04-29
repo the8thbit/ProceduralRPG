@@ -34,6 +34,8 @@ public class Settlement
 
     public WorldMapLocation WorldMapLocation { get; private set; }
 
+    public float[,] PathNodes;
+
     public Settlement(Kingdom kingdom, string name, SettlementBuilder builder)
     {
         IMPORTANT = builder.ENTR_NODE;
@@ -47,18 +49,18 @@ public class Settlement
         Buildings = builder.Buildings;
         SettlementNPCIDs = new List<int>();
         SettlementLeaderNPCIDs = new List<int>();
-        TEST_NODES = builder.TestNodes;
         tNodes = builder.TestNodes2;
         //SettlementNPCs = new List<NPC>();
         //setBuild = builder;
 
-        TEST_PATH_NODES = builder.PathNodes;
-
+        PathNodes = builder.PathNodes;
         SettlementType = builder.SettlementType;
         foreach (Building b in Buildings)
         {
             b.SetSettlement(this);
         }
+
+        SettlementPathFinder = builder.SettlementPathFinder;
     }
 
     public void SetWorldMapLocation(WorldMapLocation wml)

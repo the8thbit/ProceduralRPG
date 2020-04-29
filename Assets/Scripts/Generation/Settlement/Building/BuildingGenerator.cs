@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-
+using System.Collections.Generic;
 public class BuildingGenerator
 {
 
@@ -48,6 +48,18 @@ public class BuildingGenerator
             Blacksmith b = new Blacksmith(width, height);
             b.SetBuilding(buildingBase, buildingObjects);
             return GenerateBlacksmith(b, BuildingStyle.stone);
+        }
+        if(plan == Building.MARKET)
+        {
+            MarketPlace market = new MarketPlace(width, height);
+            market.SetBuilding(buildingBase, buildingObjects);
+            return GenerateMarket(market, BuildingStyle.stone);
+        }
+        if(plan == Building.BARACKS)
+        {
+            Baracks baracks = new Baracks(width, height);
+            baracks.SetBuilding(buildingBase, buildingObjects);
+            return GenerateBaracks(baracks);
         }
         /*
         if(plan == Building.MARKET)
@@ -169,34 +181,72 @@ public class BuildingGenerator
     }
 
     /// <summary>
-    /// Adds given object to the array of building objects.
-    /// Used to make easy placement of multicell objects.
+    /// Adds given object to the array of building objects. 
+    /// Checks if the designated spot is already filled, if so we do not place the object and returns false.
+    /// If the object covers a single tile, we add it and return true
+    /// If the object is multi tile, we check if it is placed within bounds, and if every child tile is free.
+    /// if so, we return true, otherwise we return false and do not place the object
     /// </summary>
     /// <param name="current"></param>
     /// <param name="nObj"></param>
     /// <param name="x"></param>
     /// <param name="z"></param>
-    public static void AddObject(Building building, WorldObjectData nObj, int x, int z, bool nInstance=false)
+    public static bool AddObject(Building building, WorldObjectData nObj, int x, int z, bool nInstance=false)
     {
-        building.BuildingObjects[x, z] = nObj;
-        building.AddObjectReference(nObj);
-        /*
-        if (nObj.HasMetaData && nObj.MetaData.IsMulticell)
+        //If not in bounds, return false
+        if(!(x > 0 && x<building.Width && z>0 && z < building.Height))
         {
-            int w = nObj.MetaData.MultiCellWidth;
-            int h = nObj.MetaData.MultiCellHeight;
-            for(int x_=0; x_<w; x_++)
+            return false;
+        }
+        //Check if this is a single tile object
+        if(!(nObj is IMultiTileObject))
+        {
+            //Single tile objects, we only need to check the single tile
+            if(building.BuildingObjects[x,z] == null)
             {
-                for(int z_=0; z_<h; z_++)
-                {
-                    if (x_ == 0 && z_ == 0)
-                        continue;
-                    WorldObject multSub = nInstance?WorldObject.CreateNewInstance(WorldObject.MULTI_TILE_CELL):nObj;
-                    multSub.MetaData.SetParent(nObj);
-                    current[x + x_, z + z_] = multSub;
-                }
+                //If the tile is empty, add object and return true
+                building.BuildingObjects[x, z] = nObj;
+                building.AddObjectReference(nObj);
+                return true;
             }
-        }*/
+            //If the tile is taken, we don't place the object
+            return false;
+            
+        }
+        if(!(+nObj.Size.x < building.Width && z+nObj.Size.z < building.Height))
+        {
+            //If the bounds of the multiu tile object are too big, return false;
+            return false;
+        }
+        //For multi tile objects, we iterate the whole size
+        for(int i=0; i<nObj.Size.x; i++)
+        {
+            for (int j = 0; j < nObj.Size.z; j++)
+            {
+                //if any of the tiles is not null, we don't place and return false
+                if (building.BuildingObjects[x + i, z + j] != null)
+                    return false;
+            }
+        }
+        //Set reference, then get chilren
+        building.AddObjectReference(nObj);
+        building.BuildingObjects[x, z] = nObj;
+        IMultiTileObjectChild[,] children = (nObj as IMultiTileObject).GetChildren();
+        //Iterate again to set children
+        for (int i = 0; i < nObj.Size.x; i++)
+        {
+            for (int j = 0; j < nObj.Size.z; j++)
+            {
+                if (i == 0 && j == 0)
+                    continue;
+
+                //if any of the tiles is not null, we don't place and return false
+                building.BuildingObjects[x + i, z + j] = (children[i, j] as WorldObjectData);
+                    
+            }
+        }
+
+        return true;
     }
 
     public static Vec2i AddEntrance(Building b, int entranceSide, int disp = -1)
@@ -221,6 +271,7 @@ public class BuildingGenerator
         else if (entranceSide == WEST_ENTRANCE)
             entrance = new Vec2i(0, disp);
         b.BuildingObjects[entrance.x, entrance.z] = null; //TODO - Set to door of correct type
+        
         return entrance;
     }
 
@@ -228,9 +279,9 @@ public class BuildingGenerator
     {
         int width = building.Width;
         int height = building.Height;
-        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, BuildingStyle.stone, tileType:Tile.TEST_RED);
+        Vec2i entr = GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, BuildingStyle.stone, tileType:Tile.TEST_RED);
         //AddObject(building.BuildingObjects, WorldObject.BED, 2, 3);
-        
+        building.SetEntrancePoint(entr);
         return building as House;
     }
     
@@ -238,8 +289,8 @@ public class BuildingGenerator
     {
         int width = building.Width;
         int height = building.Height;
-        GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType:Tile.TEST_MAGENTA);
-
+        Vec2i entr = GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType:Tile.TEST_MAGENTA);
+        building.SetEntrancePoint(entr);
         WorkEquiptmentData anvil = new Anvil(new Vec2i(1, 3));
         WorkEquiptmentData forge = new Anvil(new Vec2i(4,4));
         AddObject(building, anvil, 1,3);
@@ -250,13 +301,47 @@ public class BuildingGenerator
                                        new NPCJobBlackSmith(building) };
 
         building.SetWorkBuildingData(new WorkBuildingData(jobs));
-
+        AddEntrance(building, 0);
         //building.WorkEquiptment.Add(new WorkEquiptmentPlacement(anvil, new Vec2i(1, 3)));
         //building.WorkEquiptment.Add(new WorkEquiptmentPlacement(forge, new Vec2i(4, 4)));
         return building;
     }
 
+    public static MarketPlace GenerateMarket(MarketPlace building, BuildingStyle style = BuildingStyle.stone)
+    {
+        int width = building.Width;
+        int height = building.Height;
+        Vec2i entr = GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType: Tile.TEST_YELLOW);
+        building.SetEntrancePoint(entr);
+        MarketStall s1 = new MarketStall(new Vec2i(3, 3));
+        MarketStall s2 = new MarketStall(new Vec2i(building.Width - 3, building.Height - 3));
+        AddObject(building, s1, 3, 3);
+        AddObject(building, s2, building.Width - 3, building.Height - 3);
+        NPCJob[] jobs = new NPCJob[] { new NPCJobMarketStall("Market runner", building, s1), new NPCJobMarketStall("Market runner", building, s2) };
+        building.SetWorkBuildingData(new WorkBuildingData(jobs));
 
+        return building;
+    }
+
+    public static Baracks GenerateBaracks(Baracks building, BuildingStyle style = BuildingStyle.stone)
+    {
+
+        int width = building.Width;
+        int height = building.Height;
+
+        Vec2i entr = GenerateWallsFloorAndEntrance(width, height, building.BuildingObjects, building.BuildingTiles, 0, style, tileType: Tile.TEST_PURPLE);
+        building.SetEntrancePoint(entr);
+        List<NPCJob> jobs = new List<NPCJob>();
+        for(int x=2; x<building.Width; x+=3)
+        {
+            AddObject(building, new Bed(new Vec2i(2, 2)), x, 2);
+            jobs.Add(new NPCJobSoldier(building));
+        }
+        NPCJob[] jobs_ = jobs.ToArray();
+        building.SetWorkBuildingData(new WorkBuildingData(jobs_));
+
+        return building;
+    }
 
     /// <summary>
     /// Creates a castle, size must be 48x48

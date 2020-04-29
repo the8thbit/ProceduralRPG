@@ -5,6 +5,9 @@ using System.Diagnostics;
 public class GameManager : MonoBehaviour
 {
 
+    public static bool DEBUG = false;
+
+    public GameObject TEST_PREF;
 
     public static bool IsPlaying { get; private set; }
     public bool[] toDraw = { false, false, false, false };
@@ -101,6 +104,7 @@ public class GameManager : MonoBehaviour
             
             GenerateGame(seed);
             PathFinder = new PathFinder(WorldManager.World);
+            PathFinder.SetPlayerPosition(PlayerManager.Player.TilePos);
 
             System.GC.Collect();
             s.Stop();
@@ -187,8 +191,59 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+        Debug.Log("LoadedPathCount: " + PathFinder.COUNT);
+    }
+
+    bool hasBuilt = false;
     private void OnDrawGizmos()
     {
+        return;
+        if(TestSettle != null && !hasBuilt)
+        {
+            for(int x=0; x<TestSettle.PathNodes.GetLength(0); x++)
+            {
+                for (int z = 0; z < TestSettle.PathNodes.GetLength(0); z++)
+                {
+
+
+                    if(TestSettle.SettlementPathFinder.PathNodes[x,z] > 0)
+                    {
+                        Vector3 pos = Vec2i.ToVector3(new Vec2i(x,z)*World.ChunkSize + TestSettle.BaseCoord);
+                        GameObject obj = Instantiate(TEST_PREF);
+                        obj.transform.position = pos;
+                        PathFindingNodeTest pnt = obj.GetComponent<PathFindingNodeTest>();
+                        pnt.map = TestSettle.SettlementPathFinder.PathNodes;
+                        pnt.x = x;
+                        pnt.z = z;
+                    }else if(TestSettle.SettlementPathFinder.PathNodes[x,z] == -1)
+                    {
+                        Vector3 pos = Vec2i.ToVector3(new Vec2i(x, z) * World.ChunkSize + TestSettle.BaseCoord);
+                        GameObject obj = Instantiate(TEST_PREF);
+                        obj.transform.position = pos;
+                        obj.transform.localScale = Vector3.one * 5;
+                        PathFindingNodeTest pnt = obj.GetComponent<PathFindingNodeTest>();
+                        pnt.map = TestSettle.SettlementPathFinder.PathNodes;
+                        pnt.x = x;
+                        pnt.z = z;
+                    }
+
+                }
+            }/*
+            foreach (SettlementPathNode spn in TestSettle.tNodes)
+            {
+                if (spn == null)
+                    continue;
+                Vector3 pos = Vec2i.ToVector3(spn.Position + TestSettle.BaseCoord);
+                GameObject obj = Instantiate(TEST_PREF);
+                obj.transform.position = pos;
+                obj.GetComponent<PathFindingNodeTest>().spn = spn;
+            }*/
+            hasBuilt = true;
+
+        }
+        return;
         if(TestSettle != null)
         {
             foreach(SettlementPathNode spn in TestSettle.tNodes)

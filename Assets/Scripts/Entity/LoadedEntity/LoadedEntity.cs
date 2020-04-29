@@ -101,6 +101,10 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
     }
 
+    public void SetIdle(bool idle)
+    {
+        IsIdle = idle;
+    }
 
 
     public void ResetPhysics()
@@ -109,10 +113,6 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
     }
 
-    public void Idle()
-    {
-        IsIdle = true;
-    }
 
     public bool OnGround()
     {
@@ -179,6 +179,12 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
         IsIdle = false;
         LookTowards = v;
     }
+    public void LookTowardsPoint(Vector2 v)
+    {
+
+        IsIdle = false;
+        LookTowards = new Vector3(v.x,0, v.y);
+    }
     public void SetLookBasedOnMovement(bool onMovement)
     {
         IsIdle = false;
@@ -222,12 +228,15 @@ public class LoadedEntity : MonoBehaviour, IGamePauseEvent
 
             return;
         }
+
+
+
         Debug.BeginDeepProfile("le_fixed_update");
 
         if(!(Entity is Player))
         {
             DebugGUI.Instance.SetData("ent", GameManager.Paused + "_" + IsIdle + "_" + MoveDirection);
-            if (MiscMaths.DistanceSqr(transform.position, GameManager.PlayerManager.Player.Position) > (World.ChunkSize * 3) * (World.ChunkSize * 3))
+            if (MiscMaths.DistanceSqr(transform.position, GameManager.PlayerManager.Player.Position) > (World.ChunkSize * 4) * (World.ChunkSize * 4))
             {
                 IsIdle = true;
             }

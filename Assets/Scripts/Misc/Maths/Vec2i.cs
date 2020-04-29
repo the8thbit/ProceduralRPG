@@ -14,6 +14,10 @@ public class Vec2i
     }
 
 
+    public int QuickDistance(Vec2i b)
+    {
+        return Vec2i.QuickDistance(this, b);
+    }
 
     public static Vec2i Rotate(Vec2i initial, Vec2i rotate)
     {

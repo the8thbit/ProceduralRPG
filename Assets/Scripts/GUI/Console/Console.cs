@@ -104,6 +104,7 @@ public class Console : MonoBehaviour
     {
         ConsoleCommands.Add("list", new ConsoleCommandList());
         ConsoleCommands.Add("tp", new ConsoleCommandTP());
+        ConsoleCommands.Add("settledata", new ConsoleCommandSettlementData());
     }
 
 }

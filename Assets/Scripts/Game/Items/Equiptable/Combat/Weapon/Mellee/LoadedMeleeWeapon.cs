@@ -120,6 +120,8 @@ public class LoadedMeleeWeapon : MonoBehaviour
             return;
         
         le.Entity.CombatManager.DealDamage(SwingDamage, DamageType, Entity);
+        le.Entity.EntityAI?.CombatAI?.OnDealDamage(Entity);
+        GameManager.EventManager.InvokeNewEvent(new WorldCombat(Entity, le.Entity));
     }
 
 

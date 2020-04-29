@@ -325,7 +325,6 @@ public class TestMain : MonoBehaviour
         SettlementBase b = new SettlementBase(new Vec2i(8, 8), 8, SettlementType.CAPITAL);
         SettlementBuilder build = new SettlementBuilder(null, b);
         build.GenerateSettlement();
-        TestNodes = build.TestNodes;
         /*foreach(SettlementPathNode p in build.nodes)
         {
             TestNodes.Add(p);

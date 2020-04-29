@@ -32,7 +32,7 @@ public class LoadedChunk : MonoBehaviour
         transform.position = new Vector3(Chunk.X * World.ChunkSize, 0, Chunk.Z * World.ChunkSize);
         LoadedWorldObjects = new WorldObject[World.ChunkSize, World.ChunkSize];
 
-
+        Debug.BeginDeepProfile("chunk_create_mesh");
         int waterDepth = -5;
         List<Vector3> verticies = new List<Vector3>();
         List<int> triangles = new List<int>();
@@ -266,12 +266,15 @@ public class LoadedChunk : MonoBehaviour
                 }
             }
         }
-        
-        GetComponent<MeshFilter>().mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh.vertices = verticies.ToArray();
-        GetComponent<MeshFilter>().mesh.triangles = triangles.ToArray();
-        GetComponent<MeshFilter>().mesh.colors = colours.ToArray();
-        GetComponent<MeshFilter>().mesh.normals = normals.ToArray();
+        Debug.EndDeepProfile("chunk_create_mesh");
+        Debug.BeginDeepProfile("chunk_set_mesh");
+        MeshFilter meshFilt = GetComponent<MeshFilter>();
+
+        meshFilt.mesh = new Mesh();
+        meshFilt.mesh.vertices = verticies.ToArray();
+        meshFilt.mesh.triangles = triangles.ToArray();
+        meshFilt.mesh.colors = colours.ToArray();
+        meshFilt.mesh.normals = normals.ToArray();
         GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         gameObject.GetComponent<MeshRenderer>().material = ResourceManager.GetMaterial("Chunk");
         #endregion
@@ -293,12 +296,18 @@ public class LoadedChunk : MonoBehaviour
             colMesh.triangles = colTris;
         }
         this.name = this.name + chunk.DEBUG;
-        
+        Debug.EndDeepProfile("chunk_set_mesh");
+
         Vec2i chunkWorldPos = new Vec2i(chunk.X, chunk.Z) * World.ChunkSize;
         if (Chunk.Objects == null)
+        {
+            Debug.EndDeepProfile("set_data");
             return;
 
 
+        }
+
+        Debug.BeginDeepProfile("chunk_set_obj");
         for (int x=0; x<World.ChunkSize; x++)
         {
             for(int z=0; z<World.ChunkSize; z++)
@@ -316,6 +325,7 @@ public class LoadedChunk : MonoBehaviour
                 }
             }
         }
+        Debug.EndDeepProfile("chunk_set_obj");
         Debug.EndDeepProfile("set_data");
 
         //Debug.EndProfile();

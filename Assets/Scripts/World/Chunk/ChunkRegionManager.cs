@@ -6,7 +6,7 @@ using System.Collections;
 public class ChunkRegionManager : MonoBehaviour
 {
     public static int LoadChunkRadius = 10;
-
+    private Object ThreadSafe;
     public ChunkRegion[,] LoadedRegions { get; private set; }
     public Dictionary<Vec2i, LoadedChunk> LoadedChunks { get; private set; }
 
@@ -27,6 +27,7 @@ public class ChunkRegionManager : MonoBehaviour
         ToLoadIn = new List<ChunkData>();
         ToLoad = new List<Vec2i>();
         InSubworld = false;
+        ThreadSafe = new Object();
     }
     private void Start()
     {
@@ -117,8 +118,12 @@ public class ChunkRegionManager : MonoBehaviour
         {
             return null;
         }
+        ChunkRegion cr;
+        lock (ThreadSafe)
+        {
+            cr = LoadedRegions[r.x, r.z];
+        }
         //Get chunk region, check if it has been loaded
-        ChunkRegion cr = LoadedRegions[r.x, r.z];
         if (cr == null)
         {
             //If it has not been laoded, then load it
@@ -126,12 +131,19 @@ public class ChunkRegionManager : MonoBehaviour
 
             if (cr == null)
                 return null;
-
-            cr = LoadedRegions[r.x, r.z];
+            lock (ThreadSafe)
+            {
+                cr = LoadedRegions[r.x, r.z];
+            }
+            
             GameManager.PathFinder.LoadRegion(cr);
         }
-        
-        return cr.Chunks[v.x % World.RegionSize, v.z % World.RegionSize];
+        ChunkData cDat;
+        lock (ThreadSafe)
+        {
+            cDat = cr.Chunks[v.x % World.RegionSize, v.z % World.RegionSize]; 
+        }
+        return cDat;
     }
     public void LoadRegion(Vec2i rPos)
     {
@@ -275,9 +287,9 @@ public class ChunkRegionManager : MonoBehaviour
 
     private void LoadInSingleChunk(ChunkData data)       
     {
-        
 
 
+        Debug.BeginDeepProfile("chunk_load");
         //Initiate chunk
         Vec2i chunk = new Vec2i(data.X, data.Z);
 
@@ -300,7 +312,7 @@ public class ChunkRegionManager : MonoBehaviour
         LoadedChunks.Add(chunk, loadedChunk);
 
         GameManager.EntityManager.LoadChunk(World.ChunkBases[chunk.x, chunk.z], chunk);
-
+        Debug.EndDeepProfile("chunk_load");
     }
 
     public void UnloadChunk(Vec2i chunk)

@@ -11,6 +11,7 @@ public abstract class Entity
     private float[] Position_;
     public Vector3 Position { get { return new Vector3(Position_[0], Position_[1], Position_[2]); } }
     public Vector2 Position2 { get { return new Vector2(Position_[0], Position_[2]); } }
+    public Vec2i TilePos { get { return new Vec2i((int)Position_[0], (int)Position_[2]); } }
     public Vec2i LastChunkPosition { get; protected set; }
 
 
@@ -74,10 +75,19 @@ public abstract class Entity
         EntityAI.Update();
     }
 
-    public void Tick(float time)
+    private float LastTick=-1;
+
+    public void Tick()
     {
-        CombatManager.Tick(time);
+
+        if (LastTick == -1)
+            LastTick = Time.time;
+
+        float dt = Time.time - LastTick;
+
+        CombatManager.Tick(dt);
         EntityAI.Tick();
+        LastTick = Time.time;
 
     }
 

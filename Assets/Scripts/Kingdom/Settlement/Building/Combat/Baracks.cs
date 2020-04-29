@@ -9,10 +9,13 @@ public class Baracks : Building, IWorkBuilding
     {
     }
 
-    public WorkBuildingData GetWorkData => throw new System.NotImplementedException();
+    private WorkBuildingData WorkData;
+    public WorkBuildingData GetWorkData => WorkData;
+
+    public Building WorkBuilding => this;
 
     public void SetWorkBuildingData(WorkBuildingData data)
     {
-        throw new System.NotImplementedException();
+        WorkData = data;
     }
 }

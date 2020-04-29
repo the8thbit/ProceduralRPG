@@ -41,6 +41,11 @@ public class GenerationRandom
         return ran;
     }
 
+    public int RandomSign()
+    {
+        return RandomInt(0, 2)==0?-1:1;
+    }
+
 
     /// <summary>
     /// Returns an integer between min (inclusive) and max-1

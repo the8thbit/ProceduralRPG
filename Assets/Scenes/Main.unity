@@ -5091,6 +5091,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8babd542790d0a94da02e8f9a3b85a23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TEST_PREF: {fileID: 5245253030320946309, guid: fd077dfb00431fa41919071b68df96de,
+    type: 3}
   toDraw: 00000000
   toDrawTexts:
   - {fileID: 0}

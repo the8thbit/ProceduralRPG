@@ -40,6 +40,7 @@ public class LoadSave
         if (File.Exists(filePath))
         {
             BinaryFormatter bf = new BinaryFormatter();
+
             FileStream file = File.Open(filePath, FileMode.Open);
             Debug.Log("Loading region " + x + "_" + z, Debug.CHUNK_LOADING);
             ChunkRegion r = (ChunkRegion)bf.Deserialize(file);

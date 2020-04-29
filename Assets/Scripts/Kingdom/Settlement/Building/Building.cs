@@ -24,8 +24,9 @@ public abstract class Building
     public static BuildingPlan CAPTIALCASTLE = Castle.BuildingPlanBig;
 
     public static BuildingPlan BLACKSMITH = Blacksmith.BuildingPlan;
+    public static BuildingPlan MARKET = MarketPlace.BuildingPlan;
     public static BuildingPlan HOUSE = House.BuildingPlan;
-
+    public static BuildingPlan BARACKS = Baracks.BuildingPlanCity;
     public int SettlementID { get; private set; }
     public Vec2i SettlementCoord { get; private set; }
     public Tile[,] BuildingTiles { get; private set; }
@@ -100,9 +101,18 @@ public abstract class Building
     public void SetSettlement(Settlement settle)
     {
         WorldPosition = settle.BaseCoord + this.SettlementCoord;
+        if(Entrance != null)
+            Entrance += settle.BaseCoord + this.SettlementCoord;
         SettlementID = settle.SettlementID;
 
-
+        Vec2i delta = settle.BaseCoord + SettlementCoord;
+        foreach(WorldObjectData obj in BuildingObjects)
+        {
+            if(obj != null)
+            {
+                obj.SetPosition(obj.WorldPosition + delta);
+            }
+        }
         
     }
 
@@ -152,5 +162,5 @@ public abstract class Building
 
 public enum BuildingStyle
 {
-    stone, wood,
+    stone, wood, brick, sandstone
 }

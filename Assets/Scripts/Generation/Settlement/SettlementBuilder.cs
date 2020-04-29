@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System;
 [System.Serializable]
 public enum SettlementType
 {
@@ -36,17 +37,13 @@ public class SettlementBuilder
     public List<Building> Buildings { get; private set; }
     //A list that defines the mid point of the settelment entrances, up to 4 (one on each face) can be defined.
     public Vec2i Entrance { get; private set; }
-    public SettlementPathNode EntranceNode;
-    public int EntranceNodeDirection;
     //A list of all points that are parts of a path. Contains duplicates which are removed when the final settlement is built
-    public List<Vec2i> PathNodes { get; }
-    public List<SettlementPathNode> TestNodes;
     //A list of the possible plots to build on.
     public List<Recti> BuildingPlots { get; }
     //Used to generate paths inside this settlement
 
     public SettlementPathNode[,] TestNodes2;
-
+    public SettlementPathFinder SettlementPathFinder;
     public Tile PathTile { get; private set; }
 
     public SettlementBuilder(GameGenerator gameGen, SettlementBase set)
@@ -66,11 +63,16 @@ public class SettlementBuilder
         Tiles = new Tile[TileSize, TileSize];
         SettlementObjects = new WorldObjectData[TileSize, TileSize];
         Buildings = new List<Building>();
-        PathNodes = new List<Vec2i>();
+        //PathNodes = new List<Vec2i>();
         BuildingPlots = new List<Recti>();
         SettlementType = set.SettlementType;
-        TestNodes = new List<SettlementPathNode>();
+        //TestNodes = new List<SettlementPathNode>();
         TestNodes2 = new SettlementPathNode[TileSize / NODE_RES, TileSize / NODE_RES];
+
+        //Defines a path node to be once every chunk
+        PathNodeRes = World.ChunkSize; 
+        PathNodes = new float[TileSize / NODE_RES, TileSize / NODE_RES];
+        PNSize = TileSize / PathNodeRes;
     }
 
 
@@ -87,8 +89,8 @@ public class SettlementBuilder
 
                 AddMainBuilding(BuildingGenerator.GenerateCastle(48));
                 mustAdd.Add(Building.BLACKSMITH);
-                mustAdd.Add(Building.BLACKSMITH);
-                mustAdd.Add(Building.BLACKSMITH);
+                mustAdd.Add(Building.MARKET);
+                mustAdd.Add(Building.BARACKS);
                 mustAdd.Add(Building.BLACKSMITH);
                 mustAdd.Add(Building.BLACKSMITH);
                 mustAdd.Add(Building.BLACKSMITH);
@@ -108,7 +110,7 @@ public class SettlementBuilder
                 mustAdd.Add(Building.ARCHERYSTORE);
                 mustAdd.Add(Building.SWORDSELLER);
                 */
-                for (int i=0; i<40; i++)
+                for (int i=0; i<20; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
                 }
@@ -124,7 +126,7 @@ public class SettlementBuilder
                 mustAdd.Add(Building.TAVERN);
                 mustAdd.Add(Building.MARKET);
                 */
-                for (int i = 0; i < 30; i++)
+                for (int i = 0; i < 15; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
                 }
@@ -137,7 +139,7 @@ public class SettlementBuilder
                 /*mustAdd.Add(Building.GENERALMERCHANT);
                 mustAdd.Add(Building.TAVERN);
                 mustAdd.Add(Building.MARKET);*/
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
                 }
@@ -150,7 +152,7 @@ public class SettlementBuilder
                 mustAdd.Add(Building.GENERALMERCHANT);
                 mustAdd.Add(Building.TAVERN);
                 mustAdd.Add(Building.MARKET);*/
-                for (int i = 0; i < 15; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     mustAdd.Add(Building.HOUSE);
                 }
@@ -159,8 +161,26 @@ public class SettlementBuilder
 
         PlaceBuildings(mustAdd);
         CreatePathNodes();
+
+        foreach(Building b in Buildings)
+        {
+            
+        }
+
     }
     public SettlementPathNode ENTR_NODE;
+    /// <summary>
+    /// PathNodes - 2D float array representing the passable map for entities.
+    /// Used in path finding within settlements to increase performance, as well as
+    /// to create the paths within the settlement
+    /// PathNodeRes - the distance between each node on the PathNode Grid
+    /// PNSize - int, the size of each dimension of PathNodes. PNSize = TileSize/PathNodeRes;
+    /// </summary>
+    public float[,] PathNodes;
+    public int PathNodeRes;
+    public int PNSize;
+    public Vec2i EntranceNode;
+
     private void AddInitPaths()
     {
 
@@ -169,17 +189,18 @@ public class SettlementBuilder
         int xStart = GenerationRandom.RandomInt(0+3, nodeSize - 3);
         int zLen = nodeSize - GenerationRandom.RandomInt(0, 3); //Ends 0-3 chunks from settlement end
 
-        int zStartEast = GenerationRandom.RandomInt(2, nodeSize - 3);
-        int xLenEast = GenerationRandom.RandomInt(nodeSize - xStart - 2, nodeSize - xStart);
+
 
 
         int zStartWest = GenerationRandom.RandomInt(2, nodeSize - 3);
         int xLenWest = GenerationRandom.RandomInt(xStart-2, xStart);
 
-
+        EntranceNode = new Vec2i(xStart, 0);
         //Add the path nodes along the z direction (start at south -> north)
         for (int z=0; z<zLen; z++)
         {
+            PathNodes[xStart, z] = 100;
+
             TestNodes2[xStart, z] = new SettlementPathNode(new Vec2i(xStart * NODE_RES, z * NODE_RES));
             TestNodes2[xStart, z].IsMain = true;
             SetTile(xStart * NODE_RES, z * NODE_RES, Tile.TEST_BLUE);
@@ -187,66 +208,71 @@ public class SettlementBuilder
         ENTR_NODE = TestNodes2[xStart, 0];
 
 
+        
+        int zStartEast = GenerationRandom.RandomInt(2, nodeSize - 3);
+        int xLenEast = GenerationRandom.RandomInt(nodeSize - xStart - 2, nodeSize - xStart);
 
 
         for (int x=0; x<xLenEast; x++)
         {
-            TestNodes2[xStart + x, zStartEast] = new SettlementPathNode(new Vec2i((xStart + x) * NODE_RES, zStartEast * NODE_RES));
-            TestNodes2[xStart + x, zStartEast].IsMain = true;
-        }
+            PathNodes[xStart + x, zStartEast] = 100;
 
+        }
+        
 
         for(int x=0; x<xLenWest; x++)
         {
-            TestNodes2[xStart - x, zStartWest] = new SettlementPathNode(new Vec2i((xStart - x) * NODE_RES, zStartWest * NODE_RES));
-            TestNodes2[xStart - x, zStartWest].IsMain = true;
+            PathNodes[xStart - x, zStartWest] = 100;
+
         }
 
-
-        //Iterate all points, and connect everything
-        //Note, this can be made faster. We can half iterations with some TODO
-        for(int x=0; x<nodeSize; x++)
+        for (int x = 0; x < nodeSize; x++)
         {
             for (int z = 0; z < nodeSize; z++)
             {
-                if (TestNodes2[x, z] == null)
-                    continue;
-                if (x > 0 && TestNodes2[x - 1, z] != null)
+               
+                if(PathNodes[x,z] != 0)
                 {
-                    TestNodes2[x, z].AddConnection(SettlementPathNode.WEST, TestNodes2[x - 1, z]);
-                    ConnectNodes(TestNodes2[x, z], TestNodes2[x - 1, z], 5);
-                }
-                if (z > 0 && TestNodes2[x, z - 1] != null)
-                {
-                    TestNodes2[x, z].AddConnection(SettlementPathNode.SOUTH, TestNodes2[x , z - 1]);
-                    ConnectNodes(TestNodes2[x, z], TestNodes2[x , z - 1], 5);
-
-                }
-                if (x<nodeSize-1 && TestNodes2[x+1, z] != null)
-                {
-                    TestNodes2[x, z].AddConnection(SettlementPathNode.EAST, TestNodes2[x + 1, z]);
-                    ConnectNodes(TestNodes2[x, z], TestNodes2[x + 1, z], 5);
-
-                }
-                if (z < nodeSize-1 && TestNodes2[x, z + 1] != null)
-                {
-                    TestNodes2[x, z].AddConnection(SettlementPathNode.NORTH, TestNodes2[x, z + 1]);
-                    ConnectNodes(TestNodes2[x, z], TestNodes2[x, z + 1], 5);
-
+                    if(x > 0 && PathNodes[x-1,z] != 0)
+                    {
+                        SetTiles((x - 1) * NODE_RES, z * NODE_RES - 2, (x) * NODE_RES, z * NODE_RES + 2, Tile.TEST_BLUE);
+                    }
+                    if (z > 0 && PathNodes[x, z-1] != 0)
+                    {
+                        SetTiles((x) * NODE_RES-2, (z-1) * NODE_RES, (x) * NODE_RES+2, z * NODE_RES, Tile.TEST_BLUE);
+                    }
+                    if (x < nodeSize-1 && PathNodes[x + 1, z] != 0)
+                    {
+                        SetTiles((x) * NODE_RES, z * NODE_RES - 2, (x+1) * NODE_RES, z * NODE_RES + 2, Tile.TEST_BLUE);
+                    }
+                    if (z < nodeSize-1 && PathNodes[x, z + 1] != 0)
+                    {
+                        SetTiles((x) * NODE_RES - 2, (z) * NODE_RES, (x) * NODE_RES + 2, (z+1) * NODE_RES, Tile.TEST_BLUE);
+                    }
                 }
             }
         }
-        /*
-        for(int z=0; z<zLen-1; z++)
-        {
-            ConnectNodes(TestNodes2[xStart, z], TestNodes2[xStart, z + 1], 5);
-            TestNodes2[xStart, z].AddConnection(SettlementPathNode.NORTH, TestNodes2[xStart, z + 1]);
-            TestNodes2[xStart, z+1].AddConnection(SettlementPathNode.SOUTH, TestNodes2[xStart, z]);
 
-        }*/
     }
+
+    private void SetTiles(int minX, int minZ, int maxX, int maxZ, Tile tile)
+    {
+        if (!InBounds(new Vec2i(minX, minZ)) || !InBounds(new Vec2i(maxX, maxZ)))
+            return;
+        for(int x=minX; x<maxX; x++)
+        {
+            for (int z = minZ; z < maxZ; z++)
+            {
+                Tiles[x, z] = tile;
+            }
+        }
+    }
+
     private void CreatePathNodes()
     {
+        
+        int nodeSize = TileSize / NODE_RES;
+
         int tSize = TileSize/ NODE_RES;
         int checkDist = 4;
         //Create a node at every node position not inside a building
@@ -256,210 +282,303 @@ public class SettlementBuilder
             {
                 if (TestNodes2[x, z] != null)
                     continue;
-
+                if (PathNodes[x, z] != 0)
+                    continue;
                 //Define the position of this node in the settlement
                 
                 Vec2i pos = new Vec2i(x * NODE_RES, z * NODE_RES);
                 if(IsTileFree(pos.x, pos.z))
-                    TestNodes2[x, z] = new SettlementPathNode(new Vec2i(x * NODE_RES, z * NODE_RES));
-                
+                {
+                    PathNodes[x, z] = 50;
+                    //TestNodes2[x, z] = new SettlementPathNode(new Vec2i(x * NODE_RES, z * NODE_RES));
+
+                }
+                else
+                {
+                    PathNodes[x, z] = -1;
+                }
+
             }
         }
-      
+
+        for (int x = 0; x < tSize; x++)
+        {
+            for (int z = 0; z < tSize; z++)
+            {
+                if (PathNodes[x, z] <= 0)
+                    continue;
+                if (PathNodes[x, z] == 100)
+                    continue;
+                if (x > 0 && PathNodes[x - 1, z] != 0)
+                {
+                    //If nodes [x,z] and [x-1,z] are both non 0, check if a path exists between them
+                    //If there is no path, we try to remove one of the nodes
+                    if (!IsAreaFree((x - 1) * PathNodeRes, z * PathNodeRes - 1, PathNodeRes, 3, Tile.TEST_BLUE))
+                    {
+                        PathNodes[x, z] = -1;
+                        /*
+                        //Choose the x coord of the node to remove
+                        int remX = GenerationRandom.RandomInt(-1, 1) + x;
+                        //Check if the node belongs to the main path,
+                        //if so, we remove the other node
+                        if (PathNodes[remX, z] == 100)
+                        {
+                            if (remX == x - 1) PathNodes[x, z] = 0;
+                            else PathNodes[x - 1, z] = 0;
+                        }
+                        else
+                            PathNodes[remX, z] = 0;*/
+                    }
+                }
+                if (z > 0 && PathNodes[x, z - 1] != 0)
+                {
+                    //If nodes [x,z] and [x,z-1] are both non 0, check if a path exists between them
+                    //If there is no path, we try to remove one of the nodes
+                    if (!IsAreaFree((x) * PathNodeRes - 1, (z - 1) * PathNodeRes, 3, PathNodeRes, Tile.TEST_BLUE))
+                    {
+                        PathNodes[x, z] = -1;
+                        continue;
+                        //Choose the x coord of the node to remove
+                        int remZ = GenerationRandom.RandomInt(-1, 1) + z;
+                        //Check if the node belongs to the main path,
+                        //if so, we remove the other node
+                        if (PathNodes[x, remZ] == 100)
+                        {
+                            if (remZ == z - 1) PathNodes[x, z] = 0;
+                            else PathNodes[x, z - 1] = 0;
+                        }
+                        else
+                            PathNodes[x, remZ] = 0;
+                    }
+                }
+                if (x < tSize - 1 && PathNodes[x + 1, z] != 0)
+                {
+                    if (!IsAreaFree(x * PathNodeRes, z * PathNodeRes - 1, PathNodeRes, 3, Tile.TEST_BLUE))
+                    {
+                        PathNodes[x, z] = -1;
+                        continue;
+                        //Choose the x coord of the node to remove
+                        int remX = GenerationRandom.RandomInt(0, 2) + x;
+                        //Check if the node belongs to the main path,
+                        //if so, we remove the other node
+                        if (PathNodes[remX, z] == 100)
+                        {
+                            if (remX == x + 1) PathNodes[x, z] = 0;
+                            else PathNodes[x + 1, z] = 0;
+                        }
+                        else
+                            PathNodes[remX, z] = 0;
+                    }
+                }
+                if (z < tSize - 1 && PathNodes[x, z + 1] != 0)
+                {
+                    if (!IsAreaFree(x * PathNodeRes - 1, z * PathNodeRes, 3, PathNodeRes, Tile.TEST_BLUE))
+                    {
+                        PathNodes[x, z] = -1;
+                        continue;
+                        //Choose the x coord of the node to remove
+                        int remZ = GenerationRandom.RandomInt(0, 2) + z;
+                        //Check if the node belongs to the main path,
+                        //if so, we remove the other node
+                        if (PathNodes[x, remZ] == 100)
+                        {
+                            if (remZ == z + 1) PathNodes[x, z] = 0;
+                            else PathNodes[x, z + 1] = 0;
+                        }
+                        else
+                            PathNodes[x, remZ] = 0;
+
+                    }
+
+                }
+            }
+        }
+        
+        float[] nodes_ = new float[4];
+        //Remove circular path nodes
+        for (int x = 0; x < tSize - 1; x++)
+        {
+            for (int z = 0; z < tSize - 1; z++)
+            {
+                nodes_[0] = PathNodes[x, z];
+                nodes_[1] = PathNodes[x + 1, z];
+                nodes_[2] = PathNodes[x + 1, z + 1];
+                nodes_[3] = PathNodes[x, z + 1];
+                //If all nodes have a path on them
+                if (nodes_[0] > 0 && nodes_[1] > 0 && nodes_[2] > 0 && nodes_[3] > 0)
+                {
+                    int destroy = GenerationRandom.RandomInt(0, 4);
+                    while (nodes_[destroy] == 100)
+                        destroy = GenerationRandom.RandomInt(0, 4);
+                    switch (destroy)
+                    {
+                        case 0:
+                            PathNodes[x, z] = 0;
+                            break;
+                        case 1:
+                            PathNodes[x + 1, z] = 0;
+                            break;
+                        case 2:
+                            PathNodes[x + 1, z + 1] = 0;
+                            break;
+                        case 3:
+                            PathNodes[x, z + 1] = 0;
+                            break;
+                    }
+                }
+            }
+        }
+
+
+
+        //Create a settlement path finder, we will use this to find and remove islands
+        SettlementPathFinder = new SettlementPathFinder(BaseCoord, PathNodes);
+        
+        List<Vec2i> testing;
+        List<Vec2i> tested = new List<Vec2i>(PNSize * PNSize / 4);
+
+        //Iterate all nodes
+        for (int x = 0; x < tSize; x++)
+        {
+            for (int z = 0; z < tSize; z++)
+            {
+                //If node is 0, we ignore it
+                if (PathNodes[x, z] <= 0)
+                    continue;
+                int conCount = ConnectedCount(x, z);
+                /*
+                if (conCount == 0)
+                {
+                    PathNodes[x, z] = -1;
+                    SettlementPathFinder.PathNodes[x, z] = -1;
+                }*/
+                Vec2i pnPos = new Vec2i(x,z);
+                //If we have already tested this point
+                
+                
+                    
+                //If a node has only 1 connection, it is a good candidate
+                //for checking for islands
+                //if (conCount == 1)
+                if(true)
+                {
+                    float cost;
+                    //We check to see if a path can be found to the entrance from this node
+                    if(SettlementPathFinder.ConnectNodes(pnPos, EntranceNode, out testing, out cost, false))
+                    {
+                        
+                        foreach(Vec2i v in testing)
+                        {
+                            if(PathNodes[v.x,v.z] <= 0)
+                            {
+                                PathNodes[v.x, v.z] = 50;
+                                SettlementPathFinder.PathNodes[v.x, v.z] = 50;
+                            }
+                        }
+                        //If a valid path is found, we add the entire path to the list of tested paths, to reduce double checking.
+                        
+                       // Debug.Log("Path found with cost " + cost);
+                        if (cost < int.MaxValue)
+                        {
+                            tested.AddRange(testing);
+                            foreach (Vec2i v in testing)
+                            {
+                                PathNodes[v.x, v.z] = 50;
+                                SettlementPathFinder.PathNodes[v.x, v.z] = 50;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("Node " + x + "," + z + " is island. Path cost = " + cost);
+                        bool canMake = true;
+                        //If no path is found, we iterate each tested point and remove the path
+                        foreach(Vec2i v in testing)
+                        {
+                            if(PathNodes[v.x, v.z] == -1)
+                            {
+                                canMake = false;
+                                break;
+                            }
+                           // PathNodes[v.x, v.z] = 0;
+                            //SettlementPathFinder.PathNodes[v.x, v.z] = 0;
+                        }
+                        if (canMake)
+                        {
+                            foreach (Vec2i v in testing)
+                            {
+                                if (PathNodes[v.x, v.z] != 100)
+                                {
+                                    PathNodes[v.x, v.z] = 50;
+                                    SettlementPathFinder.PathNodes[v.x, v.z] = 50;
+                                }
+                                
+                            }
+                        }
+                        else
+                        {
+                            //TODO - do we need to delete all points if this happens?
+                        }
+                    }
+                }
+            }
+        }
+        
         //Connect all nodes
         for (int x = 0; x < tSize; x++)
         {
             for (int z = 0; z < tSize; z++)
             {
-                if (TestNodes2[x, z] == null)
+                if (PathNodes[x, z] <= 0)
                     continue;
-                if(x != 0)
+                bool is100 = PathNodes[x, z] == 100;
+                if (x > 0 && PathNodes[x - 1, z] > 0)
                 {
-                    SettlementPathNode minX=null;
-                    //Iterate x values below this value until non-null value found
-                    for(int i=1; i<Mathf.Min(x, checkDist); i++)
-                    {
-                        minX = TestNodes2[x - i, z];
-                        if (minX == null)
-                            continue;
-
-                        if (IsAreaFree(minX.Position.x, minX.Position.z - 1, i * World.ChunkSize, 3, Tile.TEST_BLUE))
-                            break;
-                        else
-                            minX = null;
-                    }
-                    if(minX!=null)
-                        TestNodes2[x, z].AddConnection(SettlementPathNode.WEST, minX);
-
-                }if(z != 0)
-                {
-                    SettlementPathNode minZ = null;
-                    //Iterate z values below this value until non-null value found
-                    for (int i = 1; i < Mathf.Min(z, checkDist); i++)
-                    {
-                        minZ = TestNodes2[x, z - i];
-                        if (minZ == null)
-                            continue;
-
-                        if (IsAreaFree(minZ.Position.x, minZ.Position.z - 1, 3, i * World.ChunkSize, Tile.TEST_BLUE))
-                            break;
-                        else
-                            minZ = null;
-                    }
-                    if (minZ != null)
-                        TestNodes2[x, z].AddConnection(SettlementPathNode.SOUTH, minZ);
-
-
+                    if (!(PathNodes[x - 1, z] == 100 && is100))   
+                        SetTiles((x - 1) * NODE_RES, z * NODE_RES - 1, (x) * NODE_RES, z * NODE_RES + 1, Tile.TEST_BLUE);
                 }
-                if(x != tSize - 1)
+                if (z > 0 && PathNodes[x, z - 1] > 0)
                 {
-
-                    SettlementPathNode maxX = null;
-                    //Iterate x values below this value until non-null value found
-                    for (int i = 1; i < Mathf.Min(tSize - x, checkDist); i++)
-                    {
-                        maxX = TestNodes2[x + i, z];
-                        if (maxX == null)
-                            continue;
-
-                        if (IsAreaFree(TestNodes2[x, z].Position.x, TestNodes2[x, z].Position.z - 1, i * World.ChunkSize, 3, Tile.TEST_BLUE))
-                            break;
-                        else
-                            maxX = null;
-                    }
-                    if (maxX != null)
-                        TestNodes2[x, z].AddConnection(SettlementPathNode.EAST, maxX);
-
-                    //TestNodes2[x, z].AddConnection(SettlementPathNode.EAST, TestNodes2[x + 1, z]);
-
+                    if (!(PathNodes[x, z-1] == 100 && is100))
+                        SetTiles((x) * NODE_RES - 1, (z - 1) * NODE_RES, (x) * NODE_RES + 1, z * NODE_RES, Tile.TEST_BLUE);
                 }
-                if (z != tSize - 1)
+                if (x < nodeSize - 1 && PathNodes[x + 1, z] > 0)
                 {
-                    SettlementPathNode maxZ = null;
-                    //Iterate x values below this value until non-null value found
-                    for (int i = 1; i < Mathf.Min(tSize - z, checkDist); i++)
-                    {
-                        maxZ = TestNodes2[x, z+i];
-                        if (maxZ == null)
-                            continue;
-
-                        if (IsAreaFree(TestNodes2[x, z].Position.x, TestNodes2[x, z].Position.z - 1,3,  i * World.ChunkSize, Tile.TEST_BLUE))
-                            break;
-                        else
-                            maxZ = null;
-                    }
-                    if (maxZ != null)
-                        TestNodes2[x, z].AddConnection(SettlementPathNode.NORTH, maxZ);
-
-                    // TestNodes2[x, z].AddConnection(SettlementPathNode.NORTH, TestNodes2[x, z+1]);
-
+                    if (!(PathNodes[x + 1, z] == 100 && is100))
+                        SetTiles((x) * NODE_RES, z * NODE_RES - 1, (x + 1) * NODE_RES, z * NODE_RES + 1, Tile.TEST_BLUE);
                 }
-
-            }
-            
-        }
-        SettlementPathNode[] nodes = new SettlementPathNode[4];
-        //Remove circular path nodes
-        for(int x=0; x<tSize-1; x++)
-        {
-            for (int z = 0; z < tSize - 1; z++)
-            {
-                nodes[0] = TestNodes2[x, z];
-                nodes[1] = TestNodes2[x+1, z];
-                nodes[2] = TestNodes2[x+1, z+1];
-                nodes[3] = TestNodes2[x, z+1];
-                //If all nodes are non null
-                if (nodes[0] != null && nodes[1] != null && nodes[2] != null && nodes[3] != null)
+                if (z < nodeSize - 1 && PathNodes[x, z + 1] > 0)
                 {
-                    int destroy = GenerationRandom.RandomInt(0, 4);
-                    while (nodes[destroy].IsMain)
-                        destroy = GenerationRandom.RandomInt(0, 4);
-
-                    int minCount = nodes[destroy].ConnectedCount;
-                    for (int i = 1; i < 4; i++)
-                    {
-                        if (nodes[i].ConnectedCount < minCount && !nodes[i].IsMain)
-                            destroy = i;
-                    }
-
-                    if (destroy == 0)
-                    {
-                        DestroyNode(x, z);
-                        SettlementObjects[x * NODE_RES, z * NODE_RES] = new Tree(new Vec2i(x * NODE_RES, z * NODE_RES));
-                    }
-
-                    if (destroy == 1)
-                    {
-                        DestroyNode(x + 1, z);
-                        SettlementObjects[(x+1) * NODE_RES, z * NODE_RES] = new Tree(new Vec2i((x+1) * NODE_RES, z * NODE_RES));
-
-                    }
-                    if (destroy == 2) { 
-                        DestroyNode(x + 1, z + 1);
-                        SettlementObjects[(x+1) * NODE_RES, (z+1) * NODE_RES] = new Tree(new Vec2i((x+1) * NODE_RES, (z+1) * NODE_RES));
-
-                    }
-                    if (destroy == 3){
-                        DestroyNode(x, z + 1);
-                        SettlementObjects[x * NODE_RES, (z + 1) * NODE_RES] = new Tree(new Vec2i(x * NODE_RES, (z + 1) * NODE_RES));
-
-                    }
+                    if (!(PathNodes[x, z+1] == 100 && is100))
+                        SetTiles((x) * NODE_RES - 1, (z) * NODE_RES, (x) * NODE_RES + 1, (z + 1) * NODE_RES, Tile.TEST_BLUE);
                 }
             }
         }
-        List<SettlementPathNode> island = new List<SettlementPathNode>();
-        List<SettlementPathNode> tested = new List<SettlementPathNode>();
-        //Remove islands
-        for(int x=0; x<tSize; x++)
-        {
-            for (int z = 0; z < tSize; z++)
-            {
-                if (TestNodes2[x, z] == null)
-                    continue;
-                if (TestNodes2[x, z].ConnectedCount == 0)
-                {
-                    DestroyNode(x, z);
-                    continue;
-                }
-                if (tested.Contains(TestNodes2[x, z]))
-                    continue;
-                if(TestNodes2[x,z].ConnectedCount == 1)
-                {
-                    
-                    //If no path is found
-                    if(!SettlementPathFinder.SettlementPath(TestNodes2[x, z], ENTR_NODE, out island))
-                    {
-                        Debug.Log("[SettlementBuilder] Island found");
-                        foreach(SettlementPathNode node in island)
-                        {
-                            DestroyNode(node.Position.x / NODE_RES, node.Position.z / NODE_RES);
-                        }
-                        island.Clear();
-                    }
-                    else
-                    {
-                        tested.AddRange(island);
-                        island.Clear();
-                    }
-                }
-                   
-            }
-        }
-        foreach(SettlementPathNode pn in TestNodes2)
-        {
-            if (pn == null)
-                continue;
-            
-            for(int i=0; i<4; i++)
-            {
-                if(pn.Connected[i] != null)
-                {
-                    if (!(pn.IsMain && pn.Connected[i].IsMain))
-                         ConnectNodes(pn, pn.Connected[i], 3);
-                }
-                   
-            }
-        }
+
+        return;
+      
+
+    }
+    /// <summary>
+    /// Finds the number of path nodes 'connected' to the node (x,z).
+    /// Does this by checking each of the relative directions from the node
+    /// (excluding diagonals), and adds 1 to the count if the value is not 0
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="z"></param>
+    /// <returns></returns>
+    private int ConnectedCount(int x, int z)
+    {
+        int count = 0;
+        if (x > 0 && PathNodes[x - 1, z] > 0)
+            count++;
+        if (z > 0 && PathNodes[x , z- 1] > 0)
+            count++;
+        if (x < PNSize-1 && PathNodes[x + 1, z] > 0)
+            count++;
+        if (z < PNSize - 1 && PathNodes[x , z + 1] > 0)
+            count++;
+        return count;
     }
 
     private void DestroyNode(int x, int z)
@@ -469,13 +588,26 @@ public class SettlementBuilder
             return;
         for(int i=0; i<4; i++)
         {
-            SettlementPathNode coni = node.Connected[i];
-            if(coni != null)
+            //SettlementPathNode coni = node.Connected[i];
+            if(node.Connected[i] != null)
             {
-                coni.Connected[SettlementPathNode.OppositeDirection(i)] = null;
+                GetNode(node.Connected[i])?.AddConnection(SettlementPathNode.OppositeDirection(i), null);
+                node.Connected[i].AddConnection(SettlementPathNode.OppositeDirection(i), null);
+                node.AddConnection(i, null);
+                
             }
         }
+        node = null;
         TestNodes2[x, z] = null;
+    }
+
+    private SettlementPathNode GetNode(SettlementPathNode spn)
+    {
+        if (spn == null || spn.Position == null)
+            return null;
+        int x = spn.Position.x / NODE_RES;
+        int z = spn.Position.z / NODE_RES;
+        return TestNodes2[x, z];
     }
 
     private void PlaceBuildings(List<BuildingPlan> buildings)
@@ -494,7 +626,7 @@ public class SettlementBuilder
             }
             if (r == null)
                 continue;
-
+            this.Buildings.Add(b);
             //SurroundByPath(r.X, r.Y, r.Width, r.Height, 2);
             SettlementPathNode[] nodes = AddPlot(r);
 
@@ -514,22 +646,22 @@ public class SettlementBuilder
         {
             Vec2i n1 = new Vec2i(r.X - 1, r.Y - 1);
             nodes[0] = new SettlementPathNode(n1); //Bottom left
-            PathNodes.Add(new Vec2i(r.X - 1, r.Y - 1));
+            //PathNodes.Add(new Vec2i(r.X - 1, r.Y - 1));
         }
         if (r.X > 0 && r.X + r.Width + 1 < TileSize && r.Y > 0)
         {
-            PathNodes.Add(new Vec2i(r.X + r.Width + 1, r.Y - 1));
+            //PathNodes.Add(new Vec2i(r.X + r.Width + 1, r.Y - 1));
             nodes[1] = new SettlementPathNode(new Vec2i(r.X + r.Width + 1, r.Y - 1)); //Bottom right
         }
         if (r.X > 0 && r.Y > 0 && r.Y + r.Height + 1 < TileSize)
         {
-            PathNodes.Add(new Vec2i(r.X - 1, r.Y + r.Height + 1));
+            //PathNodes.Add(new Vec2i(r.X - 1, r.Y + r.Height + 1));
             nodes[2] = new SettlementPathNode(new Vec2i(r.X - 1, r.Y + r.Height + 1)); //Top Left
 
         }
         if (r.X > 0 && r.X + r.Width + 1 < TileSize && r.Y > 0 && r.Y + r.Height + 1 < TileSize)
         {
-            PathNodes.Add(new Vec2i(r.X + r.Width + 1, r.Y + r.Height + 1));
+            //PathNodes.Add(new Vec2i(r.X + r.Width + 1, r.Y + r.Height + 1));
             nodes[3] = new SettlementPathNode(new Vec2i(r.X + r.Width + 1, r.Y + r.Height + 1)); //Top Right
         }
         if (nodes[0] != null)
@@ -558,7 +690,7 @@ public class SettlementBuilder
                 nodes[2].AddConnection(SettlementPathNode.EAST, nodes[3]);
             }
         }
-        TestNodes.AddRange(nodes);
+        //TestNodes.AddRange(nodes);
         BuildingPlots.Add(r);
         return nodes;
 
@@ -621,53 +753,6 @@ public class SettlementBuilder
 
     }
 
-    public void ChooseRandomEntrancePoints()
-    {
-        bool[] dirs = new bool[] { false, false, false, false };
-
-        dirs[GenerationRandom.RandomInt(0, 3)] = true;
-
-        int eMin = TileSize / 4;
-        int eMax = TileSize - eMin;
-
-        if (dirs[0])
-        {
-            Entrance = new Vec2i(0, GenerationRandom.RandomInt(eMin, eMax));
-            EntranceNodeDirection = SettlementPathNode.EAST;
-        }
-        if (dirs[2])
-        {
-            Entrance = new Vec2i(TileSize - 1, GenerationRandom.RandomInt(eMin, eMax));
-            EntranceNodeDirection = SettlementPathNode.WEST;
-
-        }
-
-
-        if (dirs[1])
-        {
-            Entrance = new Vec2i(GenerationRandom.RandomInt(eMin, eMax), TileSize - 1);
-            EntranceNodeDirection = SettlementPathNode.SOUTH;
-
-        }
-        if (dirs[3])
-        {
-            Entrance = new Vec2i(GenerationRandom.RandomInt(eMin, eMax), 0);
-            EntranceNodeDirection = SettlementPathNode.NORTH;
-
-
-        }
-        TestNodes.Add(new SettlementPathNode(Entrance));
-
-        EntranceNode = new SettlementPathNode(Entrance);
-        for (int x = -2; x <= 2; x++)
-        {
-            for (int z = -2; z <= 2; z++)
-            {
-                SetTile(Entrance.x + x, Entrance.z + z, Tile.TEST_YELLOW);
-            }
-        }
-
-    }
 
     /// <summary>
     /// Adds the given main building to a point near the centre of the settlement, then surrounds it
@@ -699,7 +784,7 @@ public class SettlementBuilder
         }
 
         ConnectEntranceNode(nodes[nearestNodeToEntrace], 5);
-        ConnectPathNodes(EntranceNode, nodes[nearestNodeToEntrace], 5);
+        //ConnectPathNodes(EntranceNode, nodes[nearestNodeToEntrace], 5);
         //CreatePathFromNode(nodes[nearestNodeToEntrace], 4);
         SurroundByPath(r.X, r.Y, r.Width, r.Height, 5);
         //BuildingPlots.Add(r);
@@ -712,6 +797,8 @@ public class SettlementBuilder
     /// <param name="width"></param>
     private void ConnectEntranceNode(SettlementPathNode startNode, int width)
     {
+        return;
+        /*
         SettlementPathNode entranceNode = EntranceNode;
         int entranceDirection = EntranceNodeDirection;
         Vec2i entranceDirectionStep = SettlementPathNode.GetDirection(entranceDirection);
@@ -721,7 +808,7 @@ public class SettlementBuilder
         SettlementPathNode midNode = new SettlementPathNode(midNodePosition);
         entranceNode.AddConnection(entranceDirection, midNode);
         midNode.AddConnection(SettlementPathNode.OppositeDirection(entranceDirection), entranceNode);
-        TestNodes.Add(midNode);
+       // TestNodes.Add(midNode);*/
 
 
     }
@@ -735,7 +822,7 @@ public class SettlementBuilder
         Vec2i xDiff = new Vec2i(diff.x, 0);
         int xDiffDirection = SettlementPathNode.GetDirection(xDiff);
         SettlementPathNode midNode = CreatePathFromNode(first, width, chosenDirection: xDiffDirection, length: Mathf.Abs(diff.x));
-        TestNodes.Add(midNode);
+        //TestNodes.Add(midNode);
         //Add connections
         first.AddConnection(xDiffDirection, midNode);
         midNode.AddConnection(SettlementPathNode.OppositeDirection(xDiffDirection), first);
@@ -752,8 +839,8 @@ public class SettlementBuilder
 
         int length = diff.x + diff.z;
         int direction = SettlementPathNode.GetDirection(diff);
-        first.AddConnection(direction, second);
-        second.AddConnection(SettlementPathNode.OppositeDirection(direction), first);
+        //first.AddConnection(direction, second);
+        //second.AddConnection(SettlementPathNode.OppositeDirection(direction), first);
         Vec2i step = SettlementPathNode.GetDirection(direction);
         Vec2i perpDirection = SettlementPathNode.GetPerpendicular(direction);
         int halfWidth = width / 2;
@@ -785,7 +872,7 @@ public class SettlementBuilder
         //Generate node between two existing nodes
         SettlementPathNode interPathNode = new SettlementPathNode(firstNode.Position + SettlementPathNode.GetDirection(secondNodeDirection) * startPoint);
         int oppositeDir = SettlementPathNode.OppositeDirection(secondNodeDirection);
-        TestNodes.Add(interPathNode);
+        //TestNodes.Add(interPathNode);
         //Update connections
         firstNode.AddConnection(secondNodeDirection, interPathNode);
         interPathNode.AddConnection(oppositeDir, firstNode);
@@ -927,7 +1014,7 @@ public class SettlementBuilder
         }
         b.SetSettlementCoord(pos);
         Buildings.Add(b);
-        PathNodes.Add(b.Entrance);
+        //PathNodes.Add(b.Entrance);
         return new Recti(pos.x, pos.z, b.Width, b.Height);
     }
 

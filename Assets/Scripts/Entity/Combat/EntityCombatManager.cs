@@ -125,14 +125,14 @@ public class EntityCombatManager : IGamePauseEvent
     /// Time is in seconds
     /// </summary>
     /// <param name="time"></param>
-    public void Tick(float time)
+    public void Tick(float dt)
     {
         if (GameManager.Paused)
             return;
         //Apply regen rate for health, mana, and stamina.
-        CurrentHealth = Mathf.Clamp(CurrentHealth + HeathRegenerationRate * time, 0, MaxHealth);
-        CurrentStamina = Mathf.Clamp(CurrentStamina + StaminaRegenerationRate * time, 0, MaxStamina);
-        SpellManager.Tick(time);
+        CurrentHealth = Mathf.Clamp(CurrentHealth + HeathRegenerationRate * dt, 0, MaxHealth);
+        CurrentStamina = Mathf.Clamp(CurrentStamina + StaminaRegenerationRate * dt, 0, MaxStamina);
+        SpellManager.Tick(dt);
     }
 
     public void SetEquiptWeapon(Weapon weapon)

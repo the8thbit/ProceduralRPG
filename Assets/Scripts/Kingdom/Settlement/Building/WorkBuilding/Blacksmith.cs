@@ -11,6 +11,8 @@ public class Blacksmith : Building, IWorkBuilding
 
     public WorkBuildingData GetWorkData { get => WorkBuildingData;  }
 
+    public Building WorkBuilding => this;
+
     public void SetWorkBuildingData(WorkBuildingData data)
     {
         WorkBuildingData = data;

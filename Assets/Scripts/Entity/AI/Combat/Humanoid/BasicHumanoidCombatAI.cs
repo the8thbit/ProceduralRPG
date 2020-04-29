@@ -7,8 +7,6 @@ public class BasicHumanoidCombatAI : EntityCombatAI
 
 
 
-    private float Aggression = 0.5f;
-
 
    
 
@@ -94,6 +92,11 @@ public class BasicHumanoidCombatAI : EntityCombatAI
             if (distance > 10 && eqMan.HasRangeWeapon())
                 eqMan.EquiptRangeWeapon();
         }
+
+    }
+
+    public override void OnDealDamage(Entity source)
+    {
 
     }
 }
