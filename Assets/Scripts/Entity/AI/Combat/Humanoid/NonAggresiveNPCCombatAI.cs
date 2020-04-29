@@ -94,19 +94,19 @@ public class NonAggresiveNPCCombatAI : EntityCombatAI
             else
             {
                 //Check if aggression is high against RNG
-                if (NPC.EntityRelationshipManager.Personality.Agression > GameManager.RNG.Random(0.6f, 0.8f))
+                if (NPC.EntityRelationshipManager.Personality.Aggression > GameManager.RNG.Random(0.6f, 0.8f))
                 {
-                    //Agression is between 0 and 1, we divide the team2 relationship value by this.
-                    //And check against team1relval. This means higher agression requires less difference
+                    //Aggression is between 0 and 1, we divide the team2 relationship value by this.
+                    //And check against team1relval. This means higher aggression requires less difference
                     //We also divide team2relval by the entities loyatly. This means that an entity with low loyalty requires a higher difference
-                    if (team1RelVal > team2RelVal / (NPC.EntityRelationshipManager.Personality.Loyalty * NPC.EntityRelationshipManager.Personality.Agression))
+                    if (team1RelVal > team2RelVal / (NPC.EntityRelationshipManager.Personality.Loyalty * NPC.EntityRelationshipManager.Personality.Aggression))
                     {
                         wce.Team1.Add(Entity);
                         CurrentCombatEvent = wce;
                         CurrentTarget = wce.GetNearestTeam2Entity(Entity);
                         return;
                     }
-                    else if (team2RelVal < team1RelVal / (NPC.EntityRelationshipManager.Personality.Loyalty * NPC.EntityRelationshipManager.Personality.Agression))
+                    else if (team2RelVal < team1RelVal / (NPC.EntityRelationshipManager.Personality.Loyalty * NPC.EntityRelationshipManager.Personality.Aggression))
                     {
                         wce.Team2.Add(Entity);
                         CurrentCombatEvent = wce;
@@ -120,7 +120,7 @@ public class NonAggresiveNPCCombatAI : EntityCombatAI
                 {
                     Vec2i runPos = Entity.TilePos + GameManager.RNG.RandomVec2i(10, 20) * GameManager.RNG.RandomSign();
                     Entity.EntityAI?.TaskAI.SetTask(new EntityTaskGoto(Entity, runPos, priority: 10, running: true));
-                }//if our agression is low, we check for 
+                }//if our aggression is low, we check for 
                 //If neither team has a friend/family, we 
 
             }
