@@ -45,7 +45,8 @@ public class WorldObject : MonoBehaviour
             {
                 height = data.GetMetaData().Height;
             }
-            gameObject.transform.localScale = new Vector3(data.Size.x, height, data.Size.z);
+            if(!(data is IMultiTileObject))
+                gameObject.transform.localScale = new Vector3(data.Size.x, height, data.Size.z);
         }
         obj.Data = data;
         data.OnObjectLoad(obj);
@@ -93,7 +94,10 @@ public enum WorldObjects
     GLASS_WINDOW,
     ROOF,
     DOOR,
-    DUNGEON_ENTRANCE
+    DUNGEON_ENTRANCE,
+    MARKET_STALL,
+    BED,
+    PRACTISE_DUMMY
 
 
 

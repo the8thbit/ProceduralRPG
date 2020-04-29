@@ -37,6 +37,8 @@ public abstract class WorldObjectData
         MetaData = meta;
         ObjectDeltaPosition_ = new float[] { 0,0,0 };
         Size = size;
+        IsCollision = true;
+
     }
 
     public void SetPosition(Vec2i worldPos)

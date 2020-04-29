@@ -8,13 +8,16 @@ public abstract class WorkEquiptmentData : WorldObjectData
         userPosition = this.WorldPosition + new Vec2i(1, 1);
     }
 
-    private Vec2i userPosition;
+    protected Vec2i userPosition;
 
-    public Vec2i UserPosition { get { return userPosition; } }
+    public virtual Vec2i UserPosition { get { return userPosition; } }
 
     public void SetUserTile(Vec2i pos)
     {
         userPosition = pos;
     }
+
+    [System.NonSerialized]
+    public NPC CurrentUser;
 
 }
